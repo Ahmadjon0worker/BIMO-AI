@@ -6,3 +6,4 @@ design/** linguist-documentation
 windows/localai-service/public-voice/** -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof
 windows/localai-service/public-tools/LICENSE-GitHub-CLI.txt -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof
 windows/localai-service/public-tools/github-cli-provenance.json -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof
+windows/assets/qanot/** -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof

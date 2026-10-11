@@ -2,6 +2,8 @@
 
 mod agent_hooks;
 mod agents;
+#[cfg(windows)]
+mod autostart_entry;
 mod chat;
 mod claude;
 mod codex_plan;
@@ -110,6 +112,11 @@ fn save_settings(app: AppHandle, shared: State<Shared>, settings: Settings) {
         let result = if settings.autostart { manager.enable() } else { manager.disable() };
         if let Err(err) = result {
             eprintln!("[coucou] autostart: {err}");
+        } else if settings.autostart {
+            #[cfg(windows)]
+            if let Err(err) = autostart_entry::normalize_enabled(&app.package_info().name) {
+                eprintln!("[coucou] autostart entry: {err}");
+            }
         }
     }
     if screen_changed {
@@ -141,7 +148,7 @@ fn set_system_languages(app: AppHandle, languages: Vec<String>) {
 fn language_changed(app: &AppHandle) {
     tray::retitle(app);
     if let Some(window) = app.get_webview_window("settings") {
-        let _ = window.set_title(&i18n::t("Settings — Coucou"));
+        let _ = window.set_title(&i18n::t("Settings — Qanot AI"));
     }
 }
 
@@ -622,7 +629,7 @@ fn create_settings_window(app: &AppHandle) {
     let url = settings_page_url(app);
     match WebviewWindowBuilder::new(app, "settings", url)
         .additional_browser_args(BROWSER_ARGS)
-        .title(i18n::t("Settings — Coucou"))
+        .title(i18n::t("Settings — Qanot AI"))
         .inner_size(560.0, 680.0)
         .min_inner_size(460.0, 480.0)
         .resizable(true)
@@ -841,7 +848,7 @@ pub fn run() {
             gate.set_active(true);
             island::spawn_cursor_poll(handle.clone(), gate.clone());
 
-            log::line(format!("--- Coucou {} started ---", env!("CARGO_PKG_VERSION")));
+            log::line(format!("--- Qanot AI {} started ---", env!("CARGO_PKG_VERSION")));
             hooks::ensure_hook_exe(&handle);
             pipe::start(handle.clone());
             integrations::start(handle.clone());
@@ -858,7 +865,7 @@ pub fn run() {
             Ok(())
         })
         .build(tauri::generate_context!())
-        .expect("error while building Coucou")
+        .expect("error while building Qanot AI")
         .run(|app, event| {
             if matches!(event, tauri::RunEvent::Exit) {
                 app.state::<local_service::LocalService>().stop();

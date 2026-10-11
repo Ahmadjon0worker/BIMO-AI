@@ -1,0 +1,16 @@
+{
+  "file": "QanotAI-Windows-0.6.3-runtime.zip",
+  "bytes": 454608149,
+  "sha256": "79bad9bbf4cff6bf9312e9dbc45ff9dedae44f321872c5d66c01d219cf8ddea0",
+  "manifest_sha256": "ecc66b90c2bddddbe9d140ea014805ec8366218c1d80a08cdbec303533e7c2e4",
+  "manifest_bytes": 385602,
+  "files": 2068,
+  "payload_bytes": 571951706,
+  "archive_members": 2069,
+  "timestamp": "2026-10-11T00:00:00",
+  "compression": "deflate",
+  "compression_level": 6,
+  "no_user_config_or_credentials": true,
+  "version": "0.6.3",
+  "url": "https://github.com/Ahmadjon0worker/CouCou-Uzbek-edition-/releases/download/v0.6.3/QanotAI-Windows-0.6.3-runtime.zip"
+}

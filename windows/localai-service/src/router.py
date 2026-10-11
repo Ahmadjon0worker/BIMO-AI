@@ -1,4 +1,4 @@
-"""Coucou per-user bridge: fixed loopback, Ollama, Gemini and Groq."""
+"""Qanot AI per-user bridge: fixed loopback, Ollama, Gemini and Groq."""
 from __future__ import annotations
 import base64
 import copy
@@ -591,7 +591,7 @@ class Handler(BaseHTTPRequestHandler):
                 raise ValueError('Computer Use session token required')
             return self.release_computer_session(session)
         if self.path == '/control/open-opencode':
-            return self.send_json(400, {'error': 'OpenCode is not included in this installer. Use Coucou chat or install OpenCode separately.'})
+            return self.send_json(400, {'error': 'OpenCode is not included in this installer. Use Qanot AI chat or install OpenCode separately.'})
         if not GATE.acquire(blocking=False):
             return self.send_json(409, {'error': 'Another model operation is running'})
         try:

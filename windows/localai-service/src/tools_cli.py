@@ -15,7 +15,7 @@ def literal_file(path):
 
 
 def main(argv=None, *, client=None):
-    parser = argparse.ArgumentParser(description="Coucou: terminal, Telegram, GitHub va desktop vositalari")
+    parser = argparse.ArgumentParser(description="Qanot AI: terminal, Telegram, GitHub va desktop vositalari")
     parser.add_argument("--port", type=int, choices=(11435, 11437))
     sub = parser.add_subparsers(dest="command", required=True)
     sub.add_parser("status")
@@ -70,7 +70,7 @@ def main(argv=None, *, client=None):
             return 1
         return 0
     except (ClientError, OSError, ValueError, KeyError):
-        print(json.dumps({"ok": False, "error": "Amal bajarilmadi yoki natijasi noma’lum. Qayta yuborilmadi; Coucou holatini tekshiring"}, ensure_ascii=False), file=sys.stderr)
+        print(json.dumps({"ok": False, "error": "Amal bajarilmadi yoki natijasi noma’lum. Qayta yuborilmadi; Qanot AI holatini tekshiring"}, ensure_ascii=False), file=sys.stderr)
         return 1
 
 

@@ -96,7 +96,7 @@ impl LocalService {
 
     fn publish_ready(&self, port: u16, owned: bool) -> Result<Value, String> {
         let mut slot = self.child.lock().unwrap_or_else(|e| e.into_inner());
-        if self.stopped.load(Ordering::Acquire) { return Err("Coucou is closing.".into()); }
+        if self.stopped.load(Ordering::Acquire) { return Err("Qanot AI is closing.".into()); }
         if owned {
             let alive = match slot.as_mut() {
                 Some(process) if process.port == port => process.child.try_wait()
@@ -184,12 +184,12 @@ where P: FnMut(u16) -> F, F: Future<Output = Result<Value, String>>,
       A: FnMut() -> Result<bool, String>, C: Fn() -> bool {
     let deadline = tokio::time::Instant::now() + budget;
     loop {
-        if closing() { return Err("Coucou is closing.".into()); }
+        if closing() { return Err("Qanot AI is closing.".into()); }
         if !alive()? { return Err("The bundled LocalAI service exited before it was ready.".into()); }
         let remaining = deadline.saturating_duration_since(tokio::time::Instant::now());
         if remaining.is_zero() { break; }
         let health = tokio::time::timeout(remaining.min(PROBE_TIMEOUT), probe(port)).await;
-        if closing() { return Err("Coucou is closing.".into()); }
+        if closing() { return Err("Qanot AI is closing.".into()); }
         if !alive()? { return Err("The bundled LocalAI service exited before it was ready.".into()); }
         if let Ok(Ok(value)) = health {
             if compatible_health(&value) { return Ok(value); }
@@ -198,7 +198,7 @@ where P: FnMut(u16) -> F, F: Future<Output = Result<Value, String>>,
         if remaining.is_zero() { break; }
         tokio::time::sleep(remaining.min(POLL_INTERVAL)).await;
     }
-    Err("The bundled LocalAI service did not become ready with the required Telegram features. Retry or reinstall Coucou.".into())
+    Err("The bundled LocalAI service did not become ready with the required Telegram features. Retry or reinstall Qanot AI.".into())
 }
 
 async fn owned_ready(state: &LocalService, port: u16) -> Result<Value, String> {
@@ -238,7 +238,7 @@ fn own_process(child: Child, port: u16) -> Result<OwnedProcess, String> {
 }
 
 async fn ensure_started(app: &AppHandle, state: &LocalService) -> Result<Value, String> {
-    if state.stopped.load(Ordering::Acquire) { return Err("Coucou is closing.".into()); }
+    if state.stopped.load(Ordering::Acquire) { return Err("Qanot AI is closing.".into()); }
     {
         let _slot = state.child.lock().unwrap_or_else(|e| e.into_inner());
         crate::local_ai::publish_router_port(None);
@@ -249,9 +249,9 @@ async fn ensure_started(app: &AppHandle, state: &LocalService) -> Result<Value, 
         Err(error) => { state.discard_owned(); return Err(error); },
     }
     let primary = inspect_port(PRIMARY_PORT).await;
-    if state.stopped.load(Ordering::Acquire) { return Err("Coucou is closing.".into()); }
+    if state.stopped.load(Ordering::Acquire) { return Err("Qanot AI is closing.".into()); }
     let fallback = if primary == PortState::Occupied { Some(inspect_port(FALLBACK_PORT).await) } else { None };
-    if state.stopped.load(Ordering::Acquire) { return Err("Coucou is closing.".into()); }
+    if state.stopped.load(Ordering::Acquire) { return Err("Qanot AI is closing.".into()); }
     let port = match choose_service(primary, fallback)? {
         ServiceChoice::Reuse(port) => return state.publish_ready(port, false),
         ServiceChoice::Launch(port) => port,
@@ -263,20 +263,20 @@ async fn ensure_started(app: &AppHandle, state: &LocalService) -> Result<Value, 
         use std::os::windows::process::CommandExt;
         let resources = app.path().resource_dir().map_err(|_| "LocalAI runtime is unavailable.".to_string())?;
         let (python, script) = bundled_paths(&resources);
-        if !python.is_file() || !script.is_file() { return Err("LocalAI runtime is missing. Reinstall Coucou.".into()); }
+        if !python.is_file() || !script.is_file() { return Err("LocalAI runtime is missing. Reinstall Qanot AI.".into()); }
         let data = crate::settings::local_dir().join("LocalAI");
         crate::platform::ensure_private_dir(&data).map_err(|_| "Cannot create LocalAI data folder.".to_string())?;
-        if state.stopped.load(Ordering::Acquire) { return Err("Coucou is closing.".into()); }
+        if state.stopped.load(Ordering::Acquire) { return Err("Qanot AI is closing.".into()); }
         let child = Command::new(&python).arg("-B").arg(&script).arg("--port").arg(port.to_string())
             .current_dir(script.parent().unwrap())
             .env("COUCOU_LOCALAI_DATA_DIR", &data)
             .stdin(Stdio::null()).stdout(Stdio::null()).stderr(Stdio::null())
             .creation_flags(0x0800_0000).spawn()
-            .map_err(|_| "LocalAI service could not start. Reinstall Coucou.".to_string())?;
+            .map_err(|_| "LocalAI service could not start. Reinstall Qanot AI.".to_string())?;
         let owned = own_process(child, port)?;
         {
             let mut slot = state.child.lock().unwrap_or_else(|e| e.into_inner());
-            if state.stopped.load(Ordering::Acquire) { drop(owned); return Err("Coucou is closing.".into()); }
+            if state.stopped.load(Ordering::Acquire) { drop(owned); return Err("Qanot AI is closing.".into()); }
             *slot = Some(owned);
         }
         owned_ready(state, port).await
@@ -285,7 +285,7 @@ async fn ensure_started(app: &AppHandle, state: &LocalService) -> Result<Value, 
 
 pub async fn start(app: &AppHandle) -> Result<Value, String> {
     let state = app.state::<LocalService>();
-    if state.stopped.load(Ordering::Acquire) { return Err("Coucou is closing.".into()); }
+    if state.stopped.load(Ordering::Acquire) { return Err("Qanot AI is closing.".into()); }
     let Some(_starting) = state.begin_start() else { return Ok(json!({"ok":true,"status":"starting"})); };
     ensure_started(app, &state).await
 }

@@ -23,14 +23,14 @@ const error = h("div", { class: "studio-error", role: "alert", hidden: true }, e
   } }),
 );
 const serviceBadge = h("span", { class: "studio-service-badge", role: "status", text: "Xizmat tekshirilmoqda" });
-const version = h("span", { class: "studio-version", text: "Coucou Studio" });
+const version = h("span", { class: "studio-version", text: "Qanot AI Studio" });
 const currentProvider = h("span", { class: "studio-current-provider" });
 const chatNavigation = h("button", { type: "button", class: "studio-nav on", text: "Suhbat", "aria-pressed": "true" });
 const healthNavigation = h("button", { type: "button", class: "studio-nav", text: "Tizim holati", "aria-pressed": "false" });
 const providerMount = h("div", { class: "studio-provider-mount" });
 const sidebar = h("aside", { class: "studio-sidebar", "aria-label": "Studio boshqaruvi" },
   h("div", { class: "studio-brand" }, h("span", { class: "studio-mark", text: "C" }),
-    h("div", {}, h("strong", { text: "Coucou" }), h("span", { text: "STUDIO" }))),
+    h("div", {}, h("strong", { text: "Qanot AI" }), h("span", { text: "STUDIO" }))),
   h("nav", { class: "studio-navigation", "aria-label": "Bo‘limlar" }, chatNavigation, healthNavigation),
   providerMount,
   h("div", { class: "studio-sidebar-links" },
@@ -205,7 +205,7 @@ function selectPage(next: "chat" | "health"): void {
 }
 
 async function openSettings(): Promise<void> {
-  if (!IS_TAURI) { showError("Sozlamalar o‘rnatilgan Coucou ilovasida ochiladi."); return; }
+  if (!IS_TAURI) { showError("Sozlamalar o‘rnatilgan Qanot AI ilovasida ochiladi."); return; }
   await Bridge.openSettingsWindow();
 }
 
@@ -269,7 +269,7 @@ async function main(): Promise<void> {
   const boot = await Bridge.boot();
   if (boot) {
     State.settings = { ...State.settings, ...boot.settings };
-    version.textContent = `Coucou ${boot.version}`;
+    version.textContent = `Qanot AI ${boot.version}`;
   }
   applyLanguage();
   State.view = "prompt";

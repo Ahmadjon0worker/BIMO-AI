@@ -47,7 +47,7 @@ export const Bridge = {
   localAICapabilities: () => callOrThrow<unknown>("local_ai_capabilities"),
   localAIToolboxStatus: () => callOrThrow<unknown>("local_ai_toolbox_status"),
   localAIVoiceStatus: () => callOrThrow<unknown>("local_ai_voice_status"),
-  voicePanel: (expanded: boolean) => IS_TAURI ? emitTo("main", "voice-panel", { expanded }) : Promise.reject(new Error("Panel faqat Coucou ilovasida boshqariladi")),
+  voicePanel: (expanded: boolean) => IS_TAURI ? emitTo("main", "voice-panel", { expanded }) : Promise.reject(new Error("Panel faqat Qanot AI ilovasida boshqariladi")),
   localAIVoiceTranscribe: (args: Record<string, unknown>) => callOrThrow<unknown>("local_ai_voice_transcribe", { arguments: args }),
   localAIVoiceCancel: () => callOrThrow<unknown>("local_ai_voice_cancel"),
   localAIVoiceSpeak: (args: Record<string, unknown>) => callOrThrow<unknown>("local_ai_voice_speak", { arguments: args }),
@@ -376,7 +376,7 @@ export interface HookPreview {
 
 /** Same as `call`, but surfaces the error so the UI can show what went wrong. */
 async function callOrThrow<T>(cmd: string, args?: Record<string, unknown>): Promise<T> {
-  if (!IS_TAURI) throw new Error("not running inside Coucou");
+  if (!IS_TAURI) throw new Error("not running inside Qanot AI");
   return invoke<T>(cmd, args);
 }
 

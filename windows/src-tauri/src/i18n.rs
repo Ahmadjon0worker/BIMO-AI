@@ -266,7 +266,8 @@ mod tests {
         // From the Mac's catalog.
         assert_eq!(t("Allow"), "Autoriser");
         // From extra.json.
-        assert_eq!(t("Open Coucou"), "Ouvrir Coucou");
+        assert_eq!(t("Open Qanot AI"), "Ouvrir Qanot AI");
+        assert_eq!(t("Open Coucou"), "Ouvrir Qanot AI");
         assert_eq!(t("A string nobody translated"), "A string nobody translated");
         assert_eq!(tf("Open {name}", &[("name", "Vercel")]), "Ouvrir Vercel");
         set_for_test("en");
@@ -286,6 +287,23 @@ mod tests {
         assert_eq!(plural_category("ru", 23), "few");
         assert_eq!(plural_category("ru", 25), "many");
         assert_eq!(plural_category("ar", 2), "two");
+        set_for_test("en");
+    }
+
+    #[test]
+    fn public_brand_keeps_compatibility_paths_unchanged() {
+        let file = "C:/Users/example/AppData/Roaming/Coucou/settings.json";
+        let key = "{file} isn't a JSON object — Qanot AI won't touch it.";
+        for lang in LANGUAGES {
+            set_for_test(lang);
+            assert!(t("Open Qanot AI").contains("Qanot AI"), "{lang}");
+            let message = tf(key, &[("file", file)]);
+            assert!(message.contains(file), "{lang}: compatibility path changed");
+            assert!(message.contains("Qanot AI"), "{lang}: public brand missing");
+            assert!(!message.replace(file, "").contains("Coucou"), "{lang}: old app brand shown");
+        }
+        set_for_test("fr");
+        assert_eq!(t("Open Coucou"), t("Open Qanot AI"));
         set_for_test("en");
     }
 

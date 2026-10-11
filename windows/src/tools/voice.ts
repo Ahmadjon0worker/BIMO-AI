@@ -32,7 +32,7 @@ export function buildVoice(navigate:(tab:"account"|"toolbox"|"desktop")=>void, p
     h("p",{class:"muted",text:"Whisper nutqni shu Windows kompyuterda taniydi. Ovoz yozuvi saqlanmaydi. Telegram, CMD va GitHub buyruqlari mavjud vositalarga ulanadi."}),
     h("p",{id:"voice-quality-note",class:"notice",text:"Tilga mos model avtomatik tanlanadi. Ismlar, username va shovqinli nutqda xato bo‘lishi mumkin: «Eshitilgan buyruq» matnini tekshiring va kerak bo‘lsa tahrirlang. Telegram xabarini oldin ko‘rish uchun «Aniq Telegram yuborish buyrug‘ini darhol yuborish» belgisini o‘chiring."}),notice,
     h("div",{class:"voice-options"},label("Nutq tili",language),label("Telegram qabul qiluvchisi",recipient)),h("div",{class:"actions"},load,refresh),
-    checkbox("Davomli tinglash: faqat «OK Coucou / Kuku» bilan boshlangan buyruqlar",wake),
+    checkbox("Davomli tinglash: «OK Qanot» bilan boshlangan buyruqlar",wake),
     checkbox("Javobni mahalliy ovozda o‘qish (eSpeak NG)",spoken),
     checkbox("Aniq Telegram yuborish buyrug‘ini darhol yuborish",direct),
     h("div",{class:"actions voice-record-row"},record,finish,cancel),
@@ -116,7 +116,7 @@ export function buildVoice(navigate:(tab:"account"|"toolbox"|"desktop")=>void, p
   function sync(){
     const ready=controller.status,blocked=actionBusy||controller.busy||telegram.snapshot.pending;
     const model=ready?.models_by_language[language.value as VoiceLanguage] || ready?.model;
-    notice.textContent=controller.error|| (mic.recording?`Mikrofon yoqilgan · ${wake.checked?"OK Coucou bilan buyruq ayting":"Gapiring"}`:controller.busy?"Nutq mahalliy tanilmoqda…":ready?.halted?"LocalAI to‘xtatilgan":ready?.available?`Whisper ${model} · O‘zbekcha / Ruscha / English · ${ready.tts_available?"O‘zbekcha ovoz mavjud":"Ovoz javobi mavjud emas"}`:ready?.reason||"Ovoz holatini tekshirish tugmasini bosing.");
+    notice.textContent=controller.error|| (mic.recording?`Mikrofon yoqilgan · ${wake.checked?"OK Qanot bilan buyruq ayting":"Gapiring"}`:controller.busy?"Nutq mahalliy tanilmoqda…":ready?.halted?"LocalAI to‘xtatilgan":ready?.available?`Whisper ${model} · O‘zbekcha / Ruscha / English · ${ready.tts_available?"O‘zbekcha ovoz mavjud":"Ovoz javobi mavjud emas"}`:ready?.reason||"Ovoz holatini tekshirish tugmasini bosing.");
     record.disabled=blocked||micPending||mic.recording||!visible||!ready?.available||ready.halted;finish.disabled=!mic.recording;execute.disabled=blocked||!visible;
     language.disabled=blocked||mic.recording;recipient.disabled=blocked||mic.recording;send.hidden=!telegram.snapshot.preview;send.disabled=blocked;check.hidden=telegram.snapshot.result?.status!=="unknown";check.disabled=blocked;
   }

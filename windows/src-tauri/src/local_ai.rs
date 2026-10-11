@@ -517,7 +517,7 @@ pub fn create_studio_window(app: &AppHandle) {
     }
     match WebviewWindowBuilder::new(app, "studio", url)
         .additional_browser_args(crate::BROWSER_ARGS)
-        .title("LocalAI Studio - Coucou")
+        .title("LocalAI Studio - Qanot AI")
         .inner_size(1180.0, 780.0).min_inner_size(800.0, 580.0)
         .resizable(true).visible(false).center().build() {
         Ok(window) => {

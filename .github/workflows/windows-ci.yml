@@ -1,7 +1,7 @@
 name: Windows CI
 
 # Automatic checks do not download or require the large release runtime.
-# Native tests are opt-in and require the pinned v0.6.2 runtime asset to exist.
+# Native tests are opt-in and require the pinned v0.6.3 runtime asset to exist.
 on:
   pull_request:
     paths:

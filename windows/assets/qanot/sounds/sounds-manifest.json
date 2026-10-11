@@ -1,0 +1,221 @@
+{
+  "schema": 1,
+  "brand": "Qanot AI",
+  "author": "Ahmadjon0worker",
+  "license": "MIT",
+  "generator": "scripts/generate-qanot-sounds.mjs",
+  "sample_rate": 44100,
+  "license_notice": {
+    "file": "LICENSE.txt",
+    "bytes": 3034,
+    "sha256": "6030783ae75ae8131b0c39afd25204f637fc33ff1e30f035e019ba25c5d66940"
+  },
+  "channels": 1,
+  "format": "PCM16",
+  "synthesis": "Original deterministic harmonic oscillators, frequency glides and amplitude envelopes; no source audio.",
+  "files": [
+    {
+      "file": "peek.wav",
+      "bytes": 21212,
+      "sha256": "4b6118bc3f0cb1816734da723f37fdc4df0825ba6b642e585afba22e5af2f34e",
+      "duration_ms": 240,
+      "peak": 0.18195
+    },
+    {
+      "file": "open.wav",
+      "bytes": 32238,
+      "sha256": "ad4e5c09e14204e0b3561a9d99d8ab5387be4d47c4c1cafbbb910ba3a555bc3d",
+      "duration_ms": 365,
+      "peak": 0.181032
+    },
+    {
+      "file": "close.wav",
+      "bytes": 25182,
+      "sha256": "6882bc9c6dab3ab0bb274e07776bed4affa7833c82afdb3299cddf5ea70485b8",
+      "duration_ms": 285,
+      "peak": 0.175696
+    },
+    {
+      "file": "hover.wav",
+      "bytes": 8864,
+      "sha256": "2a15e7bd168f70d25def5d7ffa54ba436351a79a34fd4d14c427dc41bc1d8d9d",
+      "duration_ms": 100,
+      "peak": 0.095282
+    },
+    {
+      "file": "blip.wav",
+      "bytes": 11510,
+      "sha256": "9909d5db2d00854c1847cbae3e97a660baffa8db3121a20485730c660493b88d",
+      "duration_ms": 130,
+      "peak": 0.169688
+    },
+    {
+      "file": "slap.wav",
+      "bytes": 9306,
+      "sha256": "8daeaef93ae798486648597a234fef817aad49f98975487133f1f041f735a86f",
+      "duration_ms": 105,
+      "peak": 0.20341
+    },
+    {
+      "file": "annoyed.wav",
+      "bytes": 28710,
+      "sha256": "68d0cef8c598c1a781e23a8f7f20fd192398685e7467f0cffe8861dcb8086789",
+      "duration_ms": 325,
+      "peak": 0.168661
+    },
+    {
+      "file": "dizzy.wav",
+      "bytes": 41940,
+      "sha256": "796b5ad12be2e53765a6d0e35d4e470f554a8bdabfd53a58745b90e2ad09ab81",
+      "duration_ms": 475,
+      "peak": 0.140886
+    },
+    {
+      "file": "greet.wav",
+      "bytes": 48114,
+      "sha256": "208ae9dbedf55a9211c4244d3b734b02b82a0c13697c5e9f1839757808a91c47",
+      "duration_ms": 545,
+      "peak": 0.178488
+    },
+    {
+      "file": "work.wav",
+      "bytes": 19890,
+      "sha256": "bc31552f949360d57a1f13f72442426de24493269ad00cb4e4ecdc104eb2735e",
+      "duration_ms": 225,
+      "peak": 0.11094
+    },
+    {
+      "file": "finish.wav",
+      "bytes": 45468,
+      "sha256": "edd34f89e6fd75bdb8cc0feee86baa491bca8a89a6c80eae07c0ad6a5819697c",
+      "duration_ms": 515,
+      "peak": 0.180735
+    },
+    {
+      "file": "error.wav",
+      "bytes": 34884,
+      "sha256": "3ae47cbad759e7dd3cefe678e645b53e092a30d6bff9a8f9617bc2613ea46911",
+      "duration_ms": 395,
+      "peak": 0.191926
+    },
+    {
+      "file": "approval.wav",
+      "bytes": 33120,
+      "sha256": "67643476a47a2c73211c6e8b0c6da7cbe0a220c483bbb20f27a828b4dd55578b",
+      "duration_ms": 375,
+      "peak": 0.186361
+    },
+    {
+      "file": "question.wav",
+      "bytes": 31356,
+      "sha256": "0432c08f58a4c2517069c50cd96b39406b17294d087928ea78546d9fa350738f",
+      "duration_ms": 355,
+      "peak": 0.169643
+    },
+    {
+      "file": "approve.wav",
+      "bytes": 30474,
+      "sha256": "b633213e35e110113e1c0aca9bae15b61c5ed554847a786c121daa3128f11297",
+      "duration_ms": 345,
+      "peak": 0.176953
+    },
+    {
+      "file": "gulp.wav",
+      "bytes": 19448,
+      "sha256": "1e2fa3743c3b2e4868abe2b7f744a18b1c6c421990be79d15587eddcf254898e",
+      "duration_ms": 220,
+      "peak": 0.17428
+    },
+    {
+      "file": "tick.wav",
+      "bytes": 6220,
+      "sha256": "82c5973e61724ca7476eaac8b643b521528ded38d3e7273466fa67b0841a7193",
+      "duration_ms": 70,
+      "peak": 0.059204
+    },
+    {
+      "file": "send.wav",
+      "bytes": 22976,
+      "sha256": "d473b98def65e8a10ac7bce3867408f3bc4ba5894d0f18d96bd48904b7699edd",
+      "duration_ms": 260,
+      "peak": 0.168707
+    },
+    {
+      "file": "love.wav",
+      "bytes": 40176,
+      "sha256": "391bd1608338b6a13b580a9145c6b9a47819063c407e9715febbbef4bdf927da",
+      "duration_ms": 455,
+      "peak": 0.194894
+    },
+    {
+      "file": "pop.wav",
+      "bytes": 9306,
+      "sha256": "2cc31bdc2ee5e1cb50678af973793696cee240031c7bacb1f142d53f2a803a85",
+      "duration_ms": 105,
+      "peak": 0.151294
+    },
+    {
+      "file": "proud.wav",
+      "bytes": 49878,
+      "sha256": "ecb4dcdc7b6a4ea434ce3efd6532d42b6cf88e5f282e05c6fa3c8addc61acc50",
+      "duration_ms": 565,
+      "peak": 0.171994
+    },
+    {
+      "file": "wink.wav",
+      "bytes": 17244,
+      "sha256": "53fbd64f9013c75fd19077368884a2a17b8b968f412e47986744906dabcb4550",
+      "duration_ms": 195,
+      "peak": 0.144876
+    },
+    {
+      "file": "yawn.wav",
+      "bytes": 47232,
+      "sha256": "bf748be3e5e83809853b8e593c6ca2cf1b351025e7a5ec58e1e34b42058d0345",
+      "duration_ms": 535,
+      "peak": 0.15515
+    },
+    {
+      "file": "attach.wav",
+      "bytes": 23858,
+      "sha256": "2700c69a21d4694353875b74a8f47e079b37cffedfa354af7c2d8b7195819b44",
+      "duration_ms": 270,
+      "peak": 0.153162
+    },
+    {
+      "file": "think.wav",
+      "bytes": 26064,
+      "sha256": "790dd3c96cdafe95ad7d0f1b5b4e605885b9a6195bd664725ae49892802ec2e4",
+      "duration_ms": 295,
+      "peak": 0.100197
+    },
+    {
+      "file": "search.wav",
+      "bytes": 35766,
+      "sha256": "cc21db67db4429cb2d4b7f2683a72596d7d25c4222ba0c09059f4b38003b0ffd",
+      "duration_ms": 405,
+      "peak": 0.122435
+    },
+    {
+      "file": "rate.wav",
+      "bytes": 29592,
+      "sha256": "61a6ba077934887b5eef5dd03caf88046abbaaf0049e4dd15b17dd61544e2a70",
+      "duration_ms": 335,
+      "peak": 0.122535
+    },
+    {
+      "file": "sleep.wav",
+      "bytes": 44586,
+      "sha256": "8370c8912dad09d8ebb3df7202df66bc98d67538670692761af71779bcb80c84",
+      "duration_ms": 505,
+      "peak": 0.111812
+    },
+    {
+      "file": "greeting.wav",
+      "bytes": 83394,
+      "sha256": "0a2734e4f41c1e54048dc20ea3ad3938f867bbdb4dea67c09917b6f4e920cb70",
+      "duration_ms": 945,
+      "peak": 0.166607
+    }
+  ]
+}

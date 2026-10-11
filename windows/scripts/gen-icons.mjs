@@ -1,111 +1,75 @@
-// Draws Mochi into the PNG/ICO set Tauri needs. No dependencies: the icons are
-// rasterised here and encoded with node:zlib, so the app icon stays "drawn in
-// code" like the character itself.
+// Original Qanot AI angular wing/diamond artwork, rendered directly into PNG/ICO.
+// The turquoise/gold emblem is independent of the upstream mascot. The existing
+// MIT PNG/ICO encoding helpers are retained; see LICENSE-QANOT-ASSETS.md.
 //
 //   node scripts/gen-icons.mjs
 
 import { deflateSync } from "node:zlib";
+import { createHash } from "node:crypto";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const OUT = join(dirname(fileURLToPath(import.meta.url)), "..", "src-tauri", "icons");
+const ASSETS = join(dirname(fileURLToPath(import.meta.url)), "..", "assets", "qanot");
 
-// ── Mochi ─────────────────────────────────────────────────────────────────────
+// ── Original Qanot wing emblem ────────────────────────────────────────────────
+const SS = 4;
+const NAVY = [16, 42, 53];
+const TURQUOISE = [34, 198, 189];
+const TURQUOISE_LIGHT = [102, 238, 224];
+const GOLD = [244, 199, 103];
+const GOLD_SHADOW = [194, 139, 44];
+const PLATE = [[.5, .045], [.92, .27], [.92, .73], [.5, .955], [.08, .73], [.08, .27]];
+const WING_TOP = [[.46, .43], [.13, .235], [.20, .485], [.43, .65], [.38, .48]];
+const WING_LOW = [[.425, .53], [.215, .505], [.285, .715], [.46, .78], [.38, .595]];
+const DIAMOND = [[.5, .23], [.62, .5], [.5, .81], [.38, .5]];
+const CORE = [[.5, .395], [.54, .5], [.5, .63], [.46, .5]];
 
-const BASE_TOP = [255, 250, 245]; // #FFFAF5
-const BASE_BOTTOM = [221, 204, 191]; // #DDCCBF
-const INK = [26, 20, 18]; // #1A1412
-const RIM = [0, 0, 0];
-
-const SS = 4; // supersampling factor
-
-/** Superellipse (exponent 2.7) test in body-local coordinates. */
-function insideBody(x, y, rx, ry) {
-  const n = 2.7;
-  return Math.pow(Math.abs(x / rx), n) + Math.pow(Math.abs(y / ry), n) <= 1;
+function insidePolygon(x, y, points) {
+  let inside = false;
+  for (let i = 0, j = points.length - 1; i < points.length; j = i++) {
+    const [ax, ay] = points[i], [bx, by] = points[j];
+    if ((ay > y) !== (by > y) && x < (bx - ax) * (y - ay) / (by - ay) + ax) inside = !inside;
+  }
+  return inside;
 }
 
-function insidePill(x, y, w, h) {
-  const hw = w / 2;
-  const hh = h / 2;
-  const r = Math.min(hw, hh);
-  const cx = Math.max(-hw + r, Math.min(hw - r, x));
-  const cy = Math.max(-hh + r, Math.min(hh - r, y));
-  return (x - cx) ** 2 + (y - cy) ** 2 <= r * r;
+function mix(a, b, t) {
+  return a.map((value, index) => value * (1 - t) + b[index] * t);
 }
 
-function renderMochi(size) {
-  const px = new Uint8Array(size * size * 4);
-  const R = size * 0.34;
-  const rx = R * 1.14;
-  const ry = R * 0.88;
-  const cx = size / 2;
-  const cy = size / 2 + R * 0.06;
-  const rim = R * 0.055; // dark outline so the tray icon reads on light themes
-
-  // Eyes — same geometry as BotEngine (yaw ±0.37, pitch −0.12)
-  const eyeYaw = 0.37;
-  const eyePitch = -0.12;
-  const cp = Math.cos(eyePitch);
-  const ex = Math.sin(eyeYaw) * cp * rx;
-  const ey = -Math.sin(eyePitch) * ry;
-  const fx = Math.max(0.18, Math.cos(eyeYaw));
-  const fy = Math.max(0.18, cp);
-  const ew = R * 0.25 * fx;
-  const eh = R * 0.27 * fy;
-
+function renderQanot(size) {
+  const pixels = new Uint8Array(size * size * 4);
   for (let y = 0; y < size; y++) {
     for (let x = 0; x < size; x++) {
-      let bodyHits = 0;
-      let rimHits = 0;
-      let eyeHits = 0;
+      const color = [0, 0, 0];
+      let hits = 0;
       for (let sy = 0; sy < SS; sy++) {
         for (let sx = 0; sx < SS; sx++) {
-          const px0 = x + (sx + 0.5) / SS - cx;
-          const py0 = y + (sy + 0.5) / SS - cy;
-          if (!insideBody(px0, py0, rx + rim, ry + rim)) continue;
-          rimHits++;
-          if (!insideBody(px0, py0, rx, ry)) continue;
-          bodyHits++;
-          if (
-            insidePill(px0 + ex, py0 - ey, ew, eh) ||
-            insidePill(px0 - ex, py0 - ey, ew, eh)
-          ) {
-            eyeHits++;
+          const u = (x + (sx + .5) / SS) / size;
+          const v = (y + (sy + .5) / SS) / size;
+          if (!insidePolygon(u, v, PLATE)) continue;
+          hits++;
+          let sample = NAVY;
+          if (insidePolygon(u, v, WING_TOP) || insidePolygon(1 - u, v, WING_TOP)) {
+            sample = mix(TURQUOISE_LIGHT, TURQUOISE, Math.min(1, Math.max(0, (v - .23) / .42)));
           }
+          if (insidePolygon(u, v, WING_LOW) || insidePolygon(1 - u, v, WING_LOW)) {
+            sample = mix(TURQUOISE, [20, 131, 146], Math.min(1, Math.max(0, (v - .5) / .3)));
+          }
+          if (insidePolygon(u, v, DIAMOND)) sample = mix(GOLD, GOLD_SHADOW, Math.min(1, Math.max(0, (v - .23) / .58)));
+          if (insidePolygon(u, v, CORE)) sample = NAVY;
+          for (let channel = 0; channel < 3; channel++) color[channel] += sample[channel];
         }
       }
-      if (rimHits === 0) continue;
-
-      const total = SS * SS;
-      const rimA = rimHits / total;
-      const bodyA = bodyHits / total;
-      const eyeA = eyeHits / total;
-
-      // Body gradient: top-right → bottom-left, like the Canvas gradient.
-      const t = Math.min(1, Math.max(0, ((x - cx) * -0.6 + (y - cy) * 0.8) / (2 * ry) + 0.5));
-      const body = [0, 1, 2].map((i) => BASE_TOP[i] + (BASE_BOTTOM[i] - BASE_TOP[i]) * t);
-
-      // rim under body, body over rim, eyes over body
-      let col = RIM.slice();
-      let alpha = rimA;
-      if (bodyA > 0) {
-        col = col.map((c, i) => c * (1 - bodyA / rimA) + body[i] * (bodyA / rimA));
-        alpha = rimA;
-      }
-      if (eyeA > 0) {
-        col = col.map((c, i) => c * (1 - eyeA) + INK[i] * eyeA);
-      }
-
-      const o = (y * size + x) * 4;
-      px[o] = Math.round(col[0]);
-      px[o + 1] = Math.round(col[1]);
-      px[o + 2] = Math.round(col[2]);
-      px[o + 3] = Math.round(Math.min(1, alpha) * 255);
+      if (!hits) continue;
+      const offset = (y * size + x) * 4;
+      for (let channel = 0; channel < 3; channel++) pixels[offset + channel] = Math.round(color[channel] / hits);
+      pixels[offset + 3] = Math.round(255 * hits / (SS * SS));
     }
   }
-  return px;
+  return pixels;
 }
 
 // ── PNG ───────────────────────────────────────────────────────────────────────
@@ -182,7 +146,7 @@ function encodeICO(entries) {
 
 mkdirSync(OUT, { recursive: true });
 
-const png = (size) => encodePNG(size, renderMochi(size));
+const png = (size) => encodePNG(size, renderQanot(size));
 
 const files = {
   "32x32.png": png(32),
@@ -198,3 +162,10 @@ for (const [name, data] of Object.entries(files)) {
 const ico = encodeICO([16, 24, 32, 48, 64, 128, 256].map((size) => ({ size, png: png(size) })));
 writeFileSync(join(OUT, "icon.ico"), ico);
 console.log(`icon.ico — ${ico.length} bytes`);
+mkdirSync(ASSETS, { recursive: true });
+const manifest = { schema: 1, brand: "Qanot AI", author: "Ahmadjon0worker", license: "MIT",
+  generator: "scripts/gen-icons.mjs", design: "Original mirrored angular turquoise wings and gold diamond on a navy hexagonal plate.",
+  files: Object.entries({ ...files, "icon.ico": ico }).map(([file, data]) => ({
+    file: `src-tauri/icons/${file}`, bytes: data.length, sha256: createHash("sha256").update(data).digest("hex"),
+  })) };
+writeFileSync(join(ASSETS, "icons-manifest.json"), JSON.stringify(manifest, null, 2) + "\n");

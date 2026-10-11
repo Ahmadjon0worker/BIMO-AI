@@ -1,0 +1,35 @@
+{
+  "schema": 1,
+  "brand": "Qanot AI",
+  "author": "Ahmadjon0worker",
+  "license": "MIT",
+  "generator": "scripts/gen-icons.mjs",
+  "design": "Original mirrored angular turquoise wings and gold diamond on a navy hexagonal plate.",
+  "files": [
+    {
+      "file": "src-tauri/icons/32x32.png",
+      "bytes": 804,
+      "sha256": "32dc99538933dc315d9a04d6221cdcf65d7ff8a7dc050d79bd1f163ea6517c93"
+    },
+    {
+      "file": "src-tauri/icons/128x128.png",
+      "bytes": 3667,
+      "sha256": "9bd509b582afe2d7a3df07d36f95e0a0897614b096e67426a6fea7c37100ab9e"
+    },
+    {
+      "file": "src-tauri/icons/128x128@2x.png",
+      "bytes": 7580,
+      "sha256": "d63723d9bfb59ae3adefa3d5671b2086c5301818ad618996c0b3297694aa59ee"
+    },
+    {
+      "file": "src-tauri/icons/icon.png",
+      "bytes": 16324,
+      "sha256": "d21f527c333b33117089dd27e402ef94b03487703b3a5028a2802377a29ffa1d"
+    },
+    {
+      "file": "src-tauri/icons/icon.ico",
+      "bytes": 16114,
+      "sha256": "baab991388a246ae3ccbad80779ee4cda9c320949d3bcc4ac7f9472f759cbd7a"
+    }
+  ]
+}

@@ -1,6 +1,6 @@
-"""Local stdio MCP tools and the shared explicit-action Coucou bridge.
+"""Local stdio MCP tools and the shared explicit-action Qanot AI bridge.
 
-Run with the bundled Coucou Python runtime and local_tools.py. The server writes
+Run with the bundled Qanot AI Python runtime and local_tools.py. The server writes
 protocol messages only to stdout; audit records contain metadata, never content.
 Windows GUI dependencies are imported only after an approved computer-use start.
 """
@@ -92,7 +92,7 @@ class WorkspacePolicy:
                 raise ToolError("Alternate streams are forbidden.")
         candidate = (path if path.is_absolute() else self.root / path).resolve()
         if not is_within(candidate, self.root):
-            raise ToolError("Path escapes the per-user Coucou LocalAI workspace.")
+            raise ToolError("Path escapes the per-user Qanot AI LocalAI workspace.")
         relative_parts = candidate.relative_to(self.root).parts
         for part in relative_parts:
             low = part.casefold()
@@ -128,7 +128,7 @@ def string(description: str, **extra) -> dict:
 
 
 TOOLS = [
-    {"name": "workspace_files", "description": "Read, list, search or write UTF-8 files ONLY in the per-user Coucou LocalAI workspace. Writes back up existing files. Credentials, traversal and symlink escapes are denied.", "inputSchema": schema({"operation": {"type": "string", "enum": ["read", "write", "list", "search"]}, "path": string("Workspace-relative path; use '.' to list/search workspace"), "content": string("UTF-8 text for write"), "query": string("Literal substring for search")}, ("operation", "path"))},
+    {"name": "workspace_files", "description": "Read, list, search or write UTF-8 files ONLY in the per-user Qanot AI LocalAI workspace. Writes back up existing files. Credentials, traversal and symlink escapes are denied.", "inputSchema": schema({"operation": {"type": "string", "enum": ["read", "write", "list", "search"]}, "path": string("Workspace-relative path; use '.' to list/search workspace"), "content": string("UTF-8 text for write"), "query": string("Literal substring for search")}, ("operation", "path"))},
     {"name": "git_read", "description": "Read-only Git status, diff or history for repositories inside workspace. No git mutation, shell, external diff or hooks.", "inputSchema": schema({"operation": {"type": "string", "enum": ["status", "diff", "history"]}, "repo": string("Repository path inside workspace")}, ("operation", "repo"))},
     {"name": "terminal_action", "description": "Named diagnostics or syntax-check a workspace .py file. python_run REQUIRES HUMAN CLIENT APPROVAL plus user_approved:true; executes approved Python as CURRENT USER, NOT an OS sandbox, with 15s timeout and sanitized environment. No arbitrary shell/pip command.", "inputSchema": schema({"action": {"type": "string", "enum": ["versions", "disk_usage", "list_workspace", "python_compile", "python_run"]}, "path": string("Required for Python actions; workspace .py script to review/approve"), "user_approved": {"type": "boolean", "description": "Must be explicitly true for python_run; human approval must also be enforced by OpenCode client."}}, ("action",))},
     {"name": "document", "description": "Read/create PDF, DOCX or XLSX within workspace. Text extraction only; no macros, external links or embedded code. Existing documents are backed up before writes.", "inputSchema": schema({"operation": {"type": "string", "enum": ["read", "create"]}, "path": string("Workspace .pdf, .docx or .xlsx path"), "text": string("Plain text for PDF/DOCX creation"), "rows": {"type": "array", "maxItems": 1000, "items": {"type": "array", "maxItems": 100, "items": {"type": ["string", "number", "boolean", "null"]}}}}, ("operation", "path"))},

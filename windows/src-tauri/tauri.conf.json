@@ -1,7 +1,7 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "Coucou",
-  "version": "0.6.2",
+  "productName": "Qanot AI",
+  "version": "0.6.3",
   "identifier": "fr.louisraille.coucou",
   "build": {
     "beforeDevCommand": "npm run dev",
@@ -18,7 +18,7 @@
     "windows": [
       {
         "label": "island",
-        "title": "Coucou",
+        "title": "Qanot AI",
         "url": "index.html",
         "width": 240,
         "height": 6,
@@ -41,6 +41,7 @@
   },
   "bundle": {
     "active": true,
+    "publisher": "Ahmadjon0worker",
     "targets": [
       "nsis",
       "msi"
@@ -56,9 +57,9 @@
       "../localai-service/bundle/": "localai-service/",
       "../INSTALL-UZ.md": "INSTALL-UZ.md"
     },
-    "copyright": "© Louis Raille",
+    "copyright": "© 2026 Qanot AI contributors. Based on MIT code by Louis Raille.",
     "category": "DeveloperTool",
-    "shortDescription": "Coucou AI: Ollama, Gemini, Groq and desktop tools",
+    "shortDescription": "Qanot AI: Ollama, Gemini, Groq and desktop tools",
     "longDescription": "Windows AI assistant with automatic Ollama, Gemini and Groq provider selection, Codex status, a flexible desktop panel, Telegram and computer controls.",
     "windows": {
       "nsis": {

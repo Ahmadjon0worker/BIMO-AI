@@ -177,7 +177,7 @@ def default_client_factory(*, api_id, api_hash, session_string):
         timeout=10, request_retries=0, raise_last_call_error=True,
         connection_retries=0, auto_reconnect=False,
         flood_sleep_threshold=0, receive_updates=False, catch_up=False,
-        base_logger=logger, device_model='LocalAI Coucou', app_version='1.0', lang_code='uz')
+        base_logger=logger, device_model='Qanot AI', app_version='0.6.3', lang_code='uz')
 
 
 def canonical_chat_id(value):

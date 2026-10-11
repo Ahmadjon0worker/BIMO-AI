@@ -3,6 +3,14 @@ import assert from "node:assert/strict";
 import { matchesRelease } from "../scripts/bundle-selection.mjs";
 
 const current = { productName: "Coucou", version: "0.3.0", platform: "win32", architecture: "x64", suffix: "-setup.exe" };
+test("pack accepts the new product name including its space and rejects inherited packages", () => {
+  const qanot = { ...current, productName: "Qanot AI", version: "0.6.3" };
+  assert.equal(matchesRelease("Qanot AI_0.6.3_x64-setup.exe", qanot), true);
+  assert.equal(matchesRelease("Qanot AI_0.6.3_x64_en-US.msi", { ...qanot, suffix: ".msi" }), true);
+  for (const file of ["Coucou_0.6.3_x64-setup.exe", "Qanot AI_0.6.2_x64-setup.exe", "Qanot AI_0.6.3_arm64-setup.exe"]) {
+    assert.equal(matchesRelease(file, qanot), false, file);
+  }
+});
 test("pack rejects stale releases and wrong Windows architecture", () => {
   assert.equal(matchesRelease("Coucou_0.3.0_x64-setup.exe", current), true);
   for (const file of ["Coucou_0.2.0_x64-setup.exe", "Coucou_0.3.0_arm64-setup.exe",

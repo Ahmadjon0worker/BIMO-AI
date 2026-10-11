@@ -1,7 +1,7 @@
 [package]
 name = "coucou"
-description = "Coucou for Windows and Linux — Mochi lives at the top of your screen"
-authors = ["Louis Raille"]
+description = "Qanot AI for Windows — local AI Studio, Telegram and voice controls"
+authors = ["Qanot AI contributors", "Louis Raille (upstream MIT code)"]
 version.workspace = true
 edition.workspace = true
 license.workspace = true
@@ -25,6 +25,8 @@ reqwest = { version = "0.12", default-features = false, features = ["json", "rus
 
 [target.'cfg(windows)'.dependencies]
 keyring = { version = "3", features = ["windows-native"] }
+# Reuse the autostart plugin's cached version to quote its own Windows Run entry.
+winreg = "=0.10.1"
 # The island's file drop reads paths straight from WebView2 (webview_drop.rs).
 # Same versions as wry, so nothing new is compiled.
 webview2-com = "0.39"

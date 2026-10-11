@@ -1,4 +1,4 @@
-"""Packaged Coucou bridge. Does not install or control shared services."""
+"""Packaged Qanot AI bridge. Does not install or control shared services."""
 from __future__ import annotations
 
 import argparse
@@ -64,7 +64,7 @@ def self_test():
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Coucou per-user LocalAI bridge")
+    parser = argparse.ArgumentParser(description="Qanot AI per-user LocalAI bridge")
     parser.add_argument("--port", type=int, default=11435)
     parser.add_argument("--data-root", type=Path)
     parser.add_argument("--self-test", action="store_true")

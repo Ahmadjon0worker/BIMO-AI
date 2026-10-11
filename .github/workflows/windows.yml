@@ -81,10 +81,10 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: Coucou-Windows-verified-installers
+          name: QanotAI-Windows-verified-installers
           path: |
-            windows/release/Coucou-Windows-*-setup.exe
-            windows/release/Coucou-Windows-*.msi
+            windows/release/QanotAI-Windows-*-setup.exe
+            windows/release/QanotAI-Windows-*.msi
             windows/release/release-manifest.json
             windows/release/SHA256SUMS.txt
             windows/release/installer-verification.json

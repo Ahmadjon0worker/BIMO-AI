@@ -1,8 +1,6 @@
-// The 1080 × 1920 image of the week, drawn once into an offscreen canvas —
-// port of RecapShareImageView in WeeklyRecapView.swift. Same colours, sizes
-// and order; Mochi comes from the island's own engine.
+// Weekly share card, with the shared Qanot companion and fork attribution.
 
-import { BotEngine } from "../mochi/engine";
+import { drawQanot } from "../mochi/outfits";
 import { formatCount, formatDuration, weekRangeLabel, type WeeklySummary } from "./summary";
 import { t } from "../i18n/i18n";
 import { SCRIPT_FONTS } from "../core/fonts";
@@ -30,7 +28,7 @@ const T = {
   get longestSession() { return t("Longest session"); },
   get approved() { return t("Approved"); },
   get denied() { return t("Denied"); },
-  footer: "Coucou · github.com/Louis-CFM/coucou",
+  footer: "Qanot AI · github.com/Ahmadjon0worker/CouCou-Uzbek-edition-",
 };
 
 /**
@@ -131,14 +129,11 @@ function badge(x: Ctx, left: number, top: number, w: number, label: string, valu
   x.fillText(ellipsize(x, value, w - 64 - labelW - 16), left + w - 32, mid);
 }
 
-/** A still Mochi, drawn by the same engine as the island's. */
-function drawMochi(x: Ctx, cx: number, top: number, size: number) {
-  const engine = new BotEngine();
-  engine.setState("idle", true);
-  engine.update(1 / 60);
+/** A static Qanot prism shares exactly the panel's authored visual. */
+function drawCompanion(x: Ctx, cx: number, top: number, size: number) {
   x.save();
-  x.translate(cx - size / 2, top);
-  engine.draw(x, size, size);
+  x.translate(cx, top + size / 2);
+  drawQanot(x, size * 0.3, { signal: "happy" });
   x.restore();
 }
 
@@ -171,11 +166,11 @@ export function renderShareImage(s: WeeklySummary, hideProjects: boolean): HTMLC
   const hasLines = s.linesAdded + s.linesRemoved > 0;
 
   // Heights of each block, so the whole stack can be centred like the VStack.
-  // Mochi's body fills ~60 % of the square the engine draws into.
-  const MOCHI = 220;
-  const MOCHI_DRAW = 320;
+  // Qanot's silhouette fills ~60 % of the square the engine draws into.
+  const COMPANION = 220;
+  const COMPANION_DRAW = 320;
   const blockH =
-    MOCHI + 20 + 62 + 6 + 36 + 14 + 29 + 80 + // Mochi, Coucou, title, range
+    COMPANION + 20 + 62 + 6 + 36 + 14 + 29 + 80 + // Companion, Qanot AI, title, range
     110 + 6 + 26 + // time + caption
     56 + 94 + // stat row
     (hasLines ? 24 + 34 : 0) +
@@ -185,13 +180,13 @@ export function renderShareImage(s: WeeklySummary, hideProjects: boolean): HTMLC
 
   x.textBaseline = "top";
 
-  drawMochi(x, cx, y + MOCHI / 2 - MOCHI_DRAW / 2 - MOCHI_DRAW * 0.02, MOCHI_DRAW);
-  y += MOCHI + 20;
+  drawCompanion(x, cx, y + COMPANION / 2 - COMPANION_DRAW / 2 - COMPANION_DRAW * 0.02, COMPANION_DRAW);
+  y += COMPANION + 20;
 
   x.fillStyle = INK;
   x.textAlign = "center";
   font(x, 900, 52);
-  x.fillText("Coucou", cx, y);
+  x.fillText("Qanot AI", cx, y);
   y += 62 + 6;
 
   x.fillStyle = DIM;
@@ -278,6 +273,7 @@ export function renderShareImage(s: WeeklySummary, hideProjects: boolean): HTMLC
   x.textAlign = "center";
   x.fillStyle = "rgba(142,147,156,0.6)";
   font(x, 500, 20, MONO);
+  fitFont(x, T.footer, 500, 20, W - 100, 0.65);
   x.fillText(T.footer, cx, footerTop);
 
   return canvas;

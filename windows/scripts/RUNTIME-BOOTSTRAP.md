@@ -1,13 +1,13 @@
 # Prepare the Windows release runtime
 
 The source checkout keeps large public binaries and generated dependencies out
-of Git. Release `v0.6.2` supplies a developer archive containing the same public
+of Git. Release `v0.6.3` supplies a developer archive containing the same public
 runtime verified inside both installers:
 
-<https://github.com/Ahmadjon0worker/CouCou-Uzbek-edition-/releases/download/v0.6.2/Coucou-Windows-0.6.2-runtime.zip>
+<https://github.com/Ahmadjon0worker/CouCou-Uzbek-edition-/releases/download/v0.6.3/QanotAI-Windows-0.6.3-runtime.zip>
 
 It contains exactly 2,068 allowlisted files plus `runtime-manifest.json`, with
-571,949,895 uncompressed payload bytes. It includes private CPython 3.12.14,
+571,951,706 uncompressed payload bytes. It includes private CPython 3.12.14,
 public dependencies, multilingual/Uzbek Whisper, Silero VAD, eSpeak and its source
 archive, GitHub CLI and Microsoft private redistributable DLLs with licenses.
 There are no user configuration files, credentials, Telegram sessions, logs,
@@ -27,13 +27,13 @@ The helper downloads only the fixed release URL. It verifies the ZIP's exact
 size/SHA256, the source-controlled runtime manifest pin and every decompressed
 file hash. Paths, case duplicates, symlinks/junctions, reserved Windows names,
 encrypted members, unlisted files and size limits are checked before extraction.
-The pins are in `scripts/release-runtime-0.6.2.json`.
+The pins are in `scripts/release-runtime-0.6.3.json`.
 
 To use an already downloaded archive without network access:
 
 ```powershell
-py -3.12 scripts/prepare-release-runtime.py --archive C:/Downloads/Coucou-Windows-0.6.2-runtime.zip --verify-only
-py -3.12 scripts/prepare-release-runtime.py --archive C:/Downloads/Coucou-Windows-0.6.2-runtime.zip
+py -3.12 scripts/prepare-release-runtime.py --archive C:/Downloads/QanotAI-Windows-0.6.3-runtime.zip --verify-only
+py -3.12 scripts/prepare-release-runtime.py --archive C:/Downloads/QanotAI-Windows-0.6.3-runtime.zip
 ```
 
 Verified archive contents populate `localai-service/bundle`, `public-voice`,

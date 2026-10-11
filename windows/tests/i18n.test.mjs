@@ -263,6 +263,21 @@ test("lookup() answers from the merged tables", () => {
   assert.equal(typeof lookup("{count} repos", "ru"), "object");
 });
 
+test("public Qanot labels and hook errors keep the brand across languages without rewriting file names", () => {
+  const file = "C:/Users/example/AppData/Roaming/Coucou/settings.json";
+  const errorKey = "{file} isn't a JSON object — Qanot AI won't touch it.";
+  for (const lang of LANGUAGE_CODES) {
+    inLanguage(lang, () => {
+      assert.match(t("Open Qanot AI"), /Qanot AI/);
+      const message = t(errorKey, { file });
+      assert.ok(message.includes(file), `${lang} changed the compatibility file path`);
+      assert.match(message, /Qanot AI/);
+      assert.ok(!message.replace(file, "").includes("Coucou"), `${lang} showed the old app brand`);
+    });
+  }
+  inLanguage("fr", () => assert.equal(t("Open Coucou"), t("Open Qanot AI")));
+});
+
 // ── No English left outside t() ───────────────────────────────────────────────
 //
 // Pragmatic: a literal in the views, the settings window, the island, the

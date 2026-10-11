@@ -36,8 +36,11 @@ test('voice normalization preserves Uzbek meaning across Cyrillic and apostrophe
 });
 test('wake mode accepts only a complete wake prefix and preserves exact message body', () => {
   assert.equal(voiceCommandText('Hey Coucou, panelni och!', true), 'panelni och!');
+  assert.equal(voiceCommandText('OK Qanot AI, panelni och!', true), 'panelni och!');
+  assert.equal(voiceCommandText('Salom Qanot: @fixture_user ga “Salom!” yubor', true), '@fixture_user ga “Salom!” yubor');
+  assert.equal(voiceCommandText('ОК Канот, панелни оч', true), 'панелни оч');
   assert.equal(voiceCommandText('KUKU: @fixture_user ga “Panelni yop!” yubor', true), '@fixture_user ga “Panelni yop!” yubor');
-  for (const text of ['panelni och', 'kukuing panelni och', 'Coucou', 'salom']) assert.equal(voiceCommandText(text, true), null, text);
+  for (const text of ['panelni och', 'kukuing panelni och', 'Coucou', 'salom', 'qanotli panelni och', 'Qanot AI']) assert.equal(voiceCommandText(text, true), null, text);
   assert.equal(voiceCommandText('Куку, панелни оч', true), 'панелни оч');
 });
 test('exact UI phrases are separate from quoted Telegram bodies and negative requests', () => {

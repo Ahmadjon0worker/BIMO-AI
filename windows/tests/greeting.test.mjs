@@ -1,6 +1,4 @@
-// The launch greeting (src/mochi/greeting.ts): Mochi must never be cut off by
-// the island while it grows, while he bounces and waves, or while it shrinks
-// back to the compact island.
+// Qanot's launch assembly must fit while the panel opens and collapses.
 
 import { test } from "node:test";
 import assert from "node:assert/strict";
@@ -54,14 +52,16 @@ test("Mochi stays inside the island when the greeting is cut short", () => {
   for (let tc = 0.3; tc < GREETING_END + 0.4; tc += 0.1) run(tc);
 });
 
-test("he slides to the side to wave, then comes back to the middle", () => {
-  const atWave = greetingPose(2.0);
-  assert.ok(atWave.x < 290, `waving at x=${atWave.x}`);
-  assert.ok(atWave.handL > 0.9 && atWave.handR > 0.9, "both hands out");
-  assert.ok(atWave.wave >= 0, "waving");
-  const back = greetingPose(3.6);
-  assert.equal(back.x, 320);
-  assert.equal(back.handL, 0);
+test("Qanot assembles in place without a fall or a hand wave", () => {
+  for (const time of [0.2, 0.5, 1, 2, 3.6]) {
+    const pose = greetingPose(time);
+    assert.equal(pose.x, 320);
+    assert.equal(pose.y, 86);
+    assert.equal(pose.handL, 0);
+    assert.equal(pose.handR, 0);
+    assert.equal(pose.wave, -1);
+  }
+  assert.ok(greetingPose(0.5).hb < greetingPose(1).hb, "facets assemble by size");
 });
 
 test("he lands where the compact island's Mochi sits", () => {

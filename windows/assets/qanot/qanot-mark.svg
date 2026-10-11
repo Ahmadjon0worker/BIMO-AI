@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Qanot AI wing emblem">
+  <defs>
+    <linearGradient id="wing" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#66EEE0"/><stop offset="1" stop-color="#22C6BD"/></linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#F4C767"/><stop offset="1" stop-color="#C28B2C"/></linearGradient>
+  </defs>
+  <path fill="#102A35" d="M50 4.5 92 27 92 73 50 95.5 8 73 8 27Z"/>
+  <path fill="url(#wing)" d="M46 43 13 23.5 20 48.5 43 65 38 48Z M54 43 87 23.5 80 48.5 57 65 62 48Z"/>
+  <path fill="#22C6BD" d="M42.5 53 21.5 50.5 28.5 71.5 46 78 38 59.5Z M57.5 53 78.5 50.5 71.5 71.5 54 78 62 59.5Z"/>
+  <path fill="url(#gold)" d="M50 23 62 50 50 81 38 50Z"/>
+  <path fill="#102A35" d="M50 39.5 54 50 50 63 46 50Z"/>
+</svg>

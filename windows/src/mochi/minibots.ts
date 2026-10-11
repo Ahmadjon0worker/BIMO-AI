@@ -1,4 +1,4 @@
-// Mini Mochis (pills + compact grid) — port of MiniBotCanvasView.
+// Mini Qanot companions (pills + compact grid) use the shared geometric engine.
 // Each canvas owns a BotEngine; the island's frame loop ticks every live one.
 
 import { BotEngine, hexToRGB } from "./engine";
@@ -14,13 +14,12 @@ interface MiniBot {
 const live = new Map<HTMLCanvasElement, MiniBot>();
 
 /**
- * Creates a mini Mochi whose **body** is `bodySize` CSS pixels across.
+ * Creates a mini Qanot whose wing silhouette fits a `bodySize` CSS pixel slot.
  *
  * The engine draws the body at 60 % of its canvas, so the canvas is
  * `bodySize / 0.6` and is centred in a `bodySize` slot, overflowing it — the
- * same thing SwiftUI does with a `.frame(width: 22/0.6)` inside a
- * `.frame(width: 22)`. Sizing the canvas itself to `bodySize` would shrink the
- * whole drawing to 60 %, which is what used to happen.
+ * matching the panel's existing sizing contract. Its exported API and task
+ * colour/state updates remain unchanged.
  */
 export function createMiniBot(task: AgentTask, bodySize: number): HTMLElement {
   const slot = document.createElement("span");
