@@ -1,12 +1,18 @@
-# Qanot AI for Windows — 0.6.3
+# Qanot AI for Windows — 0.6.4
 
-Qanot AI combines a movable desktop panel, **LocalAI Studio**, Telegram, CMD/PowerShell, GitHub tools and local Uzbek voice control. **Qanot** is the companion shown in the panel. This Windows edition derives from [Louis-CFM/coucou](https://github.com/Louis-CFM/coucou); it uses its own public branding and companion artwork.
+Qanot AI combines a movable desktop panel, **LocalAI Studio**, Telegram, CMD/PowerShell, GitHub tools and local Uzbek voice control. **Moshi** adapts the original **Mochi** design to a soft pentagonal body, retaining its white-gray materials, black eyes, shadows and clothing. Telegram, Codex, OpenCode and other agent variants share this family, with color variants for subagents. This Windows edition derives from [Louis-CFM/coucou](https://github.com/Louis-CFM/coucou); Qanot product branding, icons and notification cues remain unchanged.
+
+![Moshi, Codex, OpenCode and Telegram pentagonal companions](assets/qanot/moshi-preview.png)
+
+This still frame comes from the shipping renderer. Moshi breathes, blinks, waves and animates according to agent state. Renderer source code retains the [MIT license](../LICENSE). The Mochi-based character and preview retain the [original artwork terms](../LICENSE-ASSETS.md); the user confirmed written permission to distribute the adaptation.
 
 ## Download and open
 
-- [QanotAI-Windows-0.6.3-setup.exe](https://github.com/Ahmadjon0worker/CouCou-Uzbek-edition-/releases/download/v0.6.3/QanotAI-Windows-0.6.3-setup.exe): the recommended current-user installer.
-- [QanotAI-Windows-0.6.3.msi](https://github.com/Ahmadjon0worker/CouCou-Uzbek-edition-/releases/download/v0.6.3/QanotAI-Windows-0.6.3.msi): Windows Installer format.
-- [Release notes and checksums](https://github.com/Ahmadjon0worker/CouCou-Uzbek-edition-/releases/tag/v0.6.3).
+The 0.6.4 source and installers passed local validation. Uploaded GitHub assets, their exact source commit and SHA256 digests are checked separately by the publisher and read-only verifier after upload.
+
+- [QanotAI-Windows-0.6.4-setup.exe](https://github.com/Ahmadjon0worker/CouCou-Uzbek-edition-/releases/download/v0.6.4/QanotAI-Windows-0.6.4-setup.exe): the recommended current-user installer.
+- [QanotAI-Windows-0.6.4.msi](https://github.com/Ahmadjon0worker/CouCou-Uzbek-edition-/releases/download/v0.6.4/QanotAI-Windows-0.6.4.msi): Windows Installer format.
+- [Release notes and checksums](https://github.com/Ahmadjon0worker/CouCou-Uzbek-edition-/releases/tag/v0.6.4).
 
 Windows 10/11 x64 and WebView2 are required. The installer contains an isolated Python runtime, GitHub CLI and the offline voice components. Python, Node.js and Rust are not required on the destination PC. WebView2 installation may need internet. Ollama and large chat models are installed separately.
 
@@ -24,7 +30,7 @@ Telegram supports personal-account login, chat search/filter/pages, history, Sav
 
 Manual CMD/PowerShell, GitHub and window-bound desktop actions work without a chat model. Terminal scripts run with the current user's permissions; the workspace restriction is not an OS sandbox. AI proposes work for review. Desktop sessions require a current observation and exclude protected credential/payment/shell windows.
 
-Open **Voice control**, then click **Speak**. Uzbek selects NavAI Whisper small Q5_1 with Silero VAD; English/Russian select multilingual small-q5_1. eSpeak supplies local speech. Optional continuous listening accepts **OK Qanot**; legacy Coucou/Kuku phrases remain compatible. The microphone does not open at startup, and recordings are temporary.
+Open **Voice control**, then click **Speak**. Uzbek selects NavAI Whisper small Q5_1 with Silero VAD; English/Russian select multilingual small-q5_1. eSpeak supplies local speech. Optional continuous listening accepts **OK Moshi**; **OK Qanot**, **OK Coucou** and **OK Kuku** remain compatible. The microphone does not open at startup, and recordings are temporary.
 
 ## Existing data stays compatible
 
@@ -39,7 +45,7 @@ The new default installation folder is `%LOCALAPPDATA%\Qanot AI`. Existing per-u
 - [Local voice and limitations](localai-service/VOICE-UZ.md)
 - [Runtime bootstrap](scripts/RUNTIME-BOOTSTRAP.md)
 
-Historical **0.6.2** validation passed 633 frontend tests and 50 voice/router tests, built production binaries and verified extracted EXE/MSI payloads. Its eight public Uzbek audio clips measured WER 20.66% and CER 7.99%. These results do not verify a new 0.6.3 package. The human microphone/room test, MSI installation and clean-VM test are still pending. See [0.6.3 release notes](RELEASE-NOTES-0.6.3.md) for the current scope.
+Current 0.6.4 validation passed 651 frontend and 306 Rust tests, TypeScript/Vite/native builds, both installer extraction/hash checks and an actual EXE upgrade preserving settings and the encrypted Telegram session; see [the verification record](VERIFICATION-0.6.4-UZ.md). The frozen runtime retains the historical 0.6.3 service/voice evidence, which does not verify the new native/frontend package. The human microphone/room test, MSI installation and clean-VM test remain pending.
 
 ## Build from source
 
@@ -54,6 +60,8 @@ cargo test --workspace --locked
 npm run pack
 ```
 
-The helper obtains the fixed [0.6.3 public runtime archive](https://github.com/Ahmadjon0worker/CouCou-Uzbek-edition-/releases/download/v0.6.3/QanotAI-Windows-0.6.3-runtime.zip), verifies its ZIP/manifest and all file hashes, then synchronizes the current service source. Large runtime/model binaries and all personal data are excluded from Git. `npm run pack` checks source/runtime freshness and produces EXE/MSI plus checksums in `release`.
+The helper obtains the fixed [unchanged 0.6.3 runtime archive hosted by release v0.6.4](https://github.com/Ahmadjon0worker/CouCou-Uzbek-edition-/releases/download/v0.6.4/QanotAI-Windows-0.6.3-runtime.zip), verifies its ZIP/manifest and all file hashes, then synchronizes the current service source. Large runtime/model binaries and all personal data are excluded from Git. `npm run pack` checks source/runtime freshness and produces EXE/MSI plus checksums in `release`.
 
-The source retains the upstream MIT attribution. Upstream Coucou/Mochi names, character artwork, icons, sounds and demo media are governed separately by [LICENSE-ASSETS.md](../LICENSE-ASSETS.md); the Qanot public edition uses independently prepared branding. See the voice guide for model/eSpeak licenses and corresponding source distribution.
+For a private repository, download the ZIP with your signed-in GitHub account first, then run `py -3.12 scripts/prepare-release-runtime.py --archive C:/Downloads/QanotAI-Windows-0.6.3-runtime.zip`. The helper's `--download` request is unauthenticated and does not read tokens/browser credentials.
+
+The source retains the upstream MIT attribution. Mochi-based Moshi materials, eyes and clothing are adaptations of Louis Raillé's artwork, governed separately by [LICENSE-ASSETS.md](../LICENSE-ASSETS.md) and the written permission confirmed by the user. Moshi is not presented as independent original artwork. Qanot icons and notification cues retain their separate MIT asset license. See the voice guide for model/eSpeak licenses and corresponding source distribution.

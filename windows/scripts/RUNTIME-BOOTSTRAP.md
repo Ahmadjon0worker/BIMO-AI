@@ -1,10 +1,11 @@
 # Prepare the Windows release runtime
 
 The source checkout keeps large public binaries and generated dependencies out
-of Git. Release `v0.6.3` supplies a developer archive containing the same public
-runtime verified inside both installers:
+of Git. Release `v0.6.4` supplies the unchanged developer runtime first frozen
+for `v0.6.3`. The archive keeps its `0.6.3` filename and byte-identical payload;
+the `0.6.4` app frontend/native binaries are built from the current checkout:
 
-<https://github.com/Ahmadjon0worker/CouCou-Uzbek-edition-/releases/download/v0.6.3/QanotAI-Windows-0.6.3-runtime.zip>
+<https://github.com/Ahmadjon0worker/CouCou-Uzbek-edition-/releases/download/v0.6.4/QanotAI-Windows-0.6.3-runtime.zip>
 
 It contains exactly 2,068 allowlisted files plus `runtime-manifest.json`, with
 571,951,706 uncompressed payload bytes. It includes private CPython 3.12.14,
@@ -23,11 +24,21 @@ npm ci
 npm run pack
 ```
 
+`--download` performs an unauthenticated HTTPS request. If the repository/release
+is private, first download the ZIP through your signed-in GitHub account (or your
+own authenticated GitHub CLI), then use `--archive` below. This helper neither
+requests nor reads GitHub tokens or browser credentials.
+
 The helper downloads only the fixed release URL. It verifies the ZIP's exact
 size/SHA256, the source-controlled runtime manifest pin and every decompressed
 file hash. Paths, case duplicates, symlinks/junctions, reserved Windows names,
 encrypted members, unlisted files and size limits are checked before extraction.
-The pins are in `scripts/release-runtime-0.6.3.json`.
+The pins are in `scripts/release-runtime-0.6.3.json`. Its `version` identifies the
+frozen runtime payload, while `release_version` identifies its current download
+location. ZIP SHA256 stays
+`79bad9bbf4cff6bf9312e9dbc45ff9dedae44f321872c5d66c01d219cf8ddea0`.
+Deleting an earlier release is safe only after this exact archive is uploaded
+and verified in the new release.
 
 To use an already downloaded archive without network access:
 

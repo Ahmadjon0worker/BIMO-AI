@@ -7,6 +7,7 @@ import { buildTelegramAccount } from "./telegram-account";
 import type { ToolboxTransport } from "../core/toolbox";
 import { buildToolbox } from "./toolbox";
 import { buildVoice } from "./voice";
+import { createMoshiAvatar } from "../mochi/avatar";
 
 const TRANSPORT: CapabilitiesTransport = {
   capabilities: () => Bridge.localAICapabilities(),
@@ -19,6 +20,7 @@ const TRANSPORT: CapabilitiesTransport = {
 };
 
 export function buildTools(transport: CapabilitiesTransport = TRANSPORT, accountTransport?: AccountTransport, toolboxTransport?: ToolboxTransport) {
+  const telegramAvatar = createMoshiAvatar("telegram", "Telegram bot Moshi");
   let activeTab: "tools" | "account" | "toolbox" | "desktop" | "voice" = "tools", windowVisible = false;
   const status = h("div", { class: "notice", role: "status", "aria-live": "polite" });
   const telegramStatus = h("p", { class: "muted" });
@@ -87,7 +89,8 @@ export function buildTools(transport: CapabilitiesTransport = TRANSPORT, account
     approvalRow, h("details", {}, h("summary", { text: tl("Observed editor text") }), observed));
   const toolsPanel = h("div", { id: "bot-windows-panel", role: "tabpanel", "aria-labelledby": "tools-tab" },
     h("div", { class: "columns" },
-      h("section", { class: "card" }, h("h2", { text: tl("Telegram bot") }), telegramStatus,
+      h("section", { class: "card" }, h("div", { style: "display:flex;align-items:center;gap:10px" }, telegramAvatar.el,
+        h("h2", { text: tl("Telegram bot") })), telegramStatus,
         h("p", { class: "muted", text: tl("This setup is for a bot. A personal Telegram account needs a separate login flow.") }),
         label("Bot token", token), label("Allowed Telegram chat IDs", chats),
         h("p", { class: "hint", text: tl("The token is saved on this computer. It is never shown again. Saving keeps the bot stopped; start it explicitly.") }),
@@ -115,6 +118,7 @@ export function buildTools(transport: CapabilitiesTransport = TRANSPORT, account
     voice.el.hidden = tab !== "voice"; voice.setVisible(windowVisible && tab === "voice");
     status.hidden = tab !== "tools";
     account.setVisible(windowVisible && tab === "account");
+    telegramAvatar.setVisible(windowVisible && tab === "tools");
     toolbox.setVisible(windowVisible && (tab === "toolbox" || tab === "desktop"), tab === "desktop" ? "desktop" : "toolbox");
     toolsTab.setAttribute("aria-selected", String(tab === "tools")); accountTab.setAttribute("aria-selected", String(tab === "account"));
     toolboxTab.setAttribute("aria-selected", String(tab === "toolbox")); desktopTab.setAttribute("aria-selected", String(tab === "desktop"));
@@ -126,6 +130,7 @@ export function buildTools(transport: CapabilitiesTransport = TRANSPORT, account
   function showError(error: unknown) { status.textContent = error instanceof Error ? error.message : String(error); status.className = "notice error"; }
   function sync() {
     const state = controller.snapshot, telegram = state.capabilities?.telegram;
+    telegramAvatar.setState(state.pending ? "working" : state.error || telegram?.last_error ? "error" : telegram?.running ? "idle" : "sleeping");
     const workspace = state.capabilities?.computer.workspace_root;
     path.placeholder = workspace ? `${workspace}\\test.txt` : "…\\workspace\\test.txt";
     workspaceHint.textContent = workspace
@@ -195,6 +200,7 @@ export function buildTools(transport: CapabilitiesTransport = TRANSPORT, account
     setVisible: (visible: boolean) => {
       windowVisible = visible; account.setVisible(visible && activeTab === "account"); toolbox.setVisible(visible && (activeTab === "toolbox" || activeTab === "desktop"), activeTab === "desktop" ? "desktop" : "toolbox");
       voice.setVisible(visible && activeTab === "voice");
+      telegramAvatar.setVisible(visible && activeTab === "tools");
       if (!visible) { token.value = ""; account.clearSecrets(); }
     } };
 }

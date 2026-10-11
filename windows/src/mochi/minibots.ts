@@ -1,7 +1,8 @@
-// Mini Qanot companions (pills + compact grid) use the shared geometric engine.
+// Mini Mochis (pills + compact grid) — port of MiniBotCanvasView.
 // Each canvas owns a BotEngine; the island's frame loop ticks every live one.
 
 import { BotEngine, hexToRGB } from "./engine";
+import { moshiVariantFor } from "./moshi";
 import type { AgentTask } from "../core/state";
 
 interface MiniBot {
@@ -14,12 +15,13 @@ interface MiniBot {
 const live = new Map<HTMLCanvasElement, MiniBot>();
 
 /**
- * Creates a mini Qanot whose wing silhouette fits a `bodySize` CSS pixel slot.
+ * Creates a mini Mochi whose **body** is `bodySize` CSS pixels across.
  *
  * The engine draws the body at 60 % of its canvas, so the canvas is
  * `bodySize / 0.6` and is centred in a `bodySize` slot, overflowing it — the
- * matching the panel's existing sizing contract. Its exported API and task
- * colour/state updates remain unchanged.
+ * same thing SwiftUI does with a `.frame(width: 22/0.6)` inside a
+ * `.frame(width: 22)`. Sizing the canvas itself to `bodySize` would shrink the
+ * whole drawing to 60 %, which is what used to happen.
  */
 export function createMiniBot(task: AgentTask, bodySize: number): HTMLElement {
   const slot = document.createElement("span");
@@ -38,6 +40,9 @@ export function createMiniBot(task: AgentTask, bodySize: number): HTMLElement {
 
   const engine = new BotEngine();
   engine.isMini = true;
+  engine.variant = moshiVariantFor(task.id);
+  canvas.dataset.moshiVariant = engine.variant;
+  canvas.setAttribute("aria-label", `Moshi · ${task.name}`);
   engine.bodyColor = hexToRGB(task.color);
   engine.setState(task.state, true);
   if (task.emote) engine.setPermanentEmote(task.emote);
@@ -67,6 +72,8 @@ export function syncMiniBotStates(tasks: AgentTask[]) {
     const task = tasks.find((t) => t.id === mb.taskId);
     if (!task) continue;
     mb.engine.setState(task.state);
+    mb.engine.variant = moshiVariantFor(task.id);
+    mb.canvas.dataset.moshiVariant = mb.engine.variant;
     mb.engine.bodyColor = hexToRGB(task.color);
   }
 }

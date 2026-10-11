@@ -13,6 +13,9 @@ import type { Outfit } from "./wardrobe";
 /** What the island tells the desktop window, whenever it changes. */
 export interface DesktopSnapshot {
   state: BotStateName;
+  /** Optional for older windows until the island sends its first snapshot. */
+  companionId?: string;
+  companionColor?: string;
   /** He is always the main Mochi, so always dressed (try-ons included). */
   outfit: Outfit;
   soundEnabled: boolean;

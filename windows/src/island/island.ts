@@ -13,6 +13,7 @@ import {
 import { Sound } from "../core/sound";
 import { State } from "../core/state";
 import { BotEngine, hexToRGB } from "../mochi/engine";
+import { moshiVariantFor } from "../mochi/moshi";
 import { Greeting } from "../mochi/greeting";
 import { createMiniBot, pruneMiniBots, syncMiniBotStates, tickMiniBots } from "../mochi/minibots";
 import { SeasonCache, parseOutfit } from "../mochi/wardrobe";
@@ -1154,6 +1155,9 @@ export class Island {
     if (!ctx) return;
 
     const focus = State.focusTask;
+    this.engine.variant = moshiVariantFor(focus?.id ?? State.mainPillId);
+    this.botCanvas.dataset.moshiVariant = this.engine.variant;
+    this.botCanvas.setAttribute("aria-label", `Moshi · ${focus?.name ?? "Qanot AI"}`);
     // While a plan card is open Mochi wears the plan's colour, like its pill.
     this.engine.bodyColor = planCardOpen()
       ? hexToRGB(openPlanColor())

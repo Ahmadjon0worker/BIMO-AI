@@ -15,7 +15,7 @@ export function normalizeVoice(text: string): string {
 }
 /** A wake phrase is a gate, never an instruction to resume after Stop. */
 export function voiceCommandText(text: string, wakeOnly = false): string | null {
-  const match = text.match(/^\s*(?:(?:ok(?:ay)?|hey|salom|ey|ок(?:ей)?|эй|салом)\s+)?(?:qanot(?:\s+ai)?|kanot(?:\s+ai)?|қанот(?:\s+аи)?|канот(?:\s+аи)?|coucou|kuku|куку|kuk(u|o))(?![\p{L}\p{N}_])[\s,.:!-]*(.*)$/iu);
+  const match = text.match(/^\s*(?:(?:ok(?:ay)?|hey|salom|ey|ок(?:ей)?|эй|салом)\s+)?(?:moshi|моши|qanot(?:\s+ai)?|kanot(?:\s+ai)?|қанот(?:\s+аи)?|канот(?:\s+аи)?|coucou|kuku|куку|kuk(u|o))(?![\p{L}\p{N}_])[\s,.:!-]*(.*)$/iu);
   if (wakeOnly && !match) return null;
   return (match ? match[2] : text).trim() || null;
 }

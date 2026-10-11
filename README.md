@@ -1,18 +1,24 @@
-# Qanot AI — Windows 0.6.3
+# Qanot AI — Windows 0.6.4
 
 ![Qanot AI](windows/assets/qanot/qanot-mark.svg)
 
 O‘zbekcha interfeysli Windows yordamchisi: ko‘chiriladigan Qanot AI paneli, alohida **LocalAI Studio**, Telegram, terminal, GitHub, tanlangan oynani boshqarish va mahalliy ovozli buyruqlar.
 
-Bu [Louis-CFM/coucou](https://github.com/Louis-CFM/coucou) loyihasining Windows uchun moslashtirilgan **forki**. Qanot AI o‘z nomi va Qanot hamroh ko‘rinishidan foydalanadi. Ushbu ombor va uning Windows installerlaridagi qo‘shimchalar upstream macOS/iPhone reliziga kiritilgan deb hisoblanmaydi.
+Bu [Louis-CFM/coucou](https://github.com/Louis-CFM/coucou) loyihasining Windows uchun moslashtirilgan **forki**. **Moshi** — asl **Mochi** dizayniga asoslangan, yumshoq besh burchakli animatsion moslashtirish: oq-kulrang material, qora ko‘zlar, soyalar va kiyim uslubi saqlanadi, tana shakli va agent bezaklari moslanadi. Telegram, Codex, OpenCode va boshqa agentlar o‘z variantiga ega; subagentlar shu oilaning rang variantlarini ishlatadi. Qanot AI nomi, Telegram, providerlar, ovozli boshqaruv va eski sozlamalar mosligi saqlanadi. Ushbu Windows qo‘shimchalari upstream macOS/iPhone reliziga kiritilgan deb hisoblanmaydi.
+
+![Moshi, Codex, OpenCode va Telegram — besh burchakli hamrohlar](windows/assets/qanot/moshi-preview.png)
+
+Ko‘rinishlar ilovaning haqiqiy rendereridan chiqarilgan. Moshi nafas oladi, ko‘z qisadi, salomlashadi va agent holatiga mos jonlanadi; rasm sokin holatdagi bir kadrni ko‘rsatadi. Renderer kodi [MIT litsenziyasi](LICENSE) ostida; Mochi asosidagi personaj va preview uchun [asl artwork shartlari](LICENSE-ASSETS.md) hamda foydalanuvchi tasdiqlagan yozma ruxsat qo‘llanadi.
 
 ## Yuklab olish
 
+0.6.4 manba kodi va installer shu Windows kompyuterda tekshirildi. GitHub’dagi fayllarning upload holati, commit va SHA256 digestlari nashrdan so‘ng publisher hamda alohida verifier bilan tekshiriladi.
+
 | Windows x64 paketi | Nima uchun |
 |---|---|
-| **[0.6.3 Setup EXE — Windows x64](https://github.com/Ahmadjon0worker/CouCou-Uzbek-edition-/releases/download/v0.6.3/QanotAI-Windows-0.6.3-setup.exe)** | Tavsiya etiladi; joriy Windows foydalanuvchisi uchun o‘rnatadi. |
-| [0.6.3 MSI — Windows x64](https://github.com/Ahmadjon0worker/CouCou-Uzbek-edition-/releases/download/v0.6.3/QanotAI-Windows-0.6.3.msi) | MSI formatini talab qiladigan o‘rnatish jarayonlari uchun. |
-| [v0.6.3 relizi va tekshiruv fayllari](https://github.com/Ahmadjon0worker/CouCou-Uzbek-edition-/releases/tag/v0.6.3) | Nazorat summalari, runtime paketi va reliz dalillari. |
+| **[0.6.4 Setup EXE — Windows x64](https://github.com/Ahmadjon0worker/CouCou-Uzbek-edition-/releases/download/v0.6.4/QanotAI-Windows-0.6.4-setup.exe)** | Tavsiya etiladi; joriy Windows foydalanuvchisi uchun o‘rnatadi. |
+| [0.6.4 MSI — Windows x64](https://github.com/Ahmadjon0worker/CouCou-Uzbek-edition-/releases/download/v0.6.4/QanotAI-Windows-0.6.4.msi) | MSI formatini talab qiladigan o‘rnatish jarayonlari uchun. |
+| [v0.6.4 relizi va tekshiruv fayllari](https://github.com/Ahmadjon0worker/CouCou-Uzbek-edition-/releases/tag/v0.6.4) | Nazorat summalari, runtime paketi va reliz dalillari. |
 
 **Talablar:** Windows 10/11 **x64**, Microsoft Edge WebView2 va paketni o‘rnatish uchun yetarli disk joyi. WebView2 bo‘lmasa, installer uni internet orqali o‘rnatadi. Tayyor installer uchun Python, Node.js yoki Rust’ni alohida o‘rnatish kerak emas. ARM64 uchun alohida installer bu relizda yo‘q.
 
@@ -95,7 +101,7 @@ Studio → **🎙 Ovozli boshqaruv** yoki Telegram va Windows vositalari → **O
 - Modellar installer ichida. Nutqni tanish va eSpeak uchun internet, Ollama yoki cloud API kaliti shart emas.
 - Yozuv eng ko‘pi 15 soniya; bir vaqtda bitta transkripsiya. Vaqtinchalik WAV va decoder natijalari ish tugagach o‘chiriladi.
 
-Misollar: «Panelni och», «Sozlamalarni och», «Studioni och», «GitHub holatini ko‘rsat», «Shu chatga salom yubor». Telegram uchun avval oluvchini tanlang. Murakkab AI reja sozlangan chat provider’ni ishlatadi; terminal buyrug‘i muharrirda ko‘rib chiqiladi. Ixtiyoriy davomli tinglashni o‘zingiz yoqasiz; unda «OK Qanot» bilan boshlangan buyruqlar qabul qilinadi.
+Misollar: «Panelni och», «Sozlamalarni och», «Studioni och», «GitHub holatini ko‘rsat», «Shu chatga salom yubor». Telegram uchun avval oluvchini tanlang. Murakkab AI reja sozlangan chat provider’ni ishlatadi; terminal buyrug‘i muharrirda ko‘rib chiqiladi. Ixtiyoriy davomli tinglashni o‘zingiz yoqasiz; asosiy ibora «OK Moshi», oldingi «OK Qanot», «OK Coucou» va «OK Kuku» iboralari ham moslik uchun qabul qilinadi.
 
 **Tekshirilgan natija va cheklov:** bir xil **8 ta Google FLEURS o‘zbekcha audio** (jami 66,12 soniya) uchun WER **115,70% → 20,66%**, CER **43,70% → 7,99%** bo‘ldi. WER qo‘shimcha so‘zlar sabab 100% dan oshishi mumkin. Bu kichik, tasodifiy bo‘lmagan sinov to‘plami; barcha odamlar yoki mikrofonlar uchun aniqlik bahosi emas. Shovqinli nutq, ismlar va username xato tanilishi mumkin. **Haqiqiy mikrofon/xona sinovi hali bajarilmagan**; o‘rnatilgan xizmat ommaviy audio va sun’iy nazoratlar bilan tekshirilgan. Eshitilgan matnni yuborishdan avval tekshiring.
 
@@ -120,18 +126,20 @@ Chat, screenshot va terminal chiqishi AI uchun ma’lumotdir; ularning ichidagi 
 Yuklangan installer’ni relizdagi `SHA256SUMS.txt` bilan solishtirish mumkin:
 
 ```powershell
-Get-FileHash .\QanotAI-Windows-0.6.3-setup.exe -Algorithm SHA256
+Get-FileHash .\QanotAI-Windows-0.6.4-setup.exe -Algorithm SHA256
 ```
 
 ## Tekshiruv doirasi va reliz holati
 
-**0.6.3 tekshirildi:** frontend **642/642**, Rust **306/306**, Python **188 o‘tdi + 1 ixtiyoriy skip**. TypeScript va production Vite/Rust build o‘tdi. NSIS va MSI ichidagi ilova, hook, qo‘llanma va **2068 runtime fayli** chiqarilib, SHA256/versiya/platforma tekshirildi. Installer migratsiyasining **14/14** ajratilgan sinovi o‘tdi.
+**0.6.4 tekshirildi:** frontend **651/651**, Rust **306/306**, TypeScript va production Vite/native build o‘tdi. Mochi asosidagi yumshoq Moshi/Codex/OpenCode/Telegram pentagon, animatsiya va agent holatlari tekshirildi; shipping renderer browser sinovida console’da **0 xato**. Yakuniy EXE/MSI app/hook/guide va **2068 runtime fayli** xeshlari, versiya va x64 platformasi chiqarib tekshirildi.
 
-Yangi EXE shu Windows kompyuterda `/S` bilan, destination override’siz eski 0.6.2 o‘rnatmani yangiladi. Qanot AI / Ahmadjon0worker yozuvi tekshirildi; barcha o‘rnatilgan payload xeshlari, sozlamalar va shifrlangan Telegram fayllari saqlangani tasdiqlandi. **LocalAI Studio** ochildi, unga tegishli xizmat ishladi va Telegram saqlangan sessiya bilan qayta ulandi. Ushbu 0.6.3 tekshiruvida yangi Telegram xabari yuborilmadi.
+Yangi EXE `/S` bilan, destination override va avtomatik launch’siz mavjud Qanot AI 0.6.3 o‘rnatmani 0.6.4 ga yangiladi. Ilova ochilishidan oldin sozlamalar va barcha mavjud shifrlangan Telegram fayllari byte-identical ekanligi tekshirildi. Private backup saqlandi; yangi payload va barcha frozen runtime xeshlari mos. LocalAI Studio va unga tegishli xizmat ishga tushdi; Telegram saqlangan sessiya bilan connected/authorized holatiga qaytdi. Yangi xabar yoki mikrofon yozuvi bajarilmadi.
 
-O‘rnatilgan NavAI o‘zbekcha model **9,78 soniyalik ommaviy FLEURS audio**ni normalizatsiyadan keyin 16 so‘zda xatosiz tanidi: WER/CER **0%**. 50 Hz hum, oq shovqin va sukunat bo‘sh natija berdi; vaqtinchalik audio fayllar tozalandi. Bu bitta audio natijasi umumiy nutq aniqligi bahosi emas. Oldingi 8 audio taqqoslashi ovoz benchmarkida alohida tarixiy dalil sifatida beriladi.
+Mahalliy dalillar [0.6.4 tekshiruv hisoboti](windows/VERIFICATION-0.6.4-UZ.md)da. GitHub main/tag/Release va yuklangan fayllarning digest tekshiruvi nashrdan keyingi alohida bosqichdir.
 
-**Haqiqiy mikrofon/xona, MSI o‘rnatish va toza VM sinovi bajarilmagan.** Bitta ixtiyoriy Python offline audio smoke testi skip qilindi; native decoder yuqoridagi o‘rnatilgan audio sinovida ishlatildi. To‘liq [0.6.3 tekshiruv hisoboti](windows/VERIFICATION-0.6.3-UZ.md) manbada bor; ommaviy reliz uchun ham hisobot va tekshirilgan xeshlar tayyorlandi.
+**Avvalgi 0.6.3 dalili:** frontend 642/642, Rust 306/306, Python 188 o‘tdi va 1 ixtiyoriy skip; EXE/MSI va 2068 runtime fayli xeshlari tekshirildi. EXE eski o‘rnatmani yangilab, sozlamalar va shifrlangan Telegram sessiyasini saqladi. O‘rnatilgan xizmat 9,78 soniyalik ommaviy FLEURS audioni 16 so‘zda xatosiz tanidi; sun’iy hum, shovqin va sukunat bo‘sh natija berdi. Bular yangi 0.6.4 installer sinovi o‘rniga ko‘rsatilmaydi.
+
+**Haqiqiy mikrofon/xona, MSI o‘rnatish va toza VM sinovi bajarilmagan.** Frozen runtime o‘zgarmagani ovoz modeli aynan bir xil ekanini bildiradi; bitta ommaviy audio barcha ovozlar uchun aniqlik bahosi emas.
 
 ## Manba kodi va yig‘ish
 
@@ -150,7 +158,7 @@ docs/, relay/            Upstream hujjatlar va iPhone relay manbasi
 
 Windows x64 build kompyuterida **Node.js 24** (testlar uchun kamida 22.18), Rust MSVC toolchain, Microsoft C++ Build Tools (**Desktop development with C++**) va runtime paketini tayyorlash uchun **Python 3.12** kerak. Installer tekshiruvi uchun **7-Zip** va Tauri’ning WiX `dark.exe` keshi ishlatiladi. Bular tayyor ilovani o‘rnatadigan foydalanuvchiga kerak emas.
 
-Git klonining o‘zi katta portable Python/model binary’larini bermaydi: ular source asset sifatida emas, [v0.6.3 runtime ZIP](https://github.com/Ahmadjon0worker/CouCou-Uzbek-edition-/releases/download/v0.6.3/QanotAI-Windows-0.6.3-runtime.zip) orqali tarqatiladi. Qanot ko‘rinishi va yangi ikonalar joriy Windows manbasida tayyorlanadi. Upstream personaj, ikonalar, ovoz va demo rasmlarini yangi relizga qo‘shmang.
+Git klonining o‘zi katta portable Python/model binary’larini bermaydi: ular source asset sifatida emas, [v0.6.4 relizidagi frozen 0.6.3 runtime ZIP](https://github.com/Ahmadjon0worker/CouCou-Uzbek-edition-/releases/download/v0.6.4/QanotAI-Windows-0.6.3-runtime.zip) orqali tarqatiladi. Mochi asosidagi Moshi animatsion ko‘rinishi joriy Windows manbasidan yig‘iladi; avvalgi mustaqil Qanot ikonkalari va notification ovozlari saqlanadi. Personajning artwork shartlari va tasdiqlangan yozma ruxsat kodning MIT litsenziyasidan alohida.
 
 PowerShell’da:
 
@@ -165,7 +173,9 @@ cargo test --workspace --locked
 npm run pack
 ```
 
-`prepare-release-runtime.py` faqat build vaqtida aniq v0.6.3 public runtime ZIP’ni yuklaydi; hajm, SHA-256, manifest va har bir faylni tekshiradi. So‘ng portable runtime, ovoz modellari, GitHub CLI va private Microsoft DLL’larini build uchun joylaydi hamda `build_runtime.py --sync-source` orqali **joriy Python manbasiga** moslaydi. Ilova ishga tushishda runtime/model yuklamaydi; helper installer’ni ishga tushirmaydi yoki shaxsiy konfiguratsiyani nusxalamaydi.
+`prepare-release-runtime.py` faqat build vaqtida v0.6.4 relizidagi aynan o‘sha frozen 0.6.3 runtime ZIP’ni yuklaydi; hajm, SHA-256, manifest va har bir faylni tekshiradi. So‘ng portable runtime, ovoz modellari, GitHub CLI va private Microsoft DLL’larini build uchun joylaydi hamda `build_runtime.py --sync-source` orqali **joriy Python manbasiga** moslaydi. Ilova ishga tushishda runtime/model yuklamaydi; helper installer’ni ishga tushirmaydi yoki shaxsiy konfiguratsiyani nusxalamaydi.
+
+**Private repository:** `--download` autentifikatsiyasiz HTTPS ishlatadi. Repo/Release private bo‘lsa, ZIP’ni o‘z GitHub akkauntingiz bilan oldindan yuklab olib, quyidagi `--archive` usulini ishlating. Helper GitHub tokeni yoki brauzer credential’larini o‘qimaydi.
 
 ZIP’ni oldindan olgan bo‘lsangiz, tarmoqsiz tayyorlash uchun yuklash buyrug‘i o‘rniga:
 
@@ -185,11 +195,11 @@ Development: tayyorlangan runtime bilan `npm run tauri dev`. Faqat UI’ni teksh
 
 ## Litsenziya va asl loyiha
 
-Qanot ikonkalari, Qanot personaj kodi va 29 ta yangi ovoz [Qanot assetlari MIT litsenziyasi](LICENSE-QANOT-ASSETS.md) bilan tarqatiladi. Ovoz va ikonka generatorlari `windows/scripts` ichida, xesh manifestlari `windows/assets/qanot` ichida.
+Qanot ikonkalari va 29 ta notification ovozi [Qanot assetlari MIT litsenziyasi](LICENSE-QANOT-ASSETS.md) bilan tarqatiladi. Ovoz va ikonka generatorlari `windows/scripts` ichida, xesh manifestlari `windows/assets/qanot` ichida. Moshi renderer kodi [MIT litsenziyasi](LICENSE) ostida; uning yumshoq materiallari, ko‘zlari va kiyimlari asl Mochi dizaynidan moslashtirilgan. Personaj va unga asoslangan preview [asl asset shartlari](LICENSE-ASSETS.md) bilan qoplanadi. Foydalanuvchi ushbu moslashtirishni tarqatish uchun asl muallifning yozma ruxsati borligini tasdiqlagan; ruxsatning shaxsiy matni relizga joylanmaydi.
 
 Asl Coucou manba kodi muallifi — **[Louis Raillé](https://louisraille.fr)**. Manba kodi [MIT litsenziyasi](LICENSE) ostida. Ushbu Windows forkiga upstream muallifi tomonidan homiylik yoki tasdiq berilgani da’vo qilinmaydi.
 
-**Qanot AI va Qanot:** yangi Windows brendi va hamroh ko‘rinishi upstream Coucou/Mochi nomi, personaji yoki mediasidan mustaqil tayyorlandi. Asl loyiha nomlari faqat manba muallifligini va eski ma’lumot yo‘llarini tushuntirish uchun ishlatiladi. [LICENSE-ASSETS.md](LICENSE-ASSETS.md) upstream nom va media uchun alohida shartlarni saqlaydi; MIT kodi ushbu assetlarga ruxsat bermaydi. Ushbu fork upstream tomonidan tasdiqlangan deb ko‘rsatilmaydi.
+**Qanot AI va Moshi:** Qanot AI mahsulot nomi, ikonkalari va notification ovozlari saqlanadi. Moshi — Louis Raillé’ning Mochi personajiga asoslangan besh burchakli moslashtirish; u mustaqil original artwork deb taqdim etilmaydi. [LICENSE-ASSETS.md](LICENSE-ASSETS.md) upstream nom va media shartlarini saqlaydi; kodning MIT litsenziyasi artwork ruxsatini almashtirmaydi. Foydalanuvchining yozma ruxsat tasdig‘i upstream tomonidan butun fork homiylik qilingani yoki tasdiqlanganini anglatmaydi.
 
 Whisper/whisper.cpp va Silero MIT, NavAI o‘zbekcha model Apache-2.0, eSpeak NG GPLv3 litsenziyasida. Ularning license/provenance fayllari runtime paketida, eSpeak tegishli manba arxivi ham tarqatiladi. [Ovoz manbalari va litsenziyalari](windows/localai-service/VOICE-UZ.md#litsenziyalar-va-manbalar).
 

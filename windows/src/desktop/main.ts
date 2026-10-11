@@ -10,7 +10,8 @@
 import { Bridge, emitToWindow, onEvent, type DesktopMode } from "../core/bridge";
 import type { BotEmoteName } from "../core/layout";
 import { Sound } from "../core/sound";
-import { BotEngine } from "../mochi/engine";
+import { BotEngine, hexToRGB } from "../mochi/engine";
+import { moshiVariantFor } from "../mochi/moshi";
 import {
   DESKTOP_EVENTS, DOUBLE_CLICK_MS, DRAG_THRESHOLD, PANEL_SIZE, agentActive, gaze, isOverBody,
   layerDragTopLeft, lookOrigin, pointerDistance, shouldSleep, windowDragTopLeft,
@@ -103,6 +104,10 @@ class DesktopMochi {
 
   private onSnapshot(s: DesktopSnapshot) {
     this.snap = s;
+    this.engine.variant = moshiVariantFor(s.companionId ?? "moshi");
+    this.engine.bodyColor = s.companionColor && /^#[0-9a-f]{6}$/i.test(s.companionColor)
+      ? hexToRGB(s.companionColor) : null;
+    this.canvas.dataset.moshiVariant = this.engine.variant;
     this.informed = true;
     Sound.setEnabled(s.soundEnabled);
     Sound.setVolume(s.soundVolume);

@@ -35,6 +35,10 @@ test('voice normalization preserves Uzbek meaning across Cyrillic and apostrophe
   assert.deepEqual(parseVoiceIntent('СОЗЛАМАЛАРНИ ОЧ!'), { kind: 'ui', target: 'settings' });
 });
 test('wake mode accepts only a complete wake prefix and preserves exact message body', () => {
+  assert.equal(voiceCommandText('OK Moshi, panelni och!', true), 'panelni och!');
+  assert.equal(voiceCommandText('ОК Моши, панелни оч', true), 'панелни оч');
+  assert.equal(voiceCommandText('Moshining panelni och', true), null);
+  assert.equal(voiceCommandText('Moshi', true), null);
   assert.equal(voiceCommandText('Hey Coucou, panelni och!', true), 'panelni och!');
   assert.equal(voiceCommandText('OK Qanot AI, panelni och!', true), 'panelni och!');
   assert.equal(voiceCommandText('Salom Qanot: @fixture_user ga “Salom!” yubor', true), '@fixture_user ga “Salom!” yubor');

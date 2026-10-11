@@ -610,7 +610,7 @@ dependencies = [
 
 [[package]]
 name = "coucou"
-version = "0.6.3"
+version = "0.6.4"
 dependencies = [
  "gtk",
  "keyring",
@@ -632,7 +632,7 @@ dependencies = [
 
 [[package]]
 name = "coucou-hook"
-version = "0.6.3"
+version = "0.6.4"
 dependencies = [
  "libc",
  "serde_json",

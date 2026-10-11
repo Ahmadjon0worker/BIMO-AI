@@ -1,6 +1,6 @@
-// Weekly share card, with the shared Qanot companion and fork attribution.
+// Weekly share card, with the animated Moshi companion and Qanot AI attribution.
 
-import { drawQanot } from "../mochi/outfits";
+import { BotEngine } from "../mochi/engine";
 import { formatCount, formatDuration, weekRangeLabel, type WeeklySummary } from "./summary";
 import { t } from "../i18n/i18n";
 import { SCRIPT_FONTS } from "../core/fonts";
@@ -129,11 +129,14 @@ function badge(x: Ctx, left: number, top: number, w: number, label: string, valu
   x.fillText(ellipsize(x, value, w - 64 - labelW - 16), left + w - 32, mid);
 }
 
-/** A static Qanot prism shares exactly the panel's authored visual. */
+/** The same Moshi engine draws the panel, desktop and share image. */
 function drawCompanion(x: Ctx, cx: number, top: number, size: number) {
+  const engine = new BotEngine();
+  engine.setState("idle", true);
+  engine.update(1 / 60);
   x.save();
-  x.translate(cx, top + size / 2);
-  drawQanot(x, size * 0.3, { signal: "happy" });
+  x.translate(cx - size / 2, top);
+  engine.draw(x, size, size);
   x.restore();
 }
 
@@ -166,7 +169,7 @@ export function renderShareImage(s: WeeklySummary, hideProjects: boolean): HTMLC
   const hasLines = s.linesAdded + s.linesRemoved > 0;
 
   // Heights of each block, so the whole stack can be centred like the VStack.
-  // Qanot's silhouette fills ~60 % of the square the engine draws into.
+  // The companion's body fills ~60 % of the square the engine draws into.
   const COMPANION = 220;
   const COMPANION_DRAW = 320;
   const blockH =

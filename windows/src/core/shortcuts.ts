@@ -26,8 +26,8 @@ export const SHORTCUT_TEXT = {
   attachFrontWindow: N_("Attach the front window to the chat"),
   nextPill: N_("Next pill"),
   prevPill: N_("Previous pill"),
-  muteToggle: N_("Mute or unmute Qanot"),
-  desktopToggle: N_("Send Qanot to the desktop"),
+  muteToggle: N_("Mute or unmute Moshi"),
+  desktopToggle: N_("Send Moshi to the desktop"),
   wardrobeToggle: N_("Open the wardrobe"),
   island: {
     nextPrev: N_("Next or previous pill"),

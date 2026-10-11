@@ -12,5 +12,6 @@
   "compression_level": 6,
   "no_user_config_or_credentials": true,
   "version": "0.6.3",
-  "url": "https://github.com/Ahmadjon0worker/CouCou-Uzbek-edition-/releases/download/v0.6.3/QanotAI-Windows-0.6.3-runtime.zip"
+  "release_version": "0.6.4",
+  "url": "https://github.com/Ahmadjon0worker/CouCou-Uzbek-edition-/releases/download/v0.6.4/QanotAI-Windows-0.6.3-runtime.zip"
 }

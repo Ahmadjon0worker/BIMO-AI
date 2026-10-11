@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="uz">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Moshi — jonli hamrohlar</title>
+  <style>
+    :root { color-scheme: dark; font-family: "Segoe UI Variable", "Segoe UI", system-ui, sans-serif; }
+    * { box-sizing: border-box; }
+    body { margin: 0; color: #f1f3f8; background: #111621;
+      background-image: radial-gradient(ellipse at 20% 0%, #293144 0%, transparent 58%); }
+    main { max-width: 1180px; padding: 36px 24px 50px; margin: auto; }
+    header { display: flex; align-items: end; justify-content: space-between; gap: 20px; }
+    h1 { font-size: 40px; letter-spacing: -.045em; line-height: 1.1; margin: 0 0 12px; }
+    p { color: #a9b3c7; line-height: 1.6; margin: 0; }
+    .eyebrow { color: #edba91; font-weight: 700; font-size: 12px; letter-spacing: .12em; margin-bottom: 12px; }
+    .live { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #a4dac4; white-space: nowrap; }
+    .live::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: #85d7b8; box-shadow: 0 0 15px #85d7b850; }
+    .export { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; justify-content: end; }
+    .export a { color: #b6decf; font-size: 12px; }
+    nav { display: flex; flex-wrap: wrap; gap: 8px; margin: 28px 0 24px; }
+    button { border: 1px solid #3a455b; border-radius: 10px; color: #d8e0ef; background: #202838;
+      font: inherit; font-size: 13px; padding: 10px 15px; cursor: pointer; }
+    button:hover { background: #2d3a4e; border-color: #667d9d; }
+    button[aria-pressed="true"] { color: #152b28; background: #b6decf; border-color: #b6decf; }
+    button:focus-visible { outline: 2px solid #91bbff; outline-offset: 3px; }
+    .primary, .catalog { display: grid; gap: 14px; }
+    .comparison { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-bottom: 24px; }
+    .comparison .card { background: #171c24; border-color: #3a4557; }
+    .comparison h2 { font-size: 18px; }
+    .comparison-label { color: #b6c4d8; font-size: 13px; margin: 0 0 10px; }
+    .primary { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .catalog { grid-template-columns: repeat(6, minmax(0, 1fr)); margin-top: 14px; }
+    .card { position: relative; padding: 15px 12px 18px; border-radius: 20px; border: 1px solid #38435b;
+      background: linear-gradient(155deg, #273247, #1b2434 78%); text-align: center; overflow: hidden; }
+    .primary .card { min-height: 242px; }
+    .catalog .card { padding: 12px 5px 15px; border-color: #303c52; background: #1d2636; }
+    .card h2 { font-size: 16px; margin: 0 0 5px; }
+    .card p { color: #8e9eb8; font-size: 11px; }
+    canvas { display: block; margin: auto; max-width: 100%; touch-action: none; }
+    .miniature { display: flex; gap: 22px; align-items: center; justify-content: space-between;
+      padding: 18px 22px; border: 1px solid #334259; background: #192536; border-radius: 18px; margin-top: 24px; }
+    .miniature h2 { font-size: 16px; margin: 0 0 4px; }
+    .miniature p { font-size: 12px; }
+    .mini-bots { display: flex; flex-wrap: wrap; gap: 7px; }
+    .mini-bots canvas { width: 48px; height: 48px; }
+    .scenes { margin-top: 26px; border-top: 1px solid #2e3b51; padding-top: 22px; }
+    .scenes h2 { margin: 0 0 8px; font-size: 17px; }
+    .scene { width: 100%; height: auto; margin-top: 14px; border-radius: 20px; border: 1px solid #344158; background: #000; }
+    .scene-help { display: flex; align-items: center; justify-content: space-between; gap: 15px; }
+    #status { padding-top: 18px; font-size: 12px; color: #91a3be; }
+    @media (max-width: 800px) { .catalog { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+    @media (max-width: 700px) { .comparison { grid-template-columns: 1fr; } }
+    @media (max-width: 560px) { main { padding: 24px 14px; } h1 { font-size: 33px; }
+      header { align-items: start; } .primary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .catalog { grid-template-columns: repeat(2, minmax(0, 1fr)); } .miniature { display: block; }
+      .mini-bots { justify-content: start; margin-top: 10px; } .live { margin-top: 6px; } }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <div><div class="eyebrow">QANOT AI · MOSHI</div><h1>Mochi uslubi, Moshi shakli</h1>
+      <p>Avvalgi yumshoq material va yuz saqlanadi. Shakl besh burchakli.</p></div>
+    <div class="export"><span class="live">Animatsiya yoqilgan</span>
+      <button id="export-png">PNG saqlash</button>
+      <button id="export-comparison">Taqqoslash PNG</button>
+      <a id="png-download" download="Moshi-QanotAI-preview.png" hidden>PNG fayl</a>
+      <a id="comparison-download" download="Mochi-Moshi-taqqoslash.png" hidden>Taqqoslash fayli</a></div>
+  </header>
+  <nav aria-label="Hamroh harakati">
+    <button data-action="idle" aria-pressed="true">Sokin</button>
+    <button data-action="working" aria-pressed="false">Ishlayapti</button>
+    <button data-action="sleeping" aria-pressed="false">Uxlayapti</button>
+    <button data-action="wink" aria-pressed="false">Ko‘z qisish</button>
+    <button data-action="wave" aria-pressed="false">Salomlashish</button>
+    <button data-action="love" aria-pressed="false">Mehr</button>
+    <button data-action="finished" aria-pressed="false">Tugatdi</button>
+  </nav>
+  <p class="comparison-label">Bir xil harakatda material va yuzni solishtiring</p>
+  <section class="comparison" id="comparison" aria-label="Asl Mochi va yangi Moshi taqqoslash"></section>
+  <section class="primary" id="primary" aria-label="Asosiy hamrohlar"></section>
+  <section class="catalog" id="catalog" aria-label="Boshqa vositalar hamrohlari"></section>
+  <section class="miniature">
+    <div><h2>Subagentlar</h2><p>Bir xil Moshi shakli, har bir vazifaga o‘z rangi.</p></div>
+    <div class="mini-bots" id="mini-bots" aria-label="Rangli subagentlar"></div>
+  </section>
+  <section class="scenes">
+    <div class="scene-help"><div><h2>Salomlashish</h2><p>Avvalgi sakrash, egilish va qo‘l silkish harakati saqlangan.</p></div>
+      <button id="restart-greeting">Yana salomlash</button></div>
+    <canvas id="greeting" class="scene" width="640" height="150" aria-label="Moshi salomlashish animatsiyasi"></canvas>
+  </section>
+  <p id="status" role="status">Moshi hamrohlarini harakatda ko‘rish uchun yuqoridagi tugmalarni bosing.</p>
+</main>
+<script type="module">
+  import { BotEngine, hexToRGB } from "/src/mochi/engine.ts";
+  import { BotEngine as OriginalMochiEngine } from "./mochi-original-preview.ts";
+  import { Greeting } from "/src/mochi/greeting.ts";
+  import { Sound } from "/src/core/sound.ts";
+
+  Sound.setEnabled(false);
+  const variants = [
+    ["moshi", "Moshi", "Asl material, yumshoq besh burchak"],
+    ["codex", "Codex", "Yumshoq yashil qavslar"],
+    ["opencode", "OpenCode", "Silliq terminal belgisi"],
+    ["telegram", "Telegram", "Yengil moviy samolyot"],
+    ["claude", "Claude", "Iliq yulduzcha"],
+    ["github", "GitHub", "Kulrang quloqcha belgisi"],
+    ["automation", "Automation", "Aylanuvchi tishli belgi"],
+    ["vercel", "Vercel", "Uchburchak belgisi"],
+    ["cursor", "Cursor", "Ko‘rsatkich belgisi"],
+    ["gemini", "Gemini", "Yorqin yulduz"],
+    ["copilot", "Copilot", "Ko‘zoynakli hamroh"],
+    ["muse", "Muse", "Musiqa belgisi"],
+    ["amp", "Amp", "Harakatdagi tovush izi"],
+    ["hermes", "Hermes", "Qanotli belgi"],
+    ["agent", "Agent", "Vazifa hamrohi"],
+  ];
+  const engines = [];
+  const dpr = Math.min(2, devicePixelRatio || 1);
+  function mount(canvas, engine, width, height) {
+    canvas.width = Math.round(width * dpr); canvas.height = Math.round(height * dpr);
+    canvas.style.width = `${width}px`; canvas.style.height = `${height}px`;
+    const ctx = canvas.getContext("2d");
+    const record = { canvas, ctx, engine, width, height };
+    engines.push(record);
+    canvas.addEventListener("pointermove", event => {
+      const rect = canvas.getBoundingClientRect();
+      engine.lookX = (event.clientX - rect.left - rect.width / 2) / (rect.width / 2);
+      engine.lookY = (event.clientY - rect.top - rect.height / 2) / (rect.height / 2);
+    });
+    canvas.addEventListener("pointerleave", () => { engine.lookX = 0; engine.lookY = 0; });
+    canvas.addEventListener("click", () => engine.greet());
+    return record;
+  }
+  variants.forEach(([variant, label, description], index) => {
+    const card = document.createElement("article"); card.className = "card";
+    const canvas = document.createElement("canvas"); canvas.setAttribute("aria-label", `${label} jonli hamrohi`);
+    const title = document.createElement("h2"); title.textContent = label;
+    const note = document.createElement("p"); note.textContent = description;
+    card.append(canvas, title, note);
+    document.querySelector(index < 4 ? "#primary" : "#catalog").append(card);
+    const engine = new BotEngine(); engine.variant = variant;
+    mount(canvas, engine, index < 4 ? 170 : 124, index < 4 ? 166 : 120);
+  });
+  const comparisonFrames = [];
+  [["Asl Mochi", "Avvalgi material va yuz", OriginalMochiEngine],
+    ["Moshi · besh burchak", "Shu material va yuz, yumshoq yangi shakl", BotEngine],
+    ["Paneldagi Codex", "#2DD4BF rangda ham yumshoq yaltiroq material", BotEngine]].forEach(([label, description, Engine], index) => {
+    const card = document.createElement("article"); card.className = "card";
+    const canvas = document.createElement("canvas"); canvas.setAttribute("aria-label", `${label} taqqoslash`);
+    const title = document.createElement("h2"); title.textContent = label;
+    const note = document.createElement("p"); note.textContent = description;
+    card.append(canvas, title, note); document.querySelector("#comparison").append(card);
+    const engine = new Engine();
+    if (index === 2) { engine.variant = "codex"; engine.bodyColor = hexToRGB("#2DD4BF"); }
+    const record = mount(canvas, engine, 250, 230);
+    comparisonFrames.push({ ...record, label, description });
+  });
+  ["#E86A6A", "#3E86E0", "#EFAE5A", "#8C73F2", "#22C6BD"].forEach(color => {
+    const canvas = document.createElement("canvas");
+    canvas.setAttribute("aria-label", `Rangli Moshi subagenti ${color}`);
+    document.querySelector("#mini-bots").append(canvas);
+    const engine = new BotEngine(); engine.isMini = true; engine.variant = "moshi";
+    engine.bodyColor = hexToRGB(color); engine.setState("working", true);
+    mount(canvas, engine, 48, 48);
+  });
+  const status = document.querySelector("#status");
+  let activeActionLabel = "Sokin";
+  document.querySelectorAll("[data-action]").forEach(button => button.addEventListener("click", () => {
+    const action = button.dataset.action;
+    activeActionLabel = button.textContent;
+    document.querySelectorAll("[data-action]").forEach(other => other.setAttribute("aria-pressed", String(other === button)));
+    engines.forEach(({ engine }) => {
+      engine.interruptGreet(); engine.setPermanentEmote(null); engine.eyeOverride = null; engine.eyeOverrideUntil = 0;
+      engine.setState(["working", "sleeping", "finished"].includes(action) ? action : "idle", true);
+      if (action === "wave") engine.greet();
+      if (["wink", "love"].includes(action)) engine.triggerEmote(action);
+    });
+    status.textContent = `Harakat: ${button.textContent}. Hamrohga bosib ham salomlashishingiz mumkin.`;
+  }));
+  async function exportPng(button, frames, linkId, filename, footer) {
+    button.disabled = true;
+    try {
+      const canvas = document.createElement("canvas"); canvas.width = 1440; canvas.height = 730;
+      const ctx = canvas.getContext("2d");
+      const background = ctx.createLinearGradient(0, 0, 1440, 730);
+      background.addColorStop(0, "#243044"); background.addColorStop(1, "#111621");
+      ctx.fillStyle = background; ctx.fillRect(0, 0, 1440, 730);
+      ctx.textAlign = "left"; ctx.textBaseline = "top";
+      ctx.fillStyle = "#edba91"; ctx.font = '700 17px "Segoe UI", sans-serif';
+      ctx.fillText("QANOT AI · MOSHI", 48, 38);
+      ctx.fillStyle = "#f1f3f8"; ctx.font = '700 48px "Segoe UI", sans-serif';
+      ctx.fillText("Mochi uslubi, Moshi shakli", 48, 73);
+      ctx.fillStyle = "#a9b3c7"; ctx.font = '400 21px "Segoe UI", sans-serif';
+      ctx.fillText("Avvalgi yumshoq material va yuz · Besh burchakli yangi shakl", 48, 138);
+      const gap = 18, width = (1440 - 96 - (frames.length - 1) * gap) / frames.length, top = 195, height = 440;
+      frames.forEach(({ canvas: source, label, description }, index) => {
+        const x = 48 + index * (width + gap);
+        const card = ctx.createLinearGradient(x, top, x + width, top + height);
+        card.addColorStop(0, "#2a374d"); card.addColorStop(1, "#1b2434");
+        ctx.beginPath(); ctx.roundRect(x, top, width, height, 24);
+        ctx.fillStyle = card; ctx.fill(); ctx.strokeStyle = "#40516d"; ctx.lineWidth = 1; ctx.stroke();
+        // Capture the shipping engine's current painted pose, including its
+        // blink, wave and expression; no alternate export renderer is used.
+        const drawWidth = Math.min(360, width - 12), drawHeight = drawWidth * source.height / source.width;
+        ctx.drawImage(source, x + (width - drawWidth) / 2, top + 16, drawWidth, drawHeight);
+        ctx.textAlign = "center"; ctx.fillStyle = "#f1f3f8"; ctx.font = '600 25px "Segoe UI", sans-serif';
+        ctx.fillText(label, x + width / 2, top + 345);
+        ctx.fillStyle = "#a1b1cb"; ctx.font = '400 16px "Segoe UI", sans-serif';
+        ctx.fillText(description, x + width / 2, top + 383);
+      });
+      ctx.textAlign = "left"; ctx.fillStyle = "#90a5c2"; ctx.font = '400 16px "Segoe UI", sans-serif';
+      ctx.fillText(`${activeActionLabel} holati · ${footer}`, 48, 672);
+      const blob = await new Promise(resolve => canvas.toBlob(resolve, "image/png"));
+      if (!blob) throw new Error("PNG yaratilmadi");
+      const link = document.querySelector(linkId), oldUrl = link.href;
+      link.href = URL.createObjectURL(blob); link.hidden = false; link.click();
+      if (oldUrl.startsWith("blob:")) setTimeout(() => URL.revokeObjectURL(oldUrl), 60000);
+      status.textContent = `${filename} tayyor. Fayl havolasi orqali ham saqlashingiz mumkin.`;
+    } catch (error) { status.textContent = `PNG xatosi: ${error.message}`; }
+    finally { button.disabled = false; }
+  }
+  document.querySelector("#export-png").addEventListener("click", event => exportPng(event.currentTarget,
+    engines.slice(0, 4).map((frame, index) => ({ ...frame, label: variants[index][1], description: variants[index][2] })),
+    "#png-download", "Moshi-QanotAI-preview.png", "Moshi, Codex, OpenCode va Telegram"));
+  document.querySelector("#export-comparison").addEventListener("click", event => exportPng(event.currentTarget,
+    comparisonFrames, "#comparison-download", "Mochi-Moshi-taqqoslash.png", "Asl Mochi → yumshoq Moshi → panelning saqlangan rangi"));
+  const greeting = new Greeting();
+  const greetingCanvas = document.querySelector("#greeting"), greetingContext = greetingCanvas.getContext("2d");
+  greeting.start();
+  document.querySelector("#restart-greeting").addEventListener("click", () => greeting.start());
+  let previous = performance.now();
+  function draw(now) {
+    const dt = Math.min(.033, Math.max(0, (now - previous) / 1000)); previous = now;
+    engines.forEach(({ ctx, engine, width, height }) => {
+      engine.update(dt); ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, width, height);
+      engine.draw(ctx, width, height);
+    });
+    greeting.draw(greetingContext);
+    requestAnimationFrame(draw);
+  }
+  addEventListener("error", event => { status.textContent = `Ko‘rish xatosi: ${event.message}`; });
+  requestAnimationFrame(draw);
+</script>
+</body>
+</html>

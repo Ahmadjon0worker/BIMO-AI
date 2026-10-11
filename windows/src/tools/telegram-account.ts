@@ -3,6 +3,7 @@ import { t, tl } from "../i18n/i18n";
 import { Bridge, emitToWindow, onEvent } from "../core/bridge";
 import { AccountController, type AccountTransport } from "../core/telegram-account";
 import { buildTelegramMessenger } from "./telegram-messenger";
+import { createMoshiAvatar } from "../mochi/avatar";
 
 const TRANSPORT: AccountTransport = {
   status: () => Bridge.localAIAccountStatus(), configure: (config) => Bridge.localAIAccountConfigure(config),
@@ -15,6 +16,7 @@ const TRANSPORT: AccountTransport = {
 };
 
 export function buildTelegramAccount(transport: AccountTransport = TRANSPORT, headerHeight = () => 120) {
+  const avatar = createMoshiAvatar("telegram", "Telegram Moshi");
   const connection = h("p", { class: "muted", role: "status", "aria-live": "polite" });
   const notice = h("div", { class: "notice", role: "status", "aria-live": "polite" });
   const apiID = h("input", { id: "account-api-id", type: "number", min: 1, max: 2147483647, autocomplete: "off" });
@@ -118,11 +120,13 @@ export function buildTelegramAccount(transport: AccountTransport = TRANSPORT, he
   } });
   const el = h("div", { id: "personal-account-panel", role: "tabpanel" }, notice, recovery,
       h("section", { class: "card account-signin-card" }, h("div", { class: "account-connection-bar" },
-        h("div", {}, h("h2", { text: tl("Personal Telegram account") }), connection), h("div", { class: "actions" }, reconnect, authToggle)), authBody), messenger.el);
+        h("div", { style: "display:flex;align-items:center;gap:10px" }, avatar.el,
+          h("div", {}, h("h2", { text: tl("Personal Telegram account") }), connection)), h("div", { class: "actions" }, reconnect, authToggle)), authBody), messenger.el);
   function sync() {
     const state = controller.snapshot, status = state.status;
     const busy = !!state.pending || !!status?.busy || !!status?.teardown_pending;
     const authorized = !!status?.authorized && status.state === "authorized";
+    avatar.setState(busy ? "working" : state.error || status?.state === "error" ? "error" : authorized ? "idle" : "sleeping");
     reconnect.hidden = !authorized || status?.connected !== false;
     reconnect.disabled = busy || !status?.available || !status.has_saved_session;
     authToggle.hidden = !authorized; authToggle.setAttribute("aria-expanded", String(authExpanded));
@@ -200,6 +204,6 @@ export function buildTelegramAccount(transport: AccountTransport = TRANSPORT, he
     if (visible) void controller.refresh();
   });
   return { el, controller, sync, clearSecrets, setVisible: (next: boolean) => {
-    visible = next; if (!next) { clearSecrets(); messenger.hide(); controller.cancelPrivateRequests(); } sync();
+    visible = next; avatar.setVisible(next); if (!next) { clearSecrets(); messenger.hide(); controller.cancelPrivateRequests(); } sync();
   } };
 }
