@@ -17,6 +17,7 @@ import { Sound } from "../core/sound";
 import { State, type ChatMessage } from "../core/state";
 import type { ViewHost } from "./views";
 import { N_, t, tl } from "../i18n/i18n";
+import { createThinkingOrb } from "../effects/thinking-orb";
 import {
   isTelegramCommand, parseTelegramCommand, parseTelegramRecipient, telegramRequestNeedsClarification,
   telegramUsesMessageReference, telegramExplicitReviewRequested, TelegramActionController, type TelegramRecipient,
@@ -46,14 +47,6 @@ function bubble(message: ChatMessage): HTMLElement {
   const reply = h("div", { class: "reply" });
   renderMarkdown(reply, message.content);
   return h("div", { class: "chat-row" }, reply);
-}
-
-function typingDots(): HTMLElement {
-  return h(
-    "div",
-    { class: "chat-row" },
-    h("div", { class: "typing" }, h("i"), h("i"), h("i")),
-  );
 }
 
 /** The coloured chip showing what the question is about (a dropped file). */
@@ -228,6 +221,9 @@ function buildPicker(onChange: () => void): Picker {
 export function buildPrompt(onHeightChange: () => void): ViewHost {
   const chipRow = h("div", { class: "chip-row" });
   const log = h("div", { class: "chat-log" });
+  const orb = createThinkingOrb({ state: "solving", size: 20, theme: "dark", visible: false });
+  const thinkingRow = h("div", { class: "chat-row" }, h("div", { class: "typing", role: "status" }, orb.el));
+  window.addEventListener?.("pagehide", () => orb.destroy(), { once: true });
   const input = h("input", {
     type: "text",
     class: "chat-input",
@@ -495,12 +491,14 @@ export function buildPrompt(onHeightChange: () => void): ViewHost {
       }
 
       const thinking = State.stateOverride === "thinking";
+      orb.setState(sendingKind === "telegram" ? "connecting" : live ? "composing" : "solving");
+      orb.setVisible(visible && thinking && !live);
       const count = State.chatHistory.length + (thinking ? 0.5 : 0);
       if (count !== renderedCount && !live) {
         renderedCount = count;
         clear(log);
         for (const m of State.chatHistory) log.append(bubble(m));
-        if (thinking) log.append(typingDots());
+        if (thinking) log.append(thinkingRow);
         log.scrollTop = log.scrollHeight;
       }
 
@@ -515,6 +513,7 @@ export function buildPrompt(onHeightChange: () => void): ViewHost {
     setVisible(next: boolean) {
       if (visible && !next) forgetTelegram(false, sendingKind !== "chat");
       visible = next;
+      orb.setVisible(next && State.stateOverride === "thinking" && !live);
       drawAction();
     },
     focus() {

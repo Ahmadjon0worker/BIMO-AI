@@ -29,6 +29,7 @@ export const SHORTCUT_TEXT = {
   muteToggle: N_("Mute or unmute Moshi"),
   desktopToggle: N_("Send Moshi to the desktop"),
   wardrobeToggle: N_("Open the wardrobe"),
+  voicePushToTalk: N_("Hold to talk — release to process"),
   island: {
     nextPrev: N_("Next or previous pill"),
     byNumber: N_("Go to pill 1 to 9"),
@@ -56,7 +57,8 @@ export type ShortcutId =
   | "prevPill"
   | "muteToggle"
   | "desktopToggle"
-  | "wardrobeToggle";
+  | "wardrobeToggle"
+  | "voicePushToTalk";
 
 export interface ShortcutDef {
   id: ShortcutId;
@@ -81,6 +83,7 @@ export const SHORTCUTS: readonly ShortcutDef[] = [
   def("muteToggle", "Ctrl+Alt+S", true, true),
   def("desktopToggle", "Ctrl+Alt+D", true, true),
   def("wardrobeToggle", "Ctrl+Alt+G", true, true),
+  def("voicePushToTalk", "Ctrl+Shift+Space", true, true),
 ];
 
 export interface Binding {

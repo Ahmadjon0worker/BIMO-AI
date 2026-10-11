@@ -60,12 +60,12 @@
 <body>
 <main>
   <header>
-    <div><div class="eyebrow">QANOT AI · MOSHI</div><h1>Mochi uslubi, Moshi shakli</h1>
+    <div><div class="eyebrow">BIMO AI · MOSHI</div><h1>Mochi uslubi, Moshi shakli</h1>
       <p>Avvalgi yumshoq material va yuz saqlanadi. Shakl besh burchakli.</p></div>
     <div class="export"><span class="live">Animatsiya yoqilgan</span>
       <button id="export-png">PNG saqlash</button>
       <button id="export-comparison">Taqqoslash PNG</button>
-      <a id="png-download" download="Moshi-QanotAI-preview.png" hidden>PNG fayl</a>
+      <a id="png-download" download="Moshi-BIMOAI-preview.png" hidden>PNG fayl</a>
       <a id="comparison-download" download="Mochi-Moshi-taqqoslash.png" hidden>Taqqoslash fayli</a></div>
   </header>
   <nav aria-label="Hamroh harakati">
@@ -189,7 +189,7 @@
       ctx.fillStyle = background; ctx.fillRect(0, 0, 1440, 730);
       ctx.textAlign = "left"; ctx.textBaseline = "top";
       ctx.fillStyle = "#edba91"; ctx.font = '700 17px "Segoe UI", sans-serif';
-      ctx.fillText("QANOT AI · MOSHI", 48, 38);
+      ctx.fillText("BIMO AI · MOSHI", 48, 38);
       ctx.fillStyle = "#f1f3f8"; ctx.font = '700 48px "Segoe UI", sans-serif';
       ctx.fillText("Mochi uslubi, Moshi shakli", 48, 73);
       ctx.fillStyle = "#a9b3c7"; ctx.font = '400 21px "Segoe UI", sans-serif';
@@ -223,7 +223,7 @@
   }
   document.querySelector("#export-png").addEventListener("click", event => exportPng(event.currentTarget,
     engines.slice(0, 4).map((frame, index) => ({ ...frame, label: variants[index][1], description: variants[index][2] })),
-    "#png-download", "Moshi-QanotAI-preview.png", "Moshi, Codex, OpenCode va Telegram"));
+    "#png-download", "Moshi-BIMOAI-preview.png", "Moshi, Codex, OpenCode va Telegram"));
   document.querySelector("#export-comparison").addEventListener("click", event => exportPng(event.currentTarget,
     comparisonFrames, "#comparison-download", "Mochi-Moshi-taqqoslash.png", "Asl Mochi → yumshoq Moshi → panelning saqlangan rangi"));
   const greeting = new Greeting();

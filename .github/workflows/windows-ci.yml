@@ -1,7 +1,7 @@
 name: Windows CI
 
 # Automatic checks do not download or require the large release runtime.
-# Native tests are opt-in and require the pinned v0.6.3 runtime asset to exist.
+# Native tests are opt-in and require the verified base asset in release v0.7.1.
 on:
   pull_request:
     paths:
@@ -68,8 +68,16 @@ jobs:
           python-version: '3.12'
           architecture: x64
 
-      - name: Prepare verified public runtime
-        run: python scripts/prepare-release-runtime.py --download
+      - name: Fetch verified runtime base from this repository
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Path .build-inputs -Force | Out-Null
+          gh release download v0.7.1 --repo $env:GITHUB_REPOSITORY --pattern 'BIMOAI-Windows-runtime-base.zip' --dir .build-inputs
+          if ($LASTEXITCODE -ne 0) { throw 'Pinned runtime base download failed.' }
+          python scripts/prepare-release-runtime.py --archive .build-inputs/BIMOAI-Windows-runtime-base.zip
+          if ($LASTEXITCODE -ne 0) { throw 'Pinned runtime verification failed.' }
 
       - name: Cache cargo
         uses: actions/cache@v4

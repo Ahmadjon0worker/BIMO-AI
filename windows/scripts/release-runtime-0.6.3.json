@@ -1,5 +1,5 @@
 {
-  "file": "QanotAI-Windows-0.6.3-runtime.zip",
+  "file": "BIMOAI-Windows-runtime-base.zip",
   "bytes": 454608149,
   "sha256": "79bad9bbf4cff6bf9312e9dbc45ff9dedae44f321872c5d66c01d219cf8ddea0",
   "manifest_sha256": "ecc66b90c2bddddbe9d140ea014805ec8366218c1d80a08cdbec303533e7c2e4",
@@ -12,6 +12,6 @@
   "compression_level": 6,
   "no_user_config_or_credentials": true,
   "version": "0.6.3",
-  "release_version": "0.6.4",
-  "url": "https://github.com/Ahmadjon0worker/CouCou-Uzbek-edition-/releases/download/v0.6.4/QanotAI-Windows-0.6.3-runtime.zip"
+  "release_version": "0.7.1",
+  "url": "https://github.com/Ahmadjon0worker/BIMO-AI/releases/download/v0.7.1/BIMOAI-Windows-runtime-base.zip"
 }

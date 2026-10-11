@@ -29,7 +29,7 @@ const T = {
 
 export const GREETING_END = T.end;
 
-/** The greeting cue uses the current Qanot sound pack. */
+/** The greeting cue uses the current BIMO AI sound pack. */
 const GREETING_SOUND = "greeting";
 
 // ── Geometry (640×150) ────────────────────────────────────────────────────────

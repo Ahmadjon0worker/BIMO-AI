@@ -1,4 +1,4 @@
-# Qanot AI vositalari: AI bilan va AI’siz
+# BIMO AI vositalari: AI bilan va AI’siz
 
 LocalAI Studio → Telegram va Windows vositalari oynasida alohida **Terminal / GitHub** va **Desktop** bo‘limlari bor. Ollama o‘chiq bo‘lsa ham oddiy Telegram xabarlari, CMD, PowerShell, GitHub CLI va qo‘lda desktop amallari ishlaydi. AI reja yoki matn yaratish uchun kerak.
 
@@ -20,7 +20,7 @@ Oynalar ro‘yxatidan o‘z oynangizni tanlang. **Kuzatish** faqat tanlangan oyn
 
 ## CMD / PowerShell CLI
 
-Quyidagi buyruqlar o‘rnatilgan `localai-service` papkasida ishlaydi. Avval Qanot AI xizmatini Studio’dan boshlang.
+Quyidagi buyruqlar o‘rnatilgan `localai-service` papkasida ishlaydi. Avval BIMO AI xizmatini Studio’dan boshlang.
 
 ```cmd
 coucou.cmd status
@@ -36,7 +36,7 @@ coucou.cmd mcp-config
 `github.json` misoli:
 
 ```json
-{"operation":"issues","repo":"Ahmadjon0worker/CouCou-Uzbek-edition-"}
+{"operation":"issues","repo":"Ahmadjon0worker/BIMO-AI"}
 ```
 
 PowerShell’da `./coucou.ps1` ham shu argumentlarni qabul qiladi. Bir nechta satr, Unicode yoki shell belgilarini aynan saqlash uchun `--script-file`, `--text-file`, `--arguments-file` ishlating. Natijasi noma’lum xabar yoki boshqa amal avtomatik takrorlanmaydi.
@@ -51,4 +51,4 @@ AI provayderlar: sozlangan Ollama, Gemini yoki Groq. AI ulanmagan holatda qo‘l
 
 ## Eski nomlar bilan moslik
 
-Mahsulot Qanot AI deb ko‘rinsa ham, yuqoridagi `coucou.cmd`, `coucou.ps1`, `coucou-mcp.cmd`, MCP xizmat nomlari va credential/protokol identifikatorlari saqlanadi. `%APPDATA%\Coucou` va `%LOCALAPPDATA%\Coucou\LocalAI` eski per-user sozlamalar va Telegram sessiyasini saqlaydi. Ularni qo‘lda qayta nomlamang. Yangi EXE o‘rnatish papkasi `%LOCALAPPDATA%\Qanot AI`.
+Mahsulot BIMO AI deb ko‘rinsa ham, yuqoridagi `coucou.cmd`, `coucou.ps1`, `coucou-mcp.cmd`, MCP xizmat nomlari va credential/protokol identifikatorlari saqlanadi. `%APPDATA%\Coucou` va `%LOCALAPPDATA%\Coucou\LocalAI` eski per-user sozlamalar va Telegram sessiyasini saqlaydi. Ularni qo‘lda qayta nomlamang. Yangi EXE o‘rnatish papkasi `%LOCALAPPDATA%\BIMO AI`; oldingi tanilgan o‘rnatma yangilanganda avvalgi manzili saqlanadi.

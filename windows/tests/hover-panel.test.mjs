@@ -4,6 +4,7 @@ import { readFileSync } from 'node:fs';
 import { registerHooks, stripTypeScriptTypes } from 'node:module';
 import { fileURLToPath } from 'node:url';
 import { IslandStateMachine } from '../src/island/fsm.ts';
+import { HoverDwell } from '../src/core/hover-dwell.ts';
 import { State, DEFAULT_SETTINGS } from '../src/core/state.ts';
 import { PANEL_DOCKS, compactSize, panelRect } from '../src/island/panel-layout.ts';
 
@@ -21,6 +22,7 @@ const { Island } = await import('../src/island/island.ts');
 beforeEach(() => {
   mock.timers.enable({ apis: ['setTimeout'] });
   State.tasks = []; State.isPinned = false; State.pendingApproval = null; State.stateOverride = null;
+  State.paused = false;
   State.settings = { ...DEFAULT_SETTINGS, openOnHover: true };
 });
 afterEach(() => mock.timers.reset());
@@ -28,6 +30,7 @@ function panel(dock) {
   State.settings.islandPosition = { monitor: 'fixture', x: .5, y: .5, dock };
   const host = Object.create(Island.prototype);
   host.fsm = new IslandStateMachine(); host.panelDrag = { active: false };
+  host.hoverDwell = new HoverDwell(() => host.fsm.mouseEntered());
   host.desktop = { launch() {} }; host.wasInIsland = false; host.botHovering = false;
   host.width = { value: 0 }; host.height = { value: 0 };
   host.ensureRunning = () => {}; host.isBotHit = () => false;
@@ -46,6 +49,7 @@ test('hover opens each custom dock without arming a false leave timer, then fold
     const host = panel(dock);
     const before = host.islandRect();
     host.onCursor(...center(host));
+    mock.timers.tick(400);
     assert.equal(host.fsm.state, 'home', dock);
     assert.equal(host.wasInIsland, true, dock);
     assert.equal(host.fsm.homeCollapseDueAt, null, `${dock}: entry must not count as leave`);
@@ -60,11 +64,12 @@ test('hover opens each custom dock without arming a false leave timer, then fold
 test('manual collapse still reopens from every dock and resets hover ownership', () => {
   for (const dock of PANEL_DOCKS) {
     const host = panel(dock);
-    host.onCursor(...center(host)); host.collapse();
+    host.onCursor(...center(host)); mock.timers.tick(400); host.collapse();
     assert.equal(host.fsm.state, 'petit', dock);
     assert.equal(host.fsm.openedByHover, false, dock);
     host.onCursor(...center(host)); assert.equal(host.fsm.state, 'petit', `${dock}: manual fold stays folded`);
     host.onCursor(-10000, -10000); host.onCursor(...center(host));
+    mock.timers.tick(400);
     assert.equal(host.fsm.state, 'home', `${dock}: next intentional hover reopens`);
     host.fsm.cancelTimers();
   }
@@ -75,6 +80,22 @@ test('active panel drag suppresses hover transitions and desktop shortcut', () =
   host.panelDrag.active = true;
   host.onCursor(...center(host)); host.flyOutOrHome();
   assert.equal(host.fsm.state, 'petit'); assert.equal(flights, 0);
-  host.panelDrag.active = false; host.onCursor(...center(host));
+  host.panelDrag.active = false; host.onCursor(...center(host)); mock.timers.tick(400);
   assert.equal(host.fsm.state, 'home'); host.flyOutOrHome(); assert.equal(flights, 1);
+});
+test('an explicit hide or pause cancels pending hover so the panel cannot reopen', () => {
+  for (const pause of [false, true]) {
+    const host = panel('bottom-right'); host.onCursor(...center(host)); mock.timers.tick(200);
+    State.paused = pause; host.fsm.forceHidden(); mock.timers.tick(500);
+    assert.equal(host.fsm.state, 'hidden');
+    host.onCursor(-10000, -10000); host.onCursor(...center(host));
+    if (pause) { mock.timers.tick(500); assert.equal(host.fsm.state, 'hidden'); }
+    host.hoverDwell.leave(); host.fsm.cancelTimers(); State.paused = false;
+  }
+});
+test('starting a panel drag cancels an already pending hover timer', () => {
+  const host = panel('bottom-right'); host.onCursor(...center(host)); mock.timers.tick(200);
+  host.panelHandle = { classList: { toggle() {} } }; host.cancelBotHover = () => {};
+  host.panelDrag.active = true; host.panelDragActive(true); mock.timers.tick(500);
+  assert.equal(host.fsm.state, 'petit'); host.fsm.cancelTimers();
 });

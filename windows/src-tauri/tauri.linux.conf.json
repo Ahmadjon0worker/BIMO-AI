@@ -8,7 +8,8 @@
     ],
     "resources": {
       "../target/release/coucou-hook.exe": null,
-      "../target/release/coucou-hook": "coucou-hook"
+      "../target/release/coucou-hook": "coucou-hook",
+      "../localai-service/bundle/": null
     },
     "linux": {
       "appimage": {
@@ -30,7 +31,7 @@
     "windows": [
       {
         "label": "island",
-        "title": "Coucou",
+        "title": "BIMO AI",
         "url": "index.html",
         "width": 240,
         "height": 6,

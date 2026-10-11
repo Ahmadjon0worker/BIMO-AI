@@ -4,6 +4,7 @@ import { Bridge, emitToWindow, onEvent } from "../core/bridge";
 import { AccountController, type AccountTransport } from "../core/telegram-account";
 import { buildTelegramMessenger } from "./telegram-messenger";
 import { createMoshiAvatar } from "../mochi/avatar";
+import { createThinkingOrb } from "../effects/thinking-orb";
 
 const TRANSPORT: AccountTransport = {
   status: () => Bridge.localAIAccountStatus(), configure: (config) => Bridge.localAIAccountConfigure(config),
@@ -17,6 +18,8 @@ const TRANSPORT: AccountTransport = {
 
 export function buildTelegramAccount(transport: AccountTransport = TRANSPORT, headerHeight = () => 120) {
   const avatar = createMoshiAvatar("telegram", "Telegram Moshi");
+  const orb = createThinkingOrb({ size: 20, theme: "dark", accent: "#60caff", visible: false });
+  window.addEventListener?.("pagehide", () => orb.destroy(), { once: true });
   const connection = h("p", { class: "muted", role: "status", "aria-live": "polite" });
   const notice = h("div", { class: "notice", role: "status", "aria-live": "polite" });
   const apiID = h("input", { id: "account-api-id", type: "number", min: 1, max: 2147483647, autocomplete: "off" });
@@ -121,11 +124,14 @@ export function buildTelegramAccount(transport: AccountTransport = TRANSPORT, he
   const el = h("div", { id: "personal-account-panel", role: "tabpanel" }, notice, recovery,
       h("section", { class: "card account-signin-card" }, h("div", { class: "account-connection-bar" },
         h("div", { style: "display:flex;align-items:center;gap:10px" }, avatar.el,
-          h("div", {}, h("h2", { text: tl("Personal Telegram account") }), connection)), h("div", { class: "actions" }, reconnect, authToggle)), authBody), messenger.el);
+          h("div", {}, h("h2", { text: tl("Personal Telegram account") }), h("div", { class: "liquid-status-line" }, orb.el, connection))), h("div", { class: "actions" }, reconnect, authToggle)), authBody), messenger.el);
   function sync() {
     const state = controller.snapshot, status = state.status;
     const busy = !!state.pending || !!status?.busy || !!status?.teardown_pending;
     const authorized = !!status?.authorized && status.state === "authorized";
+    orb.setState(state.pending === "chats" || state.pending === "messages" || state.pending === "resolve" ? "searching"
+      : state.pending === "draft" || state.pending === "compose" ? "composing"
+      : state.checking || busy ? "connecting" : state.error || status?.state === "error" ? "shaping" : "breathing");
     avatar.setState(busy ? "working" : state.error || status?.state === "error" ? "error" : authorized ? "idle" : "sleeping");
     reconnect.hidden = !authorized || status?.connected !== false;
     reconnect.disabled = busy || !status?.available || !status.has_saved_session;
@@ -204,6 +210,6 @@ export function buildTelegramAccount(transport: AccountTransport = TRANSPORT, he
     if (visible) void controller.refresh();
   });
   return { el, controller, sync, clearSecrets, setVisible: (next: boolean) => {
-    visible = next; avatar.setVisible(next); if (!next) { clearSecrets(); messenger.hide(); controller.cancelPrivateRequests(); } sync();
+    visible = next; avatar.setVisible(next); orb.setVisible(next); if (!next) { clearSecrets(); messenger.hide(); controller.cancelPrivateRequests(); } sync();
   } };
 }

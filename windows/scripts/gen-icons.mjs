@@ -1,4 +1,4 @@
-// Original Qanot AI angular wing/diamond artwork, rendered directly into PNG/ICO.
+// Original BIMO AI angular wing/diamond artwork, rendered directly into PNG/ICO.
 // The turquoise/gold emblem is independent of the upstream mascot. The existing
 // MIT PNG/ICO encoding helpers are retained; see LICENSE-QANOT-ASSETS.md.
 //
@@ -163,7 +163,7 @@ const ico = encodeICO([16, 24, 32, 48, 64, 128, 256].map((size) => ({ size, png:
 writeFileSync(join(OUT, "icon.ico"), ico);
 console.log(`icon.ico — ${ico.length} bytes`);
 mkdirSync(ASSETS, { recursive: true });
-const manifest = { schema: 1, brand: "Qanot AI", author: "Ahmadjon0worker", license: "MIT",
+const manifest = { schema: 1, brand: "BIMO AI", author: "Ahmadjon0worker", license: "MIT",
   generator: "scripts/gen-icons.mjs", design: "Original mirrored angular turquoise wings and gold diamond on a navy hexagonal plate.",
   files: Object.entries({ ...files, "icon.ico": ico }).map(([file, data]) => ({
     file: `src-tauri/icons/${file}`, bytes: data.length, sha256: createHash("sha256").update(data).digest("hex"),

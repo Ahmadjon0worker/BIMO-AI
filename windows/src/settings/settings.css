@@ -429,3 +429,21 @@ select option {
 html[dir="rtl"] :is(.diff, .path, .keycap, input[type="password"], input[type="text"]) {
   direction: ltr;
 }
+
+/* Settings remain readable through clear glass; inputs retain dark contrast. */
+html:has(body.settings-window) { background: transparent; }
+body.settings-window {
+  --dim: #bacbdd;
+  --dim-2: #9ab0c8;
+  --card: rgba(18, 39, 59, .4);
+  --hairline: rgba(214, 240, 255, .19);
+  background: radial-gradient(ellipse at 0 0, rgba(76, 170, 195, .1), transparent 55%), radial-gradient(ellipse at 100% 100%, rgba(120, 100, 193, .08), transparent 58%), rgba(10, 21, 37, .4);
+}
+#settings-root[data-liquid-scope="settings"] section { background: linear-gradient(145deg, rgba(59, 99, 133, .2), rgba(11, 25, 43, .4)); }
+#settings-root[data-liquid-scope="settings"] :is(code, .path) { color: #abc2d9; }
+#settings-root[data-liquid-scope="settings"] :is(.agent-card, .shortcut-row) { background-color: rgba(153, 201, 234, .05); border-color: rgba(213, 240, 255, .14); }
+#settings-root[data-liquid-scope="settings"] .hint { color: #b8cbdf; }
+@media (prefers-reduced-transparency: reduce) {
+  body.settings-window { background: #101d30; }
+  #settings-root[data-liquid-scope="settings"] section { background: #182a40; }
+}

@@ -32,8 +32,16 @@ jobs:
           python-version: '3.12'
           architecture: x64
 
-      - name: Prepare verified public runtime
-        run: python scripts/prepare-release-runtime.py --download
+      - name: Fetch pinned runtime from this repository
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Path .build-inputs -Force | Out-Null
+          gh release download v0.7.1 --repo $env:GITHUB_REPOSITORY --pattern 'BIMOAI-Windows-runtime-base.zip' --dir .build-inputs
+          if ($LASTEXITCODE -ne 0) { throw 'Pinned runtime base download failed.' }
+          python scripts/prepare-release-runtime.py --archive .build-inputs/BIMOAI-Windows-runtime-base.zip
+          if ($LASTEXITCODE -ne 0) { throw 'Pinned runtime verification failed.' }
 
       - name: Cache cargo
         uses: actions/cache@v4
@@ -81,10 +89,10 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: QanotAI-Windows-verified-installers
+          name: BIMOAI-Windows-verified-installers
           path: |
-            windows/release/QanotAI-Windows-*-setup.exe
-            windows/release/QanotAI-Windows-*.msi
+            windows/release/BIMOAI-Windows-*-setup.exe
+            windows/release/BIMOAI-Windows-*.msi
             windows/release/release-manifest.json
             windows/release/SHA256SUMS.txt
             windows/release/installer-verification.json

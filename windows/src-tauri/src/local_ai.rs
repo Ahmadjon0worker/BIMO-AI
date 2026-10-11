@@ -2,7 +2,7 @@
 // Named tool calls address this verified bridge only. Explicit scripts execute
 // as the current user; generated proposals do not authorize execution.
 
-use std::{sync::atomic::{AtomicU16, Ordering}, time::Duration};
+use std::{sync::{atomic::{AtomicU16, Ordering}, Mutex}, time::Duration};
 
 use reqwest::{redirect::Policy, Url};
 use serde::{Deserialize, Serialize};
@@ -17,6 +17,28 @@ const MAX_BODY: usize = 64 * 1024;
 const MAX_VOICE_BODY: usize = 1024 * 1024;
 const MAX_VOICE_RESPONSE: usize = 2 * 1024 * 1024;
 const MAX_VOICE_BASE64: usize = 704_000;
+
+/// A cold WebView may miss the opening event. Keep only bounded display intent;
+/// restoring this state never restores microphone recording or any action.
+#[derive(Clone, Copy, Debug, Default, Deserialize, Serialize, PartialEq, Eq)]
+#[serde(rename_all = "lowercase")]
+pub enum ToolsTab { #[default] Tools, Assistant, Voice }
+#[derive(Default)]
+pub struct ToolsLaunch { tab: Mutex<ToolsTab> }
+pub fn request_tools_tab<R: tauri::Runtime>(app: &AppHandle<R>, tab: ToolsTab) {
+    if let Some(state) = app.try_state::<ToolsLaunch>() {
+        *state.tab.lock().unwrap_or_else(|e| e.into_inner()) = tab;
+    }
+    let event = match tab { ToolsTab::Tools => "tools-default", ToolsTab::Assistant => "tools-assistant", ToolsTab::Voice => "tools-voice" };
+    let _ = app.emit_to("tools", event, ());
+}
+
+#[tauri::command]
+pub fn local_ai_tools_snapshot(app: AppHandle) -> Value {
+    let tab = app.try_state::<ToolsLaunch>().map(|s| *s.tab.lock().unwrap_or_else(|e| e.into_inner())).unwrap_or_default();
+    let visible = app.get_webview_window("tools").is_some_and(|w| w.is_visible().unwrap_or(false) && !w.is_minimized().unwrap_or(false));
+    json!({"visible":visible,"tab":tab})
+}
 
 pub(crate) fn publish_router_port(port: Option<u16>) {
     ROUTER_PORT.store(port.filter(|port| matches!(*port, 11435 | 11437)).unwrap_or(0), Ordering::Release);
@@ -121,7 +143,7 @@ fn request_timeout(path: &str, post: bool) -> u64 {
     else if path == "/voice/speak" { 30 }
     else if path == "/voice/cancel" { 10 }
     else if path == "/tools/call" { 180 }
-    else if path == "/tools/status" { 15 }
+    else if path == "/tools/status" { 30 }
     else if matches!(path, "/telegram/account/draft" | "/telegram/account/command") { 150 }
     else if post && path.starts_with("/telegram/account/") { 50 }
     else if matches!(path, "/computer/plan" | "/computer/approve") { 90 }
@@ -215,7 +237,10 @@ pub async fn local_ai_voice_speak(arguments: Value) -> Result<Value, String> {
 
 fn toolbox_body(name: &str, arguments: Value) -> Result<Value, String> {
     if !matches!(name, "terminal_run" | "github_action" | "ai_plan" | "desktop_windows"
-        | "desktop_start" | "desktop_observe" | "desktop_action" | "desktop_finish")
+        | "desktop_start" | "desktop_observe" | "desktop_action" | "desktop_finish"
+        | "desktop_targets" | "desktop_point" | "desktop_target_action" | "desktop_check"
+        | "assistant_status" | "assistant_memory_list" | "assistant_memory_remember"
+        | "assistant_memory_forget" | "assistant_activity" | "assistant_brain_reply" | "assistant_cancel")
         || !arguments.is_object() {
         return Err(t("Invalid Local AI control."));
     }
@@ -487,6 +512,7 @@ pub fn create_tools_window(app: &AppHandle) {
     }
     match WebviewWindowBuilder::new(app, "tools", url)
         .additional_browser_args(crate::BROWSER_ARGS)
+        .transparent(true)
         .title(t("Telegram and Windows tools"))
         .inner_size(940.0, 720.0).min_inner_size(700.0, 560.0)
         .resizable(true).visible(false).center().build() {
@@ -517,7 +543,8 @@ pub fn create_studio_window(app: &AppHandle) {
     }
     match WebviewWindowBuilder::new(app, "studio", url)
         .additional_browser_args(crate::BROWSER_ARGS)
-        .title("LocalAI Studio - Qanot AI")
+        .transparent(true)
+        .title("LocalAI Studio - BIMO AI")
         .inner_size(1180.0, 780.0).min_inner_size(800.0, 580.0)
         .resizable(true).visible(false).center().build() {
         Ok(window) => {
@@ -548,7 +575,8 @@ pub fn local_ai_open_studio(app: AppHandle) -> Result<(), String> {
 }
 
 #[tauri::command]
-pub fn local_ai_open_tools(app: AppHandle) -> Result<(), String> {
+pub fn local_ai_open_tools(app: AppHandle, tab: Option<ToolsTab>) -> Result<(), String> {
+    if let Some(tab) = tab { request_tools_tab(&app, tab); }
     let window = app.get_webview_window("tools").ok_or_else(|| t("Local tools window is unavailable."))?;
     let _ = window.unminimize();
     window.show().map_err(|_| t("Local tools window is unavailable."))?;
@@ -592,6 +620,7 @@ pub async fn local_ai_mode(mode: String) -> Result<Value, String> {
 
 #[tauri::command]
 pub async fn local_ai_stop(app: AppHandle) -> Result<Value, String> {
+    crate::companion::hide(&app);
     let _ = app.emit("localai-account-invalidated", ());
     request("/control/stop", Some(json!({}))).await
 }
@@ -603,6 +632,18 @@ pub async fn local_ai_open_opencode() -> Result<Value, String> {
 
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn tools_initial_display_is_bounded_and_has_no_recording_state() {
+        use super::*;
+        assert_eq!(ToolsTab::default(), ToolsTab::Tools);
+        for (name, tab) in [("tools", ToolsTab::Tools), ("assistant", ToolsTab::Assistant), ("voice", ToolsTab::Voice)] {
+            assert_eq!(serde_json::from_value::<ToolsTab>(json!(name)).unwrap(), tab);
+            assert_eq!(serde_json::to_value(tab).unwrap(), json!(name));
+        }
+        for bad in [json!("desktop"), json!("Voice"), json!(true), json!({"tab":"voice","record":true}), Value::Null] {
+            assert!(serde_json::from_value::<ToolsTab>(bad).is_err());
+        }
+    }
     #[test]
     fn voice_routes_and_limits_do_not_expand_other_control_requests() {
         use super::*;
@@ -850,7 +891,7 @@ mod tests {
 
     #[test]
     fn natural_telegram_command_preserves_literal_text_and_accepts_only_bounded_context() {
-        let query = "@an0niym0us ga «Salom! $() `literal`» yubor";
+        let query = "@demo_user ga «Salom! $() `literal`» yubor";
         assert_eq!(account_command_body(query, None, None).unwrap(), json!({"query":query}));
         assert_eq!(account_command_body("Shunga shuni yubor", Some("123456789"), Some("Salom\nO‘zbekiston")).unwrap(),
             json!({"query":"Shunga shuni yubor","chat_id":"123456789","message_text":"Salom\nO‘zbekiston"}));
@@ -898,7 +939,7 @@ mod tests {
 
     #[test]
     fn recipient_resolution_is_explicit_and_cannot_accept_arbitrary_urls_or_phone_numbers() {
-        for recipient in ["self", "@an0niym0us", "@Name_123"] { assert_eq!(account_resolve_body(recipient).unwrap(), json!({"recipient":recipient})); }
+        for recipient in ["self", "@demo_user", "@Name_123"] { assert_eq!(account_resolve_body(recipient).unwrap(), json!({"recipient":recipient})); }
         for recipient in ["", "Self", "@abcd", "@1name", "@bad-name", "+998901234567", "https://t.me/name", "@name\n"] { assert!(account_resolve_body(recipient).is_err()); }
     }
 

@@ -20,6 +20,7 @@ export function createMoshiAvatar(variant: MoshiVariant, label: string, size = 5
   }
   function paint() {
     if (!ctx) return;
+    engine.reducedMotion = !!reduced?.matches;
     const dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
     const pixels = Math.round(size * dpr);
     if (el.width !== pixels || el.height !== pixels) { el.width = pixels; el.height = pixels; }

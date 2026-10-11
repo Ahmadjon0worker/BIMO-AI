@@ -1,4 +1,4 @@
-// Weekly share card, with the animated Moshi companion and Qanot AI attribution.
+// Weekly share card, with the animated Moshi companion and BIMO AI attribution.
 
 import { BotEngine } from "../mochi/engine";
 import { formatCount, formatDuration, weekRangeLabel, type WeeklySummary } from "./summary";
@@ -28,7 +28,7 @@ const T = {
   get longestSession() { return t("Longest session"); },
   get approved() { return t("Approved"); },
   get denied() { return t("Denied"); },
-  footer: "Qanot AI · github.com/Ahmadjon0worker/CouCou-Uzbek-edition-",
+  footer: "BIMO AI · github.com/Ahmadjon0worker/BIMO-AI",
 };
 
 /**
@@ -173,7 +173,7 @@ export function renderShareImage(s: WeeklySummary, hideProjects: boolean): HTMLC
   const COMPANION = 220;
   const COMPANION_DRAW = 320;
   const blockH =
-    COMPANION + 20 + 62 + 6 + 36 + 14 + 29 + 80 + // Companion, Qanot AI, title, range
+    COMPANION + 20 + 62 + 6 + 36 + 14 + 29 + 80 + // Companion, BIMO AI, title, range
     110 + 6 + 26 + // time + caption
     56 + 94 + // stat row
     (hasLines ? 24 + 34 : 0) +
@@ -189,7 +189,7 @@ export function renderShareImage(s: WeeklySummary, hideProjects: boolean): HTMLC
   x.fillStyle = INK;
   x.textAlign = "center";
   font(x, 900, 52);
-  x.fillText("Qanot AI", cx, y);
+  x.fillText("BIMO AI", cx, y);
   y += 62 + 6;
 
   x.fillStyle = DIM;

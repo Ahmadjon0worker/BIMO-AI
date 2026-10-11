@@ -263,19 +263,28 @@ test("lookup() answers from the merged tables", () => {
   assert.equal(typeof lookup("{count} repos", "ru"), "object");
 });
 
-test("public Qanot labels and hook errors keep the brand across languages without rewriting file names", () => {
+test("public BIMO AI labels and hook errors keep the brand across languages without rewriting file names", () => {
   const file = "C:/Users/example/AppData/Roaming/Coucou/settings.json";
-  const errorKey = "{file} isn't a JSON object — Qanot AI won't touch it.";
+  const errorKey = "{file} isn't a JSON object — BIMO AI won't touch it.";
   for (const lang of LANGUAGE_CODES) {
     inLanguage(lang, () => {
-      assert.match(t("Open Qanot AI"), /Qanot AI/);
+      assert.match(t("Open BIMO AI"), /BIMO AI/);
+      assert.equal(t("Open Coucou"), t("Open BIMO AI"));
+      assert.equal(t("Open Qanot AI"), t("Open BIMO AI"));
       const message = t(errorKey, { file });
       assert.ok(message.includes(file), `${lang} changed the compatibility file path`);
-      assert.match(message, /Qanot AI/);
+      assert.match(message, /BIMO AI/);
       assert.ok(!message.replace(file, "").includes("Coucou"), `${lang} showed the old app brand`);
     });
   }
-  inLanguage("fr", () => assert.equal(t("Open Coucou"), t("Open Qanot AI")));
+  inLanguage("fr", () => assert.equal(t("Open Coucou"), t("Open BIMO AI")));
+});
+
+test("legacy public brand mapping runs before interpolation and keeps command identifiers exact", () => {
+  const name = "Moshi / Qanot AI / Coucou";
+  assert.equal(t("Ask Coucou about {name}", {name}), `Ask BIMO AI about ${name}`);
+  assert.equal(t("Qanotli coucou-hook.exe"), "Qanotli coucou-hook.exe");
+  assert.equal(tn("{count} Coucou item", "{count} Coucou items", 2), "2 BIMO AI items");
 });
 
 // ── No English left outside t() ───────────────────────────────────────────────

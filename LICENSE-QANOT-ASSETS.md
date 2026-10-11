@@ -1,4 +1,8 @@
-# Qanot AI original artwork and sound assets
+# BIMO AI original icon and sound assets
+
+BIMO AI uses the original Qanot wing icon and procedural notification sounds.
+Historical asset directories and generator filenames remain compatible.
+Mochi-based Moshi artwork is governed separately by LICENSE-ASSETS.md.
 
 Copyright (c) 2026 Ahmadjon0worker
 

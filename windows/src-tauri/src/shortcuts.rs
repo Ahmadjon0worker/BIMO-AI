@@ -29,6 +29,7 @@
 use std::collections::{BTreeMap, HashMap, HashSet};
 use std::str::FromStr;
 use std::sync::Mutex;
+use std::sync::atomic::{AtomicBool, Ordering};
 
 use serde::{Deserialize, Serialize};
 use tauri::{AppHandle, Emitter, Manager, Runtime};
@@ -66,6 +67,7 @@ pub const ACTIONS: &[ActionDef] = &[
     // Mochi on the desktop is not in this version.
     action("desktopToggle", "Ctrl+Alt+D", true, true),
     action("wardrobeToggle", "Ctrl+Alt+G", true, true),
+    action("voicePushToTalk", "Ctrl+Shift+Space", true, true),
 ];
 
 pub fn find(id: &str) -> Option<&'static ActionDef> {
@@ -145,6 +147,7 @@ pub struct Report {
 /// What is registered right now: hot-key id → action id, plus the last report.
 #[derive(Default)]
 pub struct Registry {
+    voice_held: AtomicBool,
     by_id: Mutex<HashMap<u32, &'static str>>,
     report: Mutex<Vec<ActionStatus>>,
 }
@@ -255,13 +258,18 @@ pub fn from_args(args: &[String]) -> Option<&'static str> {
 pub fn plugin<R: Runtime>() -> tauri::plugin::TauriPlugin<R> {
     tauri_plugin_global_shortcut::Builder::new()
         .with_handler(|app, shortcut, event| {
-            if event.state != ShortcutState::Pressed {
-                return;
-            }
             let Some(registry) = app.try_state::<Registry>() else { return };
             let action = registry.by_id.lock().unwrap().get(&shortcut.id()).copied();
             if let Some(action) = action {
-                dispatch(app, action);
+                if action == "voicePushToTalk" {
+                    let pressed = event.state == ShortcutState::Pressed;
+                    if registry.voice_held.swap(pressed, Ordering::SeqCst) == pressed { return; }
+                    if pressed { crate::local_ai::request_tools_tab(app, crate::local_ai::ToolsTab::Voice); let _=app.emit("voice-barge-in",()); }
+                    if let Some(w) = app.get_webview_window("tools") {
+                        if pressed { let _=w.unminimize(); let _=w.show(); let _=w.emit("tools-visible",true); }
+                        let _=w.emit("voice-push-to-talk",serde_json::json!({"pressed":pressed}));
+                    }
+                } else if event.state == ShortcutState::Pressed { dispatch(app, action); }
             }
         })
         .build()
@@ -270,7 +278,10 @@ pub fn plugin<R: Runtime>() -> tauri::plugin::TauriPlugin<R> {
 /// Hands an action to the island.
 pub fn dispatch<R: Runtime>(app: &AppHandle<R>, action: &str) {
     crate::log::line(format!("shortcut {action}"));
-    if action == "wardrobeToggle" {
+    if action == "voicePushToTalk" {
+        crate::local_ai::request_tools_tab(app, crate::local_ai::ToolsTab::Voice);
+        if let Some(w)=app.get_webview_window("tools") {let _=w.show();let _=w.emit("tools-visible",true);}
+    } else if action == "wardrobeToggle" {
         let _ = app.emit_to(WINDOW_LABEL, "open-wardrobe", ());
     } else {
         let _ = app.emit_to(WINDOW_LABEL, "shortcut", action.to_string());
@@ -285,6 +296,8 @@ fn release<R: Runtime>(app: &AppHandle<R>) {
         }
     }
     if let Some(registry) = app.try_state::<Registry>() {
+        registry.voice_held.store(false,Ordering::SeqCst);
+        let _=app.emit_to("tools","voice-push-to-talk",serde_json::json!({"pressed":false}));
         registry.by_id.lock().unwrap().clear();
     }
 }
@@ -379,9 +392,9 @@ fn typed_character(shortcut: &Shortcut) -> Option<String> {
 mod tests {
     use super::*;
 
-    const MAC_IDS: [&str; 10] = [
+    const MAC_IDS: [&str; 11] = [
         "toggleIsland", "openChat", "goToAlert", "jumpToTerminal", "attachFrontWindow",
-        "nextPill", "prevPill", "muteToggle", "desktopToggle", "wardrobeToggle",
+        "nextPill", "prevPill", "muteToggle", "desktopToggle", "wardrobeToggle", "voicePushToTalk",
     ];
 
     fn never(_: &Shortcut) -> Option<String> {
@@ -401,7 +414,8 @@ mod tests {
         for def in ACTIONS {
             let shortcut = parse(def.default_keys)
                 .unwrap_or_else(|| panic!("{} default does not parse", def.id));
-            assert!(is_altgr_like(&shortcut), "{} default is not Ctrl+Alt", def.id);
+            if def.id == "voicePushToTalk" { assert!(shortcut.mods.contains(Modifiers::CONTROL | Modifiers::SHIFT));assert!(!is_altgr_like(&shortcut)); }
+            else {assert!(is_altgr_like(&shortcut), "{} default is not Ctrl+Alt", def.id);}
         }
     }
 

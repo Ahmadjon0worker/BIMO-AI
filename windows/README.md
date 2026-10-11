@@ -1,6 +1,8 @@
-# Qanot AI for Windows — 0.6.4
+# BIMO AI for Windows — 0.7.1
 
-Qanot AI combines a movable desktop panel, **LocalAI Studio**, Telegram, CMD/PowerShell, GitHub tools and local Uzbek voice control. **Moshi** adapts the original **Mochi** design to a soft pentagonal body, retaining its white-gray materials, black eyes, shadows and clothing. Telegram, Codex, OpenCode and other agent variants share this family, with color variants for subagents. This Windows edition derives from [Louis-CFM/coucou](https://github.com/Louis-CFM/coucou); Qanot product branding, icons and notification cues remain unchanged.
+**BIMO AI 0.7.1** includes liquid Moshi, LocalAI Studio, Telegram, grounded UIA targets, visual pointing, verified guide steps, hold-to-talk, sentence speech, CLI readiness and encrypted preference memory. See [the Uzbek usage guide](README-PLIP-UZ.md) and [liquid integration/provenance](README-LIQUID-UZ.md).
+
+BIMO AI combines a movable desktop panel, **LocalAI Studio**, Telegram, CMD/PowerShell, GitHub tools and local Uzbek voice control. **Moshi** adapts the original **Mochi** design to a soft pentagonal body, retaining its white-gray materials, black eyes, shadows and clothing. Telegram, Codex, OpenCode and other agent variants share this family, with color variants for subagents. This Windows edition derives from [Louis-CFM/coucou](https://github.com/Louis-CFM/coucou); BIMO AI product branding, icons and notification cues remain unchanged.
 
 ![Moshi, Codex, OpenCode and Telegram pentagonal companions](assets/qanot/moshi-preview.png)
 
@@ -8,15 +10,14 @@ This still frame comes from the shipping renderer. Moshi breathes, blinks, waves
 
 ## Download and open
 
-The 0.6.4 source and installers passed local validation. Uploaded GitHub assets, their exact source commit and SHA256 digests are checked separately by the publisher and read-only verifier after upload.
+- [BIMOAI-Windows-0.7.1-setup.exe](https://github.com/Ahmadjon0worker/BIMO-AI/releases/download/v0.7.1/BIMOAI-Windows-0.7.1-setup.exe): recommended current-user installer.
+- [Release notes and checksums](https://github.com/Ahmadjon0worker/BIMO-AI/releases/tag/v0.7.1).
 
-- [QanotAI-Windows-0.6.4-setup.exe](https://github.com/Ahmadjon0worker/CouCou-Uzbek-edition-/releases/download/v0.6.4/QanotAI-Windows-0.6.4-setup.exe): the recommended current-user installer.
-- [QanotAI-Windows-0.6.4.msi](https://github.com/Ahmadjon0worker/CouCou-Uzbek-edition-/releases/download/v0.6.4/QanotAI-Windows-0.6.4.msi): Windows Installer format.
-- [Release notes and checksums](https://github.com/Ahmadjon0worker/CouCou-Uzbek-edition-/releases/tag/v0.6.4).
+The repository is private; sign in with an authorized GitHub account to download. This release publishes the tested EXE installer. MSI remains a local packaging candidate until installation-path/startup migration from the previous product name is tested.
 
 Windows 10/11 x64 and WebView2 are required. The installer contains an isolated Python runtime, GitHub CLI and the offline voice components. Python, Node.js and Rust are not required on the destination PC. WebView2 installation may need internet. Ollama and large chat models are installed separately.
 
-Use **Qanot AI LocalAI Studio** in Start or the tray menu. The compatible executable command remains `coucou.exe --studio`. Closing Studio hides it; **Quit** stops the app and its owned local service.
+Use **BIMO AI LocalAI Studio** in Start or the tray menu. The compatible executable command remains `coucou.exe --studio`. Closing Studio hides it; **Quit** stops the app and its owned local service.
 
 The service listens on loopback only, using port 11435 or 11437. An incompatible service already using 11435 is preserved. Studio's system status explains startup errors.
 
@@ -30,29 +31,31 @@ Telegram supports personal-account login, chat search/filter/pages, history, Sav
 
 Manual CMD/PowerShell, GitHub and window-bound desktop actions work without a chat model. Terminal scripts run with the current user's permissions; the workspace restriction is not an OS sandbox. AI proposes work for review. Desktop sessions require a current observation and exclude protected credential/payment/shell windows.
 
-Open **Voice control**, then click **Speak**. Uzbek selects NavAI Whisper small Q5_1 with Silero VAD; English/Russian select multilingual small-q5_1. eSpeak supplies local speech. Optional continuous listening accepts **OK Moshi**; **OK Qanot**, **OK Coucou** and **OK Kuku** remain compatible. The microphone does not open at startup, and recordings are temporary.
+Open **Voice control**, then click **Speak**. Uzbek selects NavAI Whisper small Q5_1 with Silero VAD; English/Russian select multilingual small-q5_1. eSpeak supplies local speech. Optional continuous listening accepts **OK Bimo** and **OK Moshi**; **OK Qanot**, **OK Coucou** and **OK Kuku** remain compatible. The microphone does not open at startup, and recordings are temporary.
 
 ## Existing data stays compatible
 
-The new default installation folder is `%LOCALAPPDATA%\Qanot AI`. Existing per-user data retains `%APPDATA%\Coucou\settings.json` and `%LOCALAPPDATA%\Coucou\LocalAI`. Credential targets, service protocol IDs and compatible `coucou.exe`, `coucou-hook.exe`, `coucou.cmd`/`coucou.ps1` names are intentionally retained. Do not rename these internal paths. This preserves panel/provider settings and the existing Telegram session.
+The new default installation folder is `%LOCALAPPDATA%\BIMO AI`. Existing per-user data retains `%APPDATA%\Coucou\settings.json` and `%LOCALAPPDATA%\Coucou\LocalAI`. Credential targets, service protocol IDs and compatible `coucou.exe`, `coucou-hook.exe`, `coucou.cmd`/`coucou.ps1` names are intentionally retained. Do not rename these internal paths. This preserves panel/provider settings and the existing Telegram session.
 
 ## Guides and validation
 
 - [Complete edition guide and build steps](../README.md)
 - [Uzbek installation guide](INSTALL-UZ.md)
 - [Uzbek feature guide](README-UZ.md)
+- [Moshi, voice and guided desktop additions in 0.7.0](README-PLIP-UZ.md)
 - [Telegram, terminal, GitHub and MCP](localai-service/TOOLS-UZ.md)
 - [Local voice and limitations](localai-service/VOICE-UZ.md)
 - [Runtime bootstrap](scripts/RUNTIME-BOOTSTRAP.md)
 
-Current 0.6.4 validation passed 651 frontend and 306 Rust tests, TypeScript/Vite/native builds, both installer extraction/hash checks and an actual EXE upgrade preserving settings and the encrypted Telegram session; see [the verification record](VERIFICATION-0.6.4-UZ.md). The frozen runtime retains the historical 0.6.3 service/voice evidence, which does not verify the new native/frontend package. The human microphone/room test, MSI installation and clean-VM test remain pending.
+See [the current 0.7.1 verification record](VERIFICATION-0.7.1-UZ.md). Historical reports retain their exact version and installer hashes. The human microphone/room test, MSI installation and clean-VM test remain pending.
 
 ## Build from source
 
 Use Windows x64, Python 3.12+, Node.js 24, Rust MSVC and C++ Build Tools. From `windows`:
 
 ```powershell
-py -3.12 scripts/prepare-release-runtime.py --download
+gh release download v0.7.1 --repo Ahmadjon0worker/BIMO-AI --pattern BIMOAI-Windows-runtime-base.zip --dir .build-inputs
+py -3.12 scripts/prepare-release-runtime.py --archive .build-inputs/BIMOAI-Windows-runtime-base.zip
 npm ci
 npm test
 node scripts/build-hook.mjs
@@ -60,8 +63,8 @@ cargo test --workspace --locked
 npm run pack
 ```
 
-The helper obtains the fixed [unchanged 0.6.3 runtime archive hosted by release v0.6.4](https://github.com/Ahmadjon0worker/CouCou-Uzbek-edition-/releases/download/v0.6.4/QanotAI-Windows-0.6.3-runtime.zip), verifies its ZIP/manifest and all file hashes, then synchronizes the current service source. Large runtime/model binaries and all personal data are excluded from Git. `npm run pack` checks source/runtime freshness and produces EXE/MSI plus checksums in `release`.
+The helper uses the [runtime base hosted by release v0.7.1](https://github.com/Ahmadjon0worker/BIMO-AI/releases/download/v0.7.1/BIMOAI-Windows-runtime-base.zip), verifies its ZIP/manifest and all file hashes, then synchronizes the **current 1.4.1 service source**. The dependency archive retains its frozen 0.6.3 bytes; the current app does not ship the old service code. Older GitHub releases are no longer build dependencies. Large runtime/model binaries and all personal data are excluded from Git. `npm run pack` checks source/runtime freshness and produces EXE/MSI plus checksums in `release`.
 
-For a private repository, download the ZIP with your signed-in GitHub account first, then run `py -3.12 scripts/prepare-release-runtime.py --archive C:/Downloads/QanotAI-Windows-0.6.3-runtime.zip`. The helper's `--download` request is unauthenticated and does not read tokens/browser credentials.
+The commands above use your signed-in GitHub CLI account. Alternatively download the ZIP in your signed-in browser, then run `py -3.12 scripts/prepare-release-runtime.py --archive C:/Downloads/BIMOAI-Windows-runtime-base.zip`. The helper's separate `--download` request is unauthenticated and does not read tokens/browser credentials.
 
 The source retains the upstream MIT attribution. Mochi-based Moshi materials, eyes and clothing are adaptations of Louis Raillé's artwork, governed separately by [LICENSE-ASSETS.md](../LICENSE-ASSETS.md) and the written permission confirmed by the user. Moshi is not presented as independent original artwork. Qanot icons and notification cues retain their separate MIT asset license. See the voice guide for model/eSpeak licenses and corresponding source distribution.

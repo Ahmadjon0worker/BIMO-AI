@@ -3,7 +3,7 @@
 // `npm run dev` alone.
 
 import { invoke } from "@tauri-apps/api/core";
-import { emitTo, listen } from "@tauri-apps/api/event";
+import { emit, emitTo, listen } from "@tauri-apps/api/event";
 import { getCurrentWebview } from "@tauri-apps/api/webview";
 import type { Settings } from "./state";
 import type { RecapHistory, RecapPrefs } from "../recap/summary";
@@ -41,16 +41,17 @@ export const Bridge = {
   localAIStop: () => callOrThrow<unknown>("local_ai_stop"),
   localAIOpenOpenCode: () => callOrThrow<unknown>("local_ai_open_opencode"),
   localAIOpenTools: () => callOrThrow<void>("local_ai_open_tools"),
-  localAIOpenVoice: async () => { await callOrThrow<void>("local_ai_open_tools"); await emitTo("tools", "tools-voice", null); },
+  localAIOpenVoice: () => callOrThrow<void>("local_ai_open_tools", { tab: "voice" }),
   localAIOpenStudio: () => callOrThrow<void>("local_ai_open_studio"),
   localAIStartServices: () => callOrThrow<unknown>("local_ai_start_services"),
   localAICapabilities: () => callOrThrow<unknown>("local_ai_capabilities"),
   localAIToolboxStatus: () => callOrThrow<unknown>("local_ai_toolbox_status"),
   localAIVoiceStatus: () => callOrThrow<unknown>("local_ai_voice_status"),
-  voicePanel: (expanded: boolean) => IS_TAURI ? emitTo("main", "voice-panel", { expanded }) : Promise.reject(new Error("Panel faqat Qanot AI ilovasida boshqariladi")),
+  voicePanel: (expanded: boolean) => IS_TAURI ? emitTo("main", "voice-panel", { expanded }) : Promise.reject(new Error("Panel faqat BIMO AI ilovasida boshqariladi")),
   localAIVoiceTranscribe: (args: Record<string, unknown>) => callOrThrow<unknown>("local_ai_voice_transcribe", { arguments: args }),
   localAIVoiceCancel: () => callOrThrow<unknown>("local_ai_voice_cancel"),
   localAIVoiceSpeak: (args: Record<string, unknown>) => callOrThrow<unknown>("local_ai_voice_speak", { arguments: args }),
+  voiceBargeIn: () => IS_TAURI ? emit("voice-barge-in", null) : Promise.resolve(),
   localAIToolboxCall: (name: string, args: Record<string, unknown>) => callOrThrow<unknown>("local_ai_toolbox_call", { name, arguments: args }),
   localAITelegramStatus: () => callOrThrow<unknown>("local_ai_telegram_status"),
   localAITelegramConfigure: (config: TelegramConfig) => callOrThrow<unknown>("local_ai_telegram_configure", { config }),
@@ -376,7 +377,7 @@ export interface HookPreview {
 
 /** Same as `call`, but surfaces the error so the UI can show what went wrong. */
 async function callOrThrow<T>(cmd: string, args?: Record<string, unknown>): Promise<T> {
-  if (!IS_TAURI) throw new Error("not running inside Qanot AI");
+  if (!IS_TAURI) throw new Error("not running inside BIMO AI");
   return invoke<T>(cmd, args);
 }
 

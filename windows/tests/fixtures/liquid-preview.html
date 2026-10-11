@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="uz">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Moshi · Liquid Glass</title>
+  <style>
+    :root { color-scheme: dark; font-family: "Segoe UI Variable", "Segoe UI", system-ui, sans-serif; }
+    * { box-sizing: border-box; }
+    body { margin: 0; color: #f0f7ff; min-height: 100vh; background: #14212f; }
+    .wallpaper { position: fixed; inset: 0; z-index: -2; background:
+      radial-gradient(ellipse at 17% 58%, #31999a 0%, transparent 48%),
+      radial-gradient(ellipse at 86% 22%, #9874b5 0%, transparent 48%),
+      radial-gradient(ellipse at 80% 85%, #d49586 0%, transparent 38%),
+      linear-gradient(132deg,#172c47,#334f62 49%,#363448); transition: background .3s; }
+    .wallpaper::after { content: ""; position: absolute; inset: 0; opacity: .1; background-image:
+      linear-gradient(0deg, transparent 39px, #bfe8ef 40px),linear-gradient(90deg,transparent 39px,#bfe8ef 40px); background-size: 40px 40px; }
+    body.light .wallpaper { background:
+      radial-gradient(ellipse at 20% 66%,#93dad1 0%,transparent 46%),
+      radial-gradient(ellipse at 86% 20%,#c7b8e4 0%,transparent 44%),
+      radial-gradient(ellipse at 75% 88%,#efc5b9 0%,transparent 45%),#a6bfd1; }
+    main { width: min(1200px,100%); margin: auto; padding: 30px 30px 44px; }
+    header { display:flex; align-items:center; justify-content:space-between; margin-bottom:26px; gap:16px; }
+    .brand { display:flex; align-items:center; gap:11px; font-size:15px; font-weight:700; letter-spacing:.02em; }
+    .mark { width:25px; height:25px; border:1px solid #d7f0ffba; border-radius:8px; transform:rotate(45deg); background:#effbff28; box-shadow:inset 0 1px 7px #fff6; }
+    .brand span:last-child { font-weight:400; color:#d9eff3b3; margin-left:5px; font-size:12px; }
+    .controls { display:flex; align-items:center; flex-wrap:wrap; gap:7px; }
+    button { border:1px solid #e1f5ff45; border-radius:99px; padding:9px 14px; color:#edf9ff; background:#112b4938; font:inherit; font-size:12px; cursor:pointer; }
+    button:focus-visible { outline:2px solid #d2fff3; outline-offset:3px; }
+    button[aria-pressed="true"] { background:#b4e7df45 !important; border-color:#c5fff0a0 !important; }
+    h1 { font-size:clamp(32px,4.2vw,52px); line-height:1.10; letter-spacing:-.045em; font-weight:600; margin:11px 0 16px; }
+    h2 { margin:0; font-size:16px; font-weight:600; }
+    p { line-height:1.6; margin:0; color:#e2f2f3b3; font-size:13px; }
+    .eyebrow { font-size:11px; letter-spacing:.15em; font-weight:650; color:#bce9e6; }
+    .hero { display:grid; grid-template-columns:1.05fr 1fr; align-items:center; padding:12px 0 20px; }
+    .hero-copy { max-width:430px; }
+    .hero-copy p { max-width:375px; font-size:15px; }
+    .hero-art { position:relative; min-height:292px; display:flex; justify-content:center; align-items:center; }
+    .hero-lettering { position:absolute; font-size:73px; font-weight:650; letter-spacing:.14em; color:#c0e2e64d; transform:rotate(-12deg); pointer-events:none; }
+    .hero-art canvas { position:relative; z-index:1; }
+    .hero-orb { position:absolute !important; left:8%; bottom:18%; width:78px !important; height:78px !important; }
+    .hero-note { position:absolute; right:10%; top:11%; font-size:10px; font-weight:600; letter-spacing:.13em; color:#e7f2f397; }
+    .card { border:1px solid #d3edf247; border-radius:25px; background:#162b4340; box-shadow:0 12px 38px #07172b21; }
+    .panel-set { display:grid; grid-template-columns:1fr 106px 190px; gap:20px; align-items:center; margin:15px 0 30px; }
+    .panel-label { margin:0 0 10px 9px; font-size:10px; letter-spacing:.10em; color:#e7f6fabd; }
+    .horizontal { display:flex; align-items:center; padding:8px 14px 8px 4px; height:84px; gap:6px; border-radius:27px; }
+    .panel-copy { flex:1; min-width:0; padding-left:5px; }
+    .panel-copy h2 { font-size:13px; margin-bottom:3px; }
+    .panel-copy p { font-size:10px; }
+    .panel-status { display:flex; align-items:center; gap:8px; padding-left:7px; font-size:10px; }
+    .panel-dot { width:5px; height:5px; border-radius:50%; background:#a3f3d6; box-shadow:0 0 11px #8ff1d780; }
+    .vertical { display:flex; align-items:center; flex-direction:column; gap:4px; padding:10px 8px; border-radius:27px; }
+    .vertical button { padding:7px 0; width:62px; font-size:10px; }
+    .square { display:flex; align-items:center; flex-wrap:wrap; justify-content:center; gap:4px; padding:9px 9px 11px; border-radius:27px; }
+    .square > p { text-align:center; width:100%; font-size:10px; }
+    canvas { display:block; max-width:100%; touch-action:none; }
+    .section-title { display:flex; justify-content:space-between; align-items:end; margin:5px 0 15px; }
+    .section-title p { font-size:11px; }
+    .companions { display:grid; grid-template-columns:repeat(4,1fr); gap:15px; }
+    .companion { text-align:center; padding:9px 12px 18px; background:linear-gradient(150deg,#dceffc10,#10264236); }
+    .companion canvas { margin:auto; }
+    .companion h2 { font-size:15px; margin-bottom:4px; }
+    .companion p { font-size:10px; }
+    .mini-row { display:flex; justify-content:space-between; gap:20px; align-items:center; padding:14px 19px; margin-top:17px; }
+    .mini-row h2 { font-size:12px; margin-bottom:3px; }
+    .mini-row p { font-size:10px; }
+    .mini-bots { display:flex; align-items:center; gap:8px; }
+    .mini-bots canvas { width:46px; height:46px; }
+    footer { margin-top:22px; display:flex; justify-content:space-between; align-items:center; gap:14px; font-size:10px; color:#e1f1f29b; }
+    #status { margin-top:10px; font-size:11px; color:#c0ebdf; min-height:16px; }
+    @media(max-width:820px) { main { padding:23px 20px; } header { align-items:start; } .hero { grid-template-columns:1fr 1fr; }
+      .hero-art { min-height:250px; }.hero-lettering { font-size:45px; }.panel-set { grid-template-columns:1fr 92px; }
+      .corner-group { display:none; }.panel-status { display:none; }.horizontal { padding-right:10px; }
+      .companions { gap:10px; }.companion { padding:7px 4px 15px; } }
+    @media(max-width:560px) { header { flex-direction:column; }.hero { grid-template-columns:1fr; }.hero-copy p { max-width:none; }
+      .hero-art { min-height:275px; }.hero-lettering { font-size:65px; }.companions { grid-template-columns:1fr 1fr; }
+      .panel-set { gap:11px; }.horizontal .mini-extra { display:none; }.mini-row { flex-direction:column; align-items:start; }
+      footer { align-items:start; flex-direction:column; } }
+    @media(prefers-reduced-motion:reduce) { .wallpaper { transition:none; } }
+  </style>
+</head>
+<body>
+<div class="wallpaper" aria-hidden="true"></div>
+<main id="preview">
+  <header><div class="brand"><i class="mark" aria-hidden="true"></i>BIMO AI<span>Moshi</span></div>
+    <nav class="controls" aria-label="Moshi holati">
+      <button data-state="idle" aria-pressed="true">Sokin</button>
+      <button data-state="thinking" aria-pressed="false">Fikrlayapti</button>
+      <button data-state="listening" aria-pressed="false">Tinglayapti</button>
+      <button data-state="wave" aria-pressed="false">Salom</button>
+      <button id="motion" aria-pressed="false">Kam harakat</button>
+      <button id="contrast" aria-pressed="false">Yorug‘ fon</button>
+      <button id="export">PNG saqlash</button>
+    </nav></header>
+  <section class="hero"><div class="hero-copy"><div class="eyebrow">YUMSHOQ SHAKL. SUYUQ YORUG‘LIK.</div>
+    <h1>Shaffof.<br>Jonli. Moshi.</h1><p>Yumshoq besh burchak, tanish qora ko‘zlar va fonni o‘tkazadigan shisha. Har bir yordamchi o‘z rangida yashaydi.</p></div>
+    <div class="hero-art"><div class="hero-lettering" aria-hidden="true">MOSHI</div><span class="hero-note">LIQUID GLASS</span>
+      <canvas data-bot="moshi" data-size="330" aria-label="Shaffof Moshi"></canvas>
+      <canvas class="hero-orb" data-orb="64" aria-label="Jonli fikrlash orbi"></canvas></div></section>
+  <section class="panel-set" aria-label="Moslashuvchi panellar">
+    <div><p class="panel-label">TEPA VA PAST · GORIZONTAL</p><div class="card horizontal" id="island">
+      <canvas data-bot="moshi" data-size="68" aria-label="Gorizontal panel Moshi"></canvas>
+      <div class="panel-copy"><h2>Moshi</h2><p>Hammasi bir joyda</p></div>
+      <canvas data-bot="codex" data-size="42" aria-label="Codex mini"></canvas>
+      <canvas data-bot="telegram" data-size="42" aria-label="Telegram mini"></canvas>
+      <canvas class="mini-extra" data-bot="opencode" data-size="42" aria-label="OpenCode mini"></canvas>
+      <div class="panel-status"><canvas data-orb="20" aria-label="Panel holati"></canvas><span class="state-label">Tayyor</span></div>
+    </div></div>
+    <div><p class="panel-label">YON · VERTIKAL</p><div class="card vertical">
+      <canvas data-bot="moshi" data-size="62" aria-label="Vertikal panel Moshi"></canvas>
+      <canvas data-bot="codex" data-size="39" aria-label="Vertikal Codex"></canvas>
+      <canvas data-bot="telegram" data-size="39" aria-label="Vertikal Telegram"></canvas>
+      <button id="peek">Ixcham</button></div></div>
+    <div class="corner-group"><p class="panel-label">BURCHAK · KVADRAT</p><div class="card square">
+      <canvas data-bot="moshi" data-size="82" aria-label="Burchakdagi Moshi"></canvas>
+      <canvas data-bot="telegram" data-size="58" aria-label="Burchakdagi Telegram"></canvas><p>Yengil, moslashuvchan</p></div></div>
+  </section>
+  <div class="section-title"><h2>Har bir yordamchiga o‘z hamrohi</h2><p>Yuz va harakatlar saqlangan</p></div>
+  <section class="companions" id="companions" aria-label="Moshi va agentlar"></section>
+  <section class="card mini-row"><div><h2>Subagentlar</h2><p>Bitta yumshoq shakl, har bir vazifaga boshqa rang</p></div>
+    <div class="mini-bots" id="minis" aria-label="Rangli subagentlar"></div></section>
+  <footer><span><i class="panel-dot" style="display:inline-block;margin-right:6px"></i><span class="state-label">Tayyor</span> · Telegram va panel saqlangan</span>
+    <span>Thinking Orbs + QuickLiquid · Mahalliy ko‘rinish</span></footer>
+  <p id="status" role="status">Ko‘zlar kursorni kuzatadi. Moshi’ga bosib salomlashishingiz mumkin.</p>
+  <a id="download" download="Moshi-Liquid-Glass.png" hidden>PNG fayl</a>
+</main>
+<script type="module">
+  import { BotEngine, hexToRGB } from "/src/mochi/engine.ts";
+  import { Sound } from "/src/core/sound.ts";
+  import { drawThinkingOrb } from "/src/effects/thinking-orb.ts";
+  import { installLiquidSurfaces } from "/src/effects/liquid.ts";
+  import "/src/effects/liquid.css";
+
+  Sound.setEnabled(false);
+  const root = document.querySelector("#preview"), status = document.querySelector("#status");
+  const variants = [["moshi","Moshi","Besh burchakli suyuq shisha"],["codex","Codex","Yashil qavslar"],
+    ["opencode","OpenCode","Yumshoq terminal belgisi"],["telegram","Telegram","Moviy samolyot"]];
+  for (const [variant, label, note] of variants) {
+    const article = document.createElement("article"); article.className = "card companion";
+    const canvas = document.createElement("canvas"); canvas.dataset.bot = variant; canvas.dataset.size = "164";
+    canvas.setAttribute("aria-label", `${label} shisha hamrohi`);
+    const heading = document.createElement("h2"); heading.textContent = label;
+    const detail = document.createElement("p"); detail.textContent = note;
+    article.append(canvas,heading,detail); document.querySelector("#companions").append(article);
+  }
+  for (const color of ["#7adecc","#8cb9f9","#cca5ed","#eeb498","#f5b6cf"]) {
+    const canvas = document.createElement("canvas"); canvas.dataset.bot = "agent"; canvas.dataset.size = "46"; canvas.dataset.color = color;
+    canvas.setAttribute("aria-label", `Moshi subagenti ${color}`); document.querySelector("#minis").append(canvas);
+  }
+  const dpr = Math.min(2,devicePixelRatio || 1), media = matchMedia("(prefers-reduced-motion: reduce)");
+  let lowMotion = media.matches, state = "idle", orbState = "breathing", elapsed = 0, previous = 0, raf = 0;
+  const bots = [...document.querySelectorAll("[data-bot]")].map(canvas => {
+    const size = Number(canvas.dataset.size), ctx = canvas.getContext("2d");
+    canvas.width = size*dpr; canvas.height = size*dpr; canvas.style.width = `${size}px`; canvas.style.height = `${size}px`;
+    const engine = new BotEngine(); engine.variant = canvas.dataset.bot; engine.isMini = size < 60; engine.reducedMotion = lowMotion;
+    if (canvas.dataset.color) engine.bodyColor = hexToRGB(canvas.dataset.color);
+    canvas.addEventListener("pointermove", event => {
+      const box = canvas.getBoundingClientRect(); engine.lookX = (event.clientX-box.left-box.width/2)/(box.width/2);
+      engine.lookY = (event.clientY-box.top-box.height/2)/(box.height/2); if (lowMotion) render(0);
+    });
+    canvas.addEventListener("pointerleave", () => { engine.lookX = 0; engine.lookY = 0; });
+    canvas.addEventListener("click", () => { if (!lowMotion) engine.greet(); });
+    return { canvas,ctx,engine,size };
+  });
+  const orbs = [...document.querySelectorAll("[data-orb]")].map(canvas => {
+    const size = Number(canvas.dataset.orb); canvas.width = size*dpr; canvas.height = size*dpr;
+    canvas.style.width = `${size}px`; canvas.style.height = `${size}px`;
+    return {canvas,ctx:canvas.getContext("2d"),size};
+  });
+  function render(dt) {
+    for (const {ctx,engine,size} of bots) {
+      if (!lowMotion) engine.update(dt);
+      ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,size,size); engine.draw(ctx,size,size);
+    }
+    for (const {ctx,size} of orbs) {
+      ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,size,size);
+      drawThinkingOrb(ctx,{state:orbState,size,time:lowMotion?0:elapsed,dark:true,accent:"#c6fff0"});
+    }
+  }
+  function tick(now) {
+    raf = 0; if (document.hidden || lowMotion) return;
+    const dt = previous ? Math.min(.033,(now-previous)/1000) : 0; previous = now; elapsed += dt;
+    render(dt); raf = requestAnimationFrame(tick);
+  }
+  function syncMotion() {
+    cancelAnimationFrame(raf); raf = 0; previous = 0;
+    for (const {engine} of bots) engine.reducedMotion = lowMotion;
+    document.querySelector("#motion").setAttribute("aria-pressed", String(lowMotion));
+    render(0); if (!lowMotion && !document.hidden) raf = requestAnimationFrame(tick);
+  }
+  document.querySelectorAll("[data-state]").forEach(button => button.addEventListener("click", () => {
+    state = button.dataset.state; orbState = state === "thinking" ? "solving" : state === "listening" ? "listening" : "breathing";
+    for (const {engine} of bots) {
+      engine.interruptGreet(); engine.setState(state === "thinking" ? "thinking" : "idle", true);
+      if (state === "wave" && !lowMotion) engine.greet();
+    }
+    for (const other of document.querySelectorAll("[data-state]")) other.setAttribute("aria-pressed",String(other === button));
+    document.querySelectorAll(".state-label").forEach(label => label.textContent = state === "idle" ? "Tayyor" : button.textContent);
+    status.textContent = `${button.textContent}. Shisha qirralari va orb shu holatga moslashadi.`; render(0);
+  }));
+  document.querySelector("#motion").addEventListener("click", () => { lowMotion = !lowMotion; syncMotion(); });
+  document.querySelector("#contrast").addEventListener("click", event => {
+    document.body.classList.toggle("light"); event.currentTarget.setAttribute("aria-pressed",String(document.body.classList.contains("light")));
+  });
+  document.querySelector("#peek").addEventListener("click", event => {
+    const panel = event.currentTarget.closest(".vertical"), small = panel.dataset.peek !== "true";
+    panel.dataset.peek = String(small); panel.querySelectorAll("canvas").forEach((canvas,index) => { if (index > 0) canvas.hidden = small; });
+    event.currentTarget.textContent = small ? "Kengaytir" : "Ixcham";
+  });
+  document.querySelector("#export").addEventListener("click", async event => {
+    const button = event.currentTarget; button.disabled = true;
+    try {
+      const canvas = document.createElement("canvas"); canvas.width = 1600; canvas.height = 900;
+      const ctx = canvas.getContext("2d");
+      const bg = ctx.createLinearGradient(0,0,1600,900);
+      bg.addColorStop(0,"#1e3a54"); bg.addColorStop(.55,"#386d77"); bg.addColorStop(1,"#897399");
+      ctx.fillStyle = bg; ctx.fillRect(0,0,1600,900);
+      const glow = ctx.createRadialGradient(1400,870,0,1400,870,850);
+      glow.addColorStop(0,"#dfa48d90"); glow.addColorStop(1,"#dfa48d00"); ctx.fillStyle=glow; ctx.fillRect(0,0,1600,900);
+      ctx.strokeStyle="#d3f0f012"; ctx.lineWidth=1;
+      for(let x=0;x<1600;x+=50) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,900); ctx.stroke(); }
+      for(let y=0;y<900;y+=50) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(1600,y); ctx.stroke(); }
+      ctx.fillStyle="#cef4e7"; ctx.font='600 20px "Segoe UI",sans-serif'; ctx.fillText("BIMO AI · MOSHI",64,70);
+      ctx.fillStyle="#f1f9ff"; ctx.font='600 62px "Segoe UI",sans-serif'; ctx.fillText("Shaffof. Jonli. Moshi.",64,145);
+      ctx.fillStyle="#e3f3f0b8"; ctx.font='400 23px "Segoe UI",sans-serif';
+      ctx.fillText("Yumshoq besh burchak · Tanish qora ko‘zlar · Suyuq shisha",64,198);
+      const sourceFrames = variants.map(([variant,label,note]) => ({...bots.find(bot=>bot.canvas.closest("#companions") && bot.engine.variant===variant),label,note}));
+      sourceFrames.forEach(({canvas:source,label,note},index) => {
+        const x=64+index*374,y=270,w=350,h=485;
+        ctx.beginPath();ctx.roundRect(x,y,w,h,30);ctx.fillStyle="#e7f5ff14";ctx.fill();ctx.strokeStyle="#e4faff55";ctx.stroke();
+        ctx.drawImage(source,x+5,y+7,340,340);
+        ctx.textAlign="center";ctx.fillStyle="#f1f9ff";ctx.font='600 29px "Segoe UI",sans-serif';ctx.fillText(label,x+w/2,y+381);
+        ctx.fillStyle="#d9eceac2";ctx.font='400 18px "Segoe UI",sans-serif';ctx.fillText(note,x+w/2,y+418);
+      });
+      ctx.textAlign="left";ctx.fillStyle="#d1edeabd";ctx.font='400 18px "Segoe UI",sans-serif';
+      ctx.fillText("Thinking Orbs + QuickLiquid · Moshi yuzlari shu sahifadagi haqiqiy renderdan olingan",64,832);
+      const blob=await new Promise(resolve=>canvas.toBlob(resolve,"image/png"));if(!blob)throw new Error("PNG yaratilmadi");
+      const link=document.querySelector("#download"),old=link.href;link.href=URL.createObjectURL(blob);link.hidden=false;link.click();
+      if(old.startsWith("blob:"))setTimeout(()=>URL.revokeObjectURL(old),60000);
+      status.textContent="Moshi-Liquid-Glass.png tayyor.";
+    } catch(error) { status.textContent=`PNG xatosi: ${error.message}`; } finally { button.disabled=false; }
+  });
+  const destroyGlass = installLiquidSurfaces(root,"island");
+  document.addEventListener("visibilitychange",syncMotion);
+  media.addEventListener("change", event => { lowMotion = event.matches; syncMotion(); });
+  addEventListener("error",event => { status.textContent = `Ko‘rish xatosi: ${event.message}`; });
+  addEventListener("pagehide", () => { cancelAnimationFrame(raf); destroyGlass(); }, {once:true});
+  syncMotion();
+</script>
+</body>
+</html>

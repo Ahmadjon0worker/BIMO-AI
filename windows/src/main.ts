@@ -1,6 +1,8 @@
 // Entry point: boot the bridge, wire the island, start the greeting.
 
 import "./style.css";
+import "./effects/liquid.css";
+import { installLiquidSurfaces } from "./effects/liquid";
 import { Bridge, IS_TAURI, onEvent } from "./core/bridge";
 import { Sound } from "./core/sound";
 import { State, type Settings } from "./core/state";
@@ -23,6 +25,8 @@ async function main() {
   void Sound.preload();
 
   const island = new Island(root);
+  const destroyGlass = installLiquidSurfaces(root, "island");
+  window.addEventListener("pagehide", destroyGlass, { once: true });
   await onEvent<{ expanded: boolean }>("voice-panel", ({ expanded }) => {
     if (expanded === true) island.alert(State.defaultView()); else if (expanded === false) island.collapse();
   });

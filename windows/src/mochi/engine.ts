@@ -1,4 +1,4 @@
-// The original Mochi motion controller and material, adapted to a soft
+// The original Mochi motion controller, adapted to a soft liquid-glass
 // five-sided Moshi. State transitions, springs, emotes, gestures and particles stay
 // compatible with saved settings and integration events.
 
@@ -7,7 +7,7 @@ import { Sound } from "../core/sound";
 import type { BotEmoteName, BotStateName } from "../core/layout";
 import { PUMPKIN_BODY, drawOutfitBehind, drawOutfitFront, makeHead } from "./outfits";
 import type { Outfit } from "./wardrobe";
-import { moshiBodyColors, drawMoshiDetails, moshiBodyPath, type MoshiVariant } from "./moshi";
+import { drawMoshiShell, drawMoshiReflection, drawMoshiDetails, moshiBodyPath, type MoshiVariant } from "./moshi";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -66,8 +66,6 @@ const EYE_W = 0.25;
 const EYE_H = 0.27;
 const EYE_SP = 0.37;
 const EYE_P = -0.12;
-const BASE_TOP: RGB = [0.929, 0.929, 0.937]; // Original Mochi #EDEDEF.
-const BASE_BOTTOM: RGB = [0.769, 0.773, 0.792]; // Original Mochi #C4C5CA.
 const INK = "rgb(26,20,18)";
 const MINI_INK = "rgb(16,19,26)";
 
@@ -172,6 +170,8 @@ export class BotEngine {
   variant: MoshiVariant = "moshi";
   /** Optional user-selected body colour (null = the variant's Moshi palette). */
   bodyColor: RGB | null = null;
+  /** Hosts that pause motion also freeze the liquid material's reflective drift. */
+  reducedMotion = false;
 
   // Animated state (BotEngine `s`)
   yaw = 0; pitch = 0; roll = 0; tilt = 0; open = 1;
@@ -790,46 +790,24 @@ export class BotEngine {
 
   private drawBody(x: CanvasRenderingContext2D, body: Path2D, R: number, rx: number, ry: number) {
     const pumpkin = this.pumpkinAlpha;
-    const [top, bottom] = moshiBodyColors(this.variant, this.bodyColor ? rgba(this.bodyColor) : null);
-    const g = x.createLinearGradient(rx * 0.7, -ry * 0.85, -rx * 0.8, ry * 0.9);
-    g.addColorStop(0, top);
-    g.addColorStop(1, bottom);
-    x.fillStyle = g;
-    x.fill(body);
+    const visual = {
+      variant: this.variant, phase: now(), yaw: this.yaw, pitch: this.pitch,
+      mailbox: this.morph, bodyColor: this.bodyColor ? rgba(this.bodyColor) : undefined,
+      tint: rgba(this.col), tintStrength: this.tint * (1 - this.morph),
+      reducedMotion: this.reducedMotion, reflections: false,
+    };
+    drawMoshiShell(x, R, visual, body);
     x.save();
     if (pumpkin > 0.001) {
       const pg = x.createLinearGradient(rx * 0.7, -ry * 0.85, -rx * 0.8, ry * 0.9);
       pg.addColorStop(0, PUMPKIN_BODY[0]);
       pg.addColorStop(1, PUMPKIN_BODY[1]);
-      x.globalAlpha = pumpkin;
+      x.globalAlpha *= pumpkin * .68;
       x.fillStyle = pg;
       x.fill(body);
-      // Custom colours retain the same Mochi shading and reflected light.
-      x.globalAlpha = 1;
     }
-
-    const effectiveTint = this.tint * (1 - this.morph);
-    if (effectiveTint > 0.01) {
-      const tg = x.createLinearGradient(0, ry, 0, -ry);
-      tg.addColorStop(0, rgba(this.col, 0.72 * effectiveTint));
-      tg.addColorStop(1, rgba(this.col, 0));
-      x.fillStyle = tg;
-      x.fill(body);
-    }
-
-    const sh = x.createRadialGradient(0, 0, R * 0.15, 0, 0, R * 1.25);
-    sh.addColorStop(0, "rgba(0,0,0,0)");
-    sh.addColorStop(0.6, "rgba(0,0,0,0)");
-    sh.addColorStop(1, "rgba(0,0,0,0.2)");
-    x.fillStyle = sh;
-    x.fill(body);
-
-    const hl = x.createRadialGradient(rx * 0.34, -ry * 0.46, 0, rx * 0.34, -ry * 0.46, R * 0.42);
-    hl.addColorStop(0, "rgba(255,255,255,0.55)");
-    hl.addColorStop(1, "rgba(255,255,255,0)");
-    x.fillStyle = hl;
-    x.fill(body);
     x.restore();
+    drawMoshiReflection(x, R, visual, body);
   }
 
   private drawEyes(x: CanvasRenderingContext2D, body: Path2D, R: number, rx: number, ry: number) {
@@ -1069,21 +1047,10 @@ export class BotEngine {
       x.save();
       x.translate(worldX, worldY);
       if (handRot !== 0) x.rotate(handRot);
-      const g = x.createLinearGradient(hew * 0.7, -heh * 0.85, -hew * 0.8, heh * 0.9);
-      if (this.bodyColor) {
-        g.addColorStop(0, rgba(mix3(this.bodyColor, [1, 1, 1], 0.35)));
-        g.addColorStop(1, rgba(this.bodyColor));
-      } else {
-        g.addColorStop(0, rgba(BASE_TOP));
-        g.addColorStop(1, rgba(BASE_BOTTOM));
-      }
-      x.beginPath();
-      x.ellipse(0, 0, hew, heh, 0, 0, Math.PI * 2);
-      x.fillStyle = g;
-      x.fill();
-      x.strokeStyle = "rgba(0,0,0,0.08)";
-      x.lineWidth = 1;
-      x.stroke();
+      const hand = new Path2D(); hand.ellipse(0, 0, hew, heh, 0, 0, Math.PI * 2);
+      drawMoshiShell(x, hew, { variant: this.variant, phase: n, yaw: this.yaw,
+        bodyColor: this.bodyColor ? rgba(this.bodyColor) : undefined,
+        reducedMotion: this.reducedMotion }, hand);
       x.restore();
     }
   }

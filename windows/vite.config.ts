@@ -4,13 +4,13 @@ import { existsSync, mkdirSync, readdirSync, copyFileSync, createReadStream, rea
 import { resolve, join, extname } from "node:path";
 
 // ───────────────────────────────────────────────────────────────────────────────
-// Qanot's original, source-generated oscillator cues and license notices.
+// BIMO AI's original, source-generated oscillator cues and license notices.
 // No upstream macOS sound directory is part of this Windows build.
 export const SOUNDS_DIR = resolve(__dirname, "assets/qanot/sounds");
 // ───────────────────────────────────────────────────────────────────────────────
 
 /**
- * Serves/copies only the 29 hash-verified Qanot WAVs and their MIT notices.
+ * Serves/copies only the 29 hash-verified BIMO AI WAVs and their MIT notices.
  * These original assets become part of the embedded frontend in the installer.
  */
 function qanotSounds(): Plugin {
@@ -21,28 +21,28 @@ function qanotSounds(): Plugin {
   const verify = (): Asset[] => {
     const manifestPath = join(SOUNDS_DIR, manifestName);
     if (!existsSync(manifestPath) || !lstatSync(manifestPath).isFile()) {
-      throw new Error("Generate Qanot sounds first: node scripts/generate-qanot-sounds.mjs");
+      throw new Error("Generate BIMO AI sounds first: node scripts/generate-qanot-sounds.mjs");
     }
     const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
-    if (manifest.schema !== 1 || manifest.brand !== "Qanot AI" || manifest.license !== "MIT"
+    if (manifest.schema !== 1 || manifest.brand !== "BIMO AI" || manifest.license !== "MIT"
         || !Array.isArray(manifest.files) || manifest.files.length !== 29
-        || manifest.license_notice?.file !== noticeName) throw new Error("Invalid original Qanot sound manifest.");
+        || manifest.license_notice?.file !== noticeName) throw new Error("Invalid original BIMO AI sound manifest.");
     const files = [...manifest.files, manifest.license_notice] as Asset[];
     const names = new Set<string>();
     for (const file of files) {
       if ((file.file !== noticeName && !/^[a-z]+\.wav$/.test(file.file)) || names.has(file.file)
           || !Number.isSafeInteger(file.bytes) || file.bytes <= 0 || !/^[a-f0-9]{64}$/.test(file.sha256)) {
-        throw new Error("Unsafe or duplicate Qanot sound asset.");
+        throw new Error("Unsafe or duplicate BIMO AI sound asset.");
       }
       names.add(file.file);
       const path = join(SOUNDS_DIR, file.file);
       if (!existsSync(path) || !lstatSync(path).isFile() || lstatSync(path).size !== file.bytes
           || createHash("sha256").update(readFileSync(path)).digest("hex") !== file.sha256) {
-        throw new Error(`Qanot sound asset changed: ${file.file}. Regenerate the original assets.`);
+        throw new Error(`BIMO AI sound asset changed: ${file.file}. Regenerate the original assets.`);
       }
     }
     const wavs = readdirSync(SOUNDS_DIR).filter((name) => extname(name) === ".wav");
-    if (wavs.length !== 29 || wavs.some((name) => !names.has(name))) throw new Error("Unlisted Qanot WAV asset.");
+    if (wavs.length !== 29 || wavs.some((name) => !names.has(name))) throw new Error("Unlisted BIMO AI WAV asset.");
     return files;
   };
   return {
@@ -98,6 +98,7 @@ export default defineConfig({
         tools: resolve(__dirname, "tools.html"),
         studio: resolve(__dirname, "studio.html"),
         mochi: resolve(__dirname, "mochi.html"),
+        companion: resolve(__dirname, "companion.html"),
       },
     },
   },

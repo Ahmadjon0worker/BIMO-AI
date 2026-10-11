@@ -98,7 +98,7 @@ def provider_order(settings):
         return ["ollama", "google", "groq"]
     if provider in ("ollama", "google", "groq"):
         return [provider]
-    raise ProviderUnavailable("Choose Auto, Ollama, Gemini or Groq in Qanot AI Settings for LocalAI tools.")
+    raise ProviderUnavailable("Choose Auto, Ollama, Gemini or Groq in BIMO AI Settings for LocalAI tools.")
 
 
 def openai_messages(messages):
@@ -192,7 +192,7 @@ class ProviderBroker:
                     raise ProviderUnavailable("No chat model is available")
                 saved = settings.get("chatModels", {}).get(provider) if isinstance(settings.get("chatModels"), dict) else None
                 if settings.get("chatProvider") != "auto" and saved and saved not in models:
-                    raise ProviderUnavailable("The selected model is unavailable; choose an available model in Qanot AI Settings")
+                    raise ProviderUnavailable("The selected model is unavailable; choose an available model in BIMO AI Settings")
                 preferred = native_body.get("model") if provider == "ollama" else DEFAULT_MODELS[provider]
                 model = saved if saved in models else preferred if preferred in models else models[0]
                 body = copy.deepcopy(native_body)
@@ -248,4 +248,4 @@ class ProviderBroker:
                 return result
             except (ProviderUnavailable, ValueError) as exc:
                 errors.append(provider + ": " + (str(exc) if isinstance(exc, ProviderUnavailable) else "Invalid provider result"))
-        raise ProviderUnavailable("AI provider unavailable. Start Ollama with a chat model, or configure Gemini/Groq in Qanot AI Settings. " + "; ".join(errors))
+        raise ProviderUnavailable("AI provider unavailable. Start Ollama with a chat model, or configure Gemini/Groq in BIMO AI Settings. " + "; ".join(errors))

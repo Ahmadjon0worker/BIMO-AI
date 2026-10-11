@@ -4,11 +4,11 @@ import { pcmWav } from "./voice";
 export class VoiceMic {
   private stream: MediaStream | null = null; private context: AudioContext | null = null; private processor: ScriptProcessorNode | null = null;
   private generation=0; private chunks: Float32Array[]=[]; private count=0; private spoke=false; private silence=0; private delivered=false;
-  recording=false; level=0;
+  recording=false; level=0; elapsed=0; private finishOnSilence=true; private lastMeter=0;
   private finished:(wav:Uint8Array)=>void; private changed:()=>void;
   constructor(finished:(wav:Uint8Array)=>void, changed:()=>void=()=>{}) {this.finished=finished;this.changed=changed;}
-  async start(): Promise<void> {
-    this.stop(); const generation=this.generation;
+  async start(options: { finishOnSilence?: boolean } = {}): Promise<void> {
+    this.stop(); const generation=this.generation; this.finishOnSilence=options.finishOnSilence !== false;
     if (!navigator.mediaDevices?.getUserMedia) throw new Error("Mikrofon mavjud emas. Windows mikrofon ruxsatini tekshiring.");
     const stream=await navigator.mediaDevices.getUserMedia({audio:{channelCount:1,echoCancellation:true,noiseSuppression:true,autoGainControl:true}});
     if(generation!==this.generation){stream.getTracks().forEach(t=>t.stop());return;}
@@ -23,8 +23,10 @@ export class VoiceMic {
         const chunk=e.inputBuffer.getChannelData(0).slice(); let sum=0;for(const v of chunk)sum+=v*v;this.level=Math.sqrt(sum/chunk.length);
         const remaining=Math.floor(context.sampleRate*15)-this.count;
         if(remaining>0){const clipped=chunk.subarray(0,remaining);this.chunks.push(clipped);this.count+=clipped.length;}
+        this.elapsed=this.count/context.sampleRate;
         if(this.level>0.012){this.spoke=true;this.silence=0;}else this.silence+=chunk.length/context.sampleRate;
-        if(this.count>=context.sampleRate*15 || this.spoke && this.silence>=1.15)this.finish();else this.changed();
+        if(this.count>=context.sampleRate*15 || this.finishOnSilence && this.spoke && this.silence>=1.15)this.finish();
+        else if(performance.now()-this.lastMeter>=80){this.lastMeter=performance.now();this.changed();}
       };
     } catch(e){if(generation===this.generation)this.stop();else stream.getTracks().forEach(t=>t.stop());throw e;}
   }
@@ -36,5 +38,5 @@ export class VoiceMic {
   }
   stop(){this.generation++;this.recording=false;this.level=0;if(this.processor){this.processor.onaudioprocess=null;this.processor.disconnect();this.processor=null;}
     this.stream?.getTracks().forEach(t=>t.stop());this.stream=null;const context=this.context;this.context=null;if(context)void context.close().catch(()=>{});
-    this.chunks=[];this.count=0;this.spoke=false;this.silence=0;this.delivered=false;this.changed();}
+    this.chunks=[];this.count=0;this.spoke=false;this.silence=0;this.delivered=false;this.elapsed=0;this.lastMeter=0;this.changed();}
 }

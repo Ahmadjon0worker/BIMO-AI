@@ -1,5 +1,5 @@
 // SoundEngine keeps the upstream MIT playback implementation.
-// Qanot AI's 29 original oscillator cues live in assets/qanot/sounds and are
+// BIMO AI's 29 original oscillator cues live in assets/qanot/sounds and are
 // served at /sounds/<name>.wav. Default volume 0.12, slider range 0–0.2;
 // several sounds may overlap. See LICENSE-QANOT-ASSETS.md and the cue manifest.
 // A file of the user's own in the sounds folder (src-tauri/src/sounds.rs)

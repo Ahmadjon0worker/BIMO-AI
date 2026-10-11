@@ -144,3 +144,29 @@ select { width: 100%; padding: 10px; font: inherit; color: #f5f8fc; border: 1px 
 .toolbox-desktop-columns { grid-template-columns: 1.5fr 1fr; }
 @media (max-width: 860px) { .toolbox-columns, .toolbox-desktop-columns { grid-template-columns: 1fr; } }
 @media (max-width: 580px) { .toolbox-terminal-options { grid-template-columns: 1fr 1fr; } .toolbox-terminal-options .field:first-child { grid-column: 1/-1; } }
+
+/* Telegram and command tools share the same clear, refractive material. */
+:root { background: transparent; }
+body:has(#tools-root) {
+  background: radial-gradient(ellipse at 0% 0%, rgba(66, 165, 197, .11), transparent 50%), radial-gradient(ellipse at 100% 100%, rgba(125, 113, 213, .08), transparent 55%), rgba(9, 20, 35, .4);
+  min-height: 100vh;
+}
+#tools-root[data-liquid-scope="tools"] header { background: rgba(9, 22, 38, .76); backdrop-filter: blur(18px); border-bottom: 1px solid rgba(219, 241, 255, .14); }
+#tools-root[data-liquid-scope="tools"] .card { background: linear-gradient(145deg, rgba(61, 104, 139, .2), rgba(10, 24, 42, .38)); border-color: rgba(212, 239, 255, .22); }
+#tools-root[data-liquid-scope="tools"] .messenger-sidebar { background: rgba(19, 40, 61, .28); border-right-color: rgba(213, 239, 255, .15); }
+#tools-root[data-liquid-scope="tools"] .messenger-messages { background: radial-gradient(ellipse at 70% 0%, rgba(75, 167, 183, .07), transparent 60%), rgba(8, 21, 38, .15); }
+#tools-root[data-liquid-scope="tools"] .messenger-chat-row { background: transparent; box-shadow: none; }
+#tools-root[data-liquid-scope="tools"] .messenger-chat-row:hover { background: rgba(162, 219, 251, .11); }
+#tools-root[data-liquid-scope="tools"] .messenger-chat-row.selected { background: linear-gradient(135deg, rgba(127, 237, 220, .2), rgba(59, 136, 177, .16)); border-color: rgba(149, 245, 226, .4); }
+#tools-root[data-liquid-scope="tools"] .messenger-compose { border-top-color: rgba(213, 239, 255, .16); }
+#tools-root[data-liquid-scope="tools"] .messenger-compose-actions { background: rgba(15, 33, 52, .8); backdrop-filter: blur(12px); }
+#tools-root[data-liquid-scope="tools"] :is(.action-preview, .editor-preview, .toolbox-output) { background: rgba(4, 18, 34, .58); border-color: rgba(213, 239, 255, .18); }
+#tools-root[data-liquid-scope="tools"] .account-auth-step[data-active="true"] { background: rgba(63, 152, 150, .2); border-color: rgba(151, 245, 226, .46); }
+#tools-root[data-liquid-scope="tools"] .account-api-editor > .liquid-optics + .field { margin-top: 0; }
+#tools-root[data-liquid-scope="tools"] .messenger-unread { background: linear-gradient(145deg, rgba(123, 237, 218, .63), rgba(41, 146, 165, .5)); }
+#tools-root[data-liquid-scope="tools"] .messenger-message-meta { color: #c4d9eb; }
+@media (prefers-reduced-transparency: reduce) {
+  body:has(#tools-root) { background: #111e30; }
+  #tools-root[data-liquid-scope="tools"] :is(header, .card, .messenger-compose-actions) { background: #17283e; backdrop-filter: none; }
+}
+:root .assistant-brains{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin:14px 0}.assistant-brain{display:flex;flex-direction:column;gap:7px;padding:12px;border:1px solid #ffffff26;border-radius:14px;background:#ffffff08}.assistant-brain[data-ready=true]{border-color:#a7ebd266}.assistant-brain span{color:#b4c7ca;font-size:13px}.assistant-brain[data-ready=true] span{color:#a7ebd2}.assistant-brain small{color:#96aaae;overflow-wrap:anywhere}.assistant-memory-item{border-bottom:1px solid #ffffff1a;padding:10px 0;overflow-wrap:anywhere}.assistant-memory-item small{display:block;color:#96aaae;margin-bottom:7px}.assistant-activity-row{font-size:13px;padding:8px;border-bottom:1px solid #ffffff12;overflow-wrap:anywhere}

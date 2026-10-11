@@ -610,7 +610,7 @@ dependencies = [
 
 [[package]]
 name = "coucou"
-version = "0.6.4"
+version = "0.7.1"
 dependencies = [
  "gtk",
  "keyring",
@@ -632,7 +632,7 @@ dependencies = [
 
 [[package]]
 name = "coucou-hook"
-version = "0.6.4"
+version = "0.7.1"
 dependencies = [
  "libc",
  "serde_json",
@@ -3716,7 +3716,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c3d1e2c7f27f8d4cb10542a02c49005dbd6e93095799d6f3be745fae9f8fedd4"
 dependencies = [
  "libc",
- "windows-sys 0.61.2",
+ "windows-sys 0.60.2",
 ]
 
 [[package]]

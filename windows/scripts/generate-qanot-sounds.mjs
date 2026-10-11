@@ -1,4 +1,4 @@
-// Original Qanot AI interface cues: deterministic oscillators and envelopes.
+// Original BIMO AI interface cues: deterministic oscillators and envelopes.
 // No recordings, sampled instruments, upstream WAVs or third-party melodies.
 // Generated artwork/audio are MIT; see ../../LICENSE-QANOT-ASSETS.md.
 import { createHash } from "node:crypto";
@@ -10,7 +10,7 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const OUT = join(ROOT, "assets", "qanot", "sounds");
 const RATE = 44100;
 // Each tone is [start seconds, duration, initial Hz, final Hz, amplitude].
-// The three rising notes form Qanot's original short flight signature.
+// The three rising notes form BIMO's original short flight signature.
 const CUES = {
   peek: [[0, .13, 659, 740, .27], [.075, .14, 988, 1047, .19]],
   open: [[0, .16, 523, 587, .25], [.095, .19, 784, 880, .22], [.17, .17, 1175, 1175, .13]],
@@ -103,9 +103,9 @@ const qanotLicense = readFileSync(join(ROOT, "..", "LICENSE-QANOT-ASSETS.md"), "
   .replace(/\r\n/g, "\n").trimEnd() + "\n\n";
 const license = Buffer.from(originalLicense + "\n\n" + qanotLicense, "utf8");
 writeFileSync(join(OUT, "LICENSE.txt"), license);
-const manifest = { schema: 1, brand: "Qanot AI", author: "Ahmadjon0worker", license: "MIT",
+const manifest = { schema: 1, brand: "BIMO AI", author: "Ahmadjon0worker", license: "MIT",
   generator: "scripts/generate-qanot-sounds.mjs", sample_rate: RATE,
   license_notice: { file: "LICENSE.txt", bytes: license.length, sha256: createHash("sha256").update(license).digest("hex") },
   channels: 1, format: "PCM16", synthesis: "Original deterministic harmonic oscillators, frequency glides and amplitude envelopes; no source audio.", files };
 writeFileSync(join(OUT, "sounds-manifest.json"), JSON.stringify(manifest, null, 2) + "\n");
-console.log(`Generated ${files.length} original Qanot AI cues.`);
+console.log(`Generated ${files.length} original BIMO AI cues.`);

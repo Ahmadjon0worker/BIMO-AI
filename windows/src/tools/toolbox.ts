@@ -1,14 +1,15 @@
 import { h } from "../views/dom";
 import { t, tl } from "../i18n/i18n";
 import { Bridge, onEvent } from "../core/bridge";
-import { ToolboxController, GITHUB_OPERATIONS, DESKTOP_KEYS, type ToolboxTransport, type ToolboxDomain, type TerminalShell, type GithubOperation, type DesktopAction } from "../core/toolbox";
+import { ToolboxController, GITHUB_OPERATIONS, DESKTOP_KEYS, normalizeDesktopLabel, type ToolboxTransport, type ToolboxDomain, type TerminalShell, type GithubOperation, type DesktopAction } from "../core/toolbox";
+import { pointMoshi, stopMoshiPoint } from "../core/companion";
 
 const TRANSPORT: ToolboxTransport = { status: () => Bridge.localAIToolboxStatus(), call: (name, args) => Bridge.localAIToolboxCall(name, args) };
 const label = (text: string, input: HTMLElement) => h("label", { class: "field", for: input.id }, h("span", { text: tl(text) }), input);
 const operations: Record<GithubOperation, string> = { status: "GitHub status", repos: "My repositories", issues: "List issues", pulls: "List pull requests", view: "Repository details", create_issue: "Create issue", create_pr: "Create pull request" };
 export function buildToolbox(transport: ToolboxTransport = TRANSPORT) {
   const controller = new ToolboxController(transport, sync);
-  let visible = false, activePanel: "toolbox" | "desktop" = "toolbox", planKey = "", outputKey = "", windowKey = "", captureKey = "";
+  let visible = false, activePanel: "toolbox" | "desktop" = "toolbox", planKey = "", outputKey = "", windowKey = "", captureKey = "", targetKey = "", pointing = false, pointedObservation = "", pointEpoch = 0;
   const status = h("div", { id: "toolbox-status", class: "notice", role: "status", "aria-live": "polite" });
   const readiness = h("p", { id: "toolbox-readiness", class: "hint" });
   const acknowledge = h("button", { id: "toolbox-check-result", class: "secondary", text: tl("I checked the result"), onclick: () => { if (!acknowledge.disabled) controller.acknowledgeUnknown(); } });
@@ -99,6 +100,43 @@ export function buildToolbox(transport: ToolboxTransport = TRANSPORT) {
     if (!desktopPlan.disabled) void controller.plan("desktop", desktopTask.value || "");
   } });
   const desktopPlanOutput = h("div", { id: "desktop-ai-preview", class: "toolbox-plan" });
+  const targetSearch = h("input", { id: "desktop-target-search", maxlength: 200, placeholder: "Masalan: Saqlash yoki Сақлаш" });
+  const targets = h("select", { id: "desktop-target", "aria-label": "Kuzatilgan tugma yoki maydon" });
+  const targetAction = h("select", { id: "desktop-target-action" }, h("option", { value: "click", text: "Tugmani bosish" }), h("option", { value: "type", text: "Maydonga matn yozish" }), h("option", { value: "scroll", text: "Tanlangan qismni aylantirish" })); targetAction.value = "click";
+  const targetText = h("textarea", { id: "desktop-target-text", rows: 3, maxlength: 2000 });
+  const targetTextField = label("Yoziladigan matn", targetText);
+  const targetAmount = h("input", { id: "desktop-target-scroll", type: "number", min: -10, max: 10, value: -3 }); targetAmount.value = "-3";
+  const targetScrollField = label("Aylantirish miqdori", targetAmount);
+  const expectedText = h("input", { id: "desktop-expected-text", maxlength: 500, placeholder: "Masalan: Saqlandi" });
+  const point = h("button", { id: "desktop-point-moshi", class: "secondary", text: "Moshi bilan ko‘rsat", onclick: () => {
+    if (point.disabled || pointing) return;
+    const epoch = ++pointEpoch;
+    pointing = true; sync();
+    void (async () => { try { const resolved = await controller.point(targets.value); if (resolved && visible && activePanel === "desktop" && epoch === pointEpoch) {
+        pointedObservation = `${resolved.session_id}:${resolved.state_hash}`; await pointMoshi(resolved);
+      } }
+      catch (error) { controller.error(error); } finally { pointing = false; sync(); } })();
+  } });
+  const targetRun = h("button", { id: "desktop-target-run", text: "Tanlangan elementda bajarish", onclick: () => {
+    if (targetRun.disabled) return;
+    const action = targetAction.value as "click" | "type" | "scroll";
+    void controller.targetAction({ target_id: targets.value, action,
+      ...(action === "type" ? { text: targetText.value || "" } : {}), ...(action === "scroll" ? { amount: Number(targetAmount.value) } : {}),
+      ...(expectedText.value ? { expected_text: expectedText.value } : {}) });
+  } });
+  const evidence = h("p", { id: "desktop-evidence", class: "hint", role: "status", "aria-live": "polite" });
+  const targetCard = h("section", { class: "card desktop-guidance" }, h("h2", { text: "Moshi bilan aniq boshqarish" }),
+    h("p", { class: "hint", text: "Oynadagi haqiqiy tugma yoki maydonni tanlang. Moshi ko‘rsatadi; bajarish tugmasi bitta amalni bajaradi. Lotin va kirill yozuvida qidirish mumkin." }),
+    label("Nom bo‘yicha qidirish", targetSearch), label("Kuzatilgan tugma yoki maydon", targets), h("div", { class: "actions" }, point),
+    label("Elementda bajariladigan amal", targetAction), targetTextField, targetScrollField, label("Kutilgan aniq matn (ixtiyoriy)", expectedText), targetRun, evidence);
+  const guideInput = h("textarea", { id: "desktop-guide-input", rows: 4, maxlength: 8000, placeholder: "Sahifani ochish | Bosh sahifa\nNatijani tekshirish | Saqlandi" });
+  const guideBuild = h("button", { id: "desktop-guide-build", class: "secondary", text: "Qadamlarni tayyorlash", onclick: () => { if (!guideBuild.disabled) controller.setGuide(guideInput.value || ""); } });
+  const guideCheck = h("button", { id: "desktop-guide-check", text: "Joriy qadamni tekshirish", onclick: () => { if (!guideCheck.disabled) void controller.checkGuide(); } });
+  const guideNext = h("button", { id: "desktop-guide-next", class: "secondary", text: "Keyingi qadam", onclick: () => { if (!guideNext.disabled) controller.advanceGuide(); } });
+  const guideList = h("ol", { id: "desktop-guide-steps", class: "toolbox-plan" });
+  const guideCard = h("section", { class: "card desktop-guide" }, h("h2", { text: "Bosqichma-bosqich yordam" }),
+    h("p", { class: "hint", text: "Har qatorga qadam nomi | kutilgan aniq matn yozing (ko‘pi bilan 12 qadam). Tekshirish oynani yangidan kuzatadi. Keyingi qadamni o‘zingiz bosasiz." }),
+    label("Vazifa qadamlari", guideInput), h("div", { class: "actions" }, guideBuild, guideCheck, guideNext), guideList);
   const desktopEl = h("div", { id: "desktop-panel", role: "tabpanel" }, desktopStatus, desktopAcknowledge,
     h("section", { class: "card" }, h("h2", { text: tl("Desktop control") }),
       h("p", { class: "hint", text: tl("Choose a window, capture it, then perform one explicit action. This works without AI. Each action stays bound to the captured window.") }),
@@ -108,13 +146,20 @@ export function buildToolbox(transport: ToolboxTransport = TRANSPORT) {
       h("details", {}, h("summary", { text: tl("Observed window text") }), desktopText)),
       h("section", { class: "card" }, label("Action", action), coordinates, textField, keyField, scrollField, act,
         h("details", {}, h("summary", { text: tl("Last desktop result") }), desktopResult))),
+    h("div", { class: "columns toolbox-desktop-columns" }, targetCard, guideCard),
     h("section", { class: "card" }, h("h2", { text: tl("Optional AI planning") }),
       h("p", { class: "hint", text: tl("Desktop AI proposes steps only. Fill the action fields yourself and perform each action explicitly.") }),
       label("Task", desktopTask), desktopPlan, desktopPlanOutput));
 
   function clearProposals() { controller.clearPlan(); }
+  function cancelPoint() {
+    ++pointEpoch;
+    if (!pointedObservation && !pointing) return;
+    pointedObservation = ""; void stopMoshiPoint().catch(() => {});
+  }
   for (const field of [script, shell, repo, operation, domain, aiTask, desktopTask]) field.addEventListener(field.tagName === "SELECT" ? "change" : "input", clearProposals);
   shell.addEventListener("change", sync); operation.addEventListener("change", sync); action.addEventListener("change", sync); windows.addEventListener("change", sync);
+  targetSearch.addEventListener("input", sync); targets.addEventListener("change", sync); targetAction.addEventListener("change", sync);
   script.addEventListener("keydown", event => {
     const key = event as KeyboardEvent;
     if (key.key === "Enter" && key.ctrlKey && !key.isComposing && !key.repeat && !run.disabled) {
@@ -154,6 +199,9 @@ export function buildToolbox(transport: ToolboxTransport = TRANSPORT) {
   }
   function sync() {
     const state = controller.snapshot, ready = state.status, busy = !!state.pending;
+    const currentObservation = state.observation ? `${state.observation.session_id}:${state.observation.state_hash}` : "";
+    if (pointedObservation && (pointedObservation !== currentObservation || !visible || activePanel !== "desktop")
+      || pointing && (!visible || activePanel !== "desktop" || ["desktop_observe", "desktop_action", "desktop_target_action", "desktop_finish"].includes(state.pending || ""))) cancelPoint();
     status.className = desktopStatus.className = state.error || state.unknownEffect ? "notice error" : "notice";
     status.textContent = desktopStatus.textContent = state.unknownEffect ? `${state.uncertainOperation ? `${t(operations[state.uncertainOperation])} · ${state.uncertainRepo || ""} · ` : ""}${t("The action result is uncertain. Check its result before running another action.")}${state.error ? ` ${t(state.error)}` : ""}`
       : state.error ? t(state.error) : busy ? t("Running local tool…") : ready ? t("Manual tools ready. AI planning is optional.") : t("Start LocalAI services, then refresh tool status.");
@@ -190,15 +238,40 @@ export function buildToolbox(transport: ToolboxTransport = TRANSPORT) {
     windowInfo.textContent = observation ? `${observation.window.title} · ${observation.window.process} · ${observation.window.width}×${observation.window.height}`
       : state.session ? t("Session active. Refresh the capture before an action.") : supported ? t("No desktop session is active.") : t("Desktop control is unavailable on this computer.");
     desktopText.textContent = observation?.editor_text || observation?.uia_text || ""; desktopResult.textContent = state.desktopResult;
+    const query = normalizeDesktopLabel(targetSearch.value || "");
+    const available = (observation?.targets || []).filter(target => !query || normalizeDesktopLabel(target.label).includes(query));
+    const nextTargets = JSON.stringify([available, query]);
+    if (nextTargets !== targetKey) {
+      const selected = targets.value;
+      targets.replaceChildren(h("option", { value: "", text: observation ? "Tugma yoki maydonni tanlang" : "Avval oynani kuzating" }),
+        ...available.map(target => h("option", { value: target.id, text: `${target.label} · ${target.type}${target.enabled ? "" : " · faol emas"}` })));
+      targets.value = available.some(target => target.id === selected) ? selected : ""; targetKey = nextTargets;
+    }
+    const selectedTarget = available.find(target => target.id === targets.value);
+    point.disabled = busy || pointing || !selectedTarget?.enabled;
+    targetRun.disabled = busy || pointing || !selectedTarget?.enabled || targetAction.value === "type" && !["Edit", "Document", "ComboBox"].includes(selectedTarget.type);
+    for (const field of [targets, targetSearch, targetAction, targetText, targetAmount, expectedText]) field.disabled = busy || pointing || !observation;
+    targetTextField.hidden = targetAction.value !== "type"; targetScrollField.hidden = targetAction.value !== "scroll";
+    const result = state.desktopEvidence;
+    evidence.textContent = result ? result.verified ? `✓ Kutilgan natija topildi: ${result.expected}` : result.kind === "unavailable" ? "Amal bajarildi. Natijani tekshirish uchun oynani yangilang." : result.kind === "unspecified" ? "Amal bajarildi. Aniq natija ko‘rsatilmagani uchun vazifa yakuni tasdiqlanmadi." : `Kutilgan natija hali topilmadi: ${result.expected}` : "";
+    guideInput.disabled = guideBuild.disabled = busy || pointing || !state.session;
+    const currentStep = state.guide[state.guideIndex];
+    guideCheck.disabled = busy || pointing || !state.session || !currentStep;
+    guideNext.disabled = busy || pointing || currentStep?.status !== "verified";
+    guideList.replaceChildren(...state.guide.map((step, index) => h("li", { class: "toolbox-plan-step", "aria-current": index === state.guideIndex ? "step" : "false" },
+      h("strong", { text: `${step.status === "verified" ? "✓" : step.status === "unverified" ? "○" : "·"} ${step.title}` }),
+      h("p", { class: "hint", text: `Kutilgan matn: ${step.expected_text}${index === state.guideIndex ? " · joriy qadam" : ""}` }))));
+    if (state.guide.length && state.guideIndex === state.guide.length) guideList.append(h("li", { text: "✓ Barcha qadamlar aniq matn bilan tekshirildi." }));
   }
   sync();
   void onEvent<unknown>("localai-account-invalidated", () => {
-    controller.invalidate(); aiTask.value = ""; desktopTask.value = ""; text.value = ""; sync();
+    controller.invalidate(); aiTask.value = ""; desktopTask.value = ""; text.value = ""; targetText.value = ""; expectedText.value = ""; guideInput.value = ""; targetSearch.value = ""; sync();
   });
   return { el: terminalEl, desktopEl, controller, sync, prefillTerminal: (nextShell: TerminalShell, nextScript: string) => { shell.value = nextShell; script.value = nextScript; sync(); }, refresh: () => controller.refresh(), setVisible: (next: boolean, panel: "toolbox" | "desktop" = activePanel) => {
+    if (!next || panel !== activePanel) cancelPoint();
     if (panel !== activePanel && visible) controller.setVisible(false);
     activePanel = panel; visible = next; controller.setVisible(next);
-    if (!next) { aiTask.value = ""; desktopTask.value = ""; text.value = ""; ghBody.value = ""; }
+    if (!next) { aiTask.value = ""; desktopTask.value = ""; text.value = ""; ghBody.value = ""; targetText.value = ""; expectedText.value = ""; guideInput.value = ""; targetSearch.value = ""; }
     sync();
   } };
 }

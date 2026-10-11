@@ -15,7 +15,7 @@ export function normalizeVoice(text: string): string {
 }
 /** A wake phrase is a gate, never an instruction to resume after Stop. */
 export function voiceCommandText(text: string, wakeOnly = false): string | null {
-  const match = text.match(/^\s*(?:(?:ok(?:ay)?|hey|salom|ey|ок(?:ей)?|эй|салом)\s+)?(?:moshi|моши|qanot(?:\s+ai)?|kanot(?:\s+ai)?|қанот(?:\s+аи)?|канот(?:\s+аи)?|coucou|kuku|куку|kuk(u|o))(?![\p{L}\p{N}_])[\s,.:!-]*(.*)$/iu);
+  const match = text.match(/^\s*(?:(?:ok(?:ay)?|hey|salom|ey|ок(?:ей)?|эй|салом)\s+)?(?:bimo(?:\s+ai)?|бимо(?:\s+(?:аи|ай))?|moshi|моши|qanot(?:\s+ai)?|kanot(?:\s+ai)?|қанот(?:\s+аи)?|канот(?:\s+аи)?|coucou|kuku|куку|kuk(u|o))(?![\p{L}\p{N}_])[\s,.:!-]*(.*)$/iu);
   if (wakeOnly && !match) return null;
   return (match ? match[2] : text).trim() || null;
 }
@@ -79,9 +79,9 @@ export class VoiceController {
       if (r?.ok !== true || r.voice_api !== 1 || r.execution_performed !== false || typeof r.text !== "string" || r.text.length > 4000 || r.language !== language) throw new Error("Nutq natijasi yaroqsiz");
       this.text = r.text.trim(); return this.text;
     } catch (e) { if (generation === this.generation) this.error = String(e instanceof Error ? e.message : e); return null; }
-    finally { this.busy = false; this.changed(); }
+    finally { if (generation === this.generation) { this.busy = false; this.changed(); } }
   }
-  invalidate() { this.generation++; this.text = ""; this.cancelling = this.cancelling.then(() => this.transport.cancel()).catch(() => {}); this.changed(); }
+  invalidate() { this.generation++; this.text = ""; this.error = ""; this.busy = false; this.cancelling = this.cancelling.then(() => this.transport.cancel()).catch(() => {}); this.changed(); }
 }
 export function audioBase64(bytes: Uint8Array): string {
   if (bytes.length > 480044) throw new Error("Yozuv 15 soniyadan oshmasin");

@@ -1,4 +1,4 @@
-"""Packaged Qanot AI bridge. Does not install or control shared services."""
+"""Packaged BIMO AI bridge. Does not install or control shared services."""
 from __future__ import annotations
 
 import argparse
@@ -36,7 +36,7 @@ def self_test():
     # model requests, storage creation or Telegram login.
     required = ("ssl", "sqlite3", "ctypes", "psutil", "PIL.Image", "telethon", "pypdf",
                 "docx", "openpyxl", "reportlab", "pywinauto", "win32api", "pythoncom",
-                "toolbox", "desktop_tools", "toolbox_runtime", "tool_client", "tools_cli", "voice_tools")
+                "toolbox", "desktop_tools", "toolbox_runtime", "tool_client", "tools_cli", "voice_tools", "assistant_tools")
     errors = []
     for name in required:
         try:
@@ -64,7 +64,7 @@ def self_test():
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Qanot AI per-user LocalAI bridge")
+    parser = argparse.ArgumentParser(description="BIMO AI per-user LocalAI bridge")
     parser.add_argument("--port", type=int, default=11435)
     parser.add_argument("--data-root", type=Path)
     parser.add_argument("--self-test", action="store_true")

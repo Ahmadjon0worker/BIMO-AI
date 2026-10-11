@@ -7,6 +7,7 @@ mod autostart_entry;
 mod chat;
 mod claude;
 mod codex_plan;
+mod companion;
 mod config_file;
 mod desktop;
 mod files;
@@ -148,7 +149,7 @@ fn set_system_languages(app: AppHandle, languages: Vec<String>) {
 fn language_changed(app: &AppHandle) {
     tray::retitle(app);
     if let Some(window) = app.get_webview_window("settings") {
-        let _ = window.set_title(&i18n::t("Settings — Qanot AI"));
+        let _ = window.set_title(&i18n::t("Settings — BIMO AI"));
     }
 }
 
@@ -629,7 +630,8 @@ fn create_settings_window(app: &AppHandle) {
     let url = settings_page_url(app);
     match WebviewWindowBuilder::new(app, "settings", url)
         .additional_browser_args(BROWSER_ARGS)
-        .title(i18n::t("Settings — Qanot AI"))
+        .transparent(true)
+        .title(i18n::t("Settings — BIMO AI"))
         .inner_size(560.0, 680.0)
         .min_inner_size(460.0, 480.0)
         .resizable(true)
@@ -670,12 +672,14 @@ pub fn run() {
     platform::prepare_environment();
     let first_run = !settings::config_dir().join("settings.json").is_file();
     let show_studio = first_run || std::env::args().any(|arg| arg == "--studio");
+    let show_assistant = std::env::args().any(|arg| arg == "--assistant");
     let loaded = settings::load();
     i18n::set_picked(&loaded.language);
     let gate = Arc::new(PollGate::new());
 
     let mut builder = tauri::Builder::default()
         .plugin(tauri_plugin_single_instance::init(|app, argv, _cwd| {
+            if argv.iter().any(|arg|arg=="--assistant") { let _=local_ai::local_ai_open_tools(app.clone(), Some(local_ai::ToolsTab::Assistant));return; }
             if argv.iter().any(|arg| arg == "--studio") {
                 let _ = local_ai::local_ai_open_studio(app.clone());
                 return;
@@ -704,6 +708,7 @@ pub fn run() {
         .manage(Chat::default())
         .manage(StudioChat(Chat::for_window("studio")))
         .manage(local_service::LocalService::default())
+        .manage(local_ai::ToolsLaunch::default())
         .manage(shortcuts::Registry::default())
         .manage(recap::load())
         .invoke_handler(tauri::generate_handler![
@@ -751,11 +756,15 @@ pub fn run() {
             local_ai::local_ai_stop,
             local_ai::local_ai_open_opencode,
             local_ai::local_ai_open_tools,
+            local_ai::local_ai_tools_snapshot,
             local_ai::local_ai_open_studio,
             local_service::local_ai_start_services,
             local_ai::local_ai_capabilities,
             local_ai::local_ai_toolbox_status,
             local_ai::local_ai_toolbox_call,
+            companion::companion_point,
+            companion::companion_hide,
+            companion::companion_snapshot,
             local_ai::local_ai_voice_status,
             local_ai::local_ai_voice_transcribe,
             local_ai::local_ai_voice_cancel,
@@ -816,6 +825,10 @@ pub fn run() {
             desktop::desktop_mochi_set_asleep,
         ])
         .setup(move |app| {
+            #[cfg(windows)]
+            if autostart_entry::migrate_owned_legacy().is_err() {
+                log::line("BIMO AI autostart migration was withheld.");
+            }
             let handle = app.handle().clone();
             tray::build(&handle)?;
             // Before the island: see create_settings_window.
@@ -824,6 +837,7 @@ pub fn run() {
             local_ai::create_studio_window(&handle);
             // Same rule for Mochi's desktop window.
             desktop::setup(&handle);
+            companion::setup(&handle);
 
             if let Some(win) = island::window(&handle) {
                 // Where Tauri takes the drop itself (Linux), its paths are the
@@ -848,7 +862,7 @@ pub fn run() {
             gate.set_active(true);
             island::spawn_cursor_poll(handle.clone(), gate.clone());
 
-            log::line(format!("--- Qanot AI {} started ---", env!("CARGO_PKG_VERSION")));
+            log::line(format!("--- BIMO AI {} started ---", env!("CARGO_PKG_VERSION")));
             hooks::ensure_hook_exe(&handle);
             pipe::start(handle.clone());
             integrations::start(handle.clone());
@@ -856,6 +870,7 @@ pub fn run() {
             if show_studio {
                 let _ = local_ai::local_ai_open_studio(handle.clone());
             }
+            if show_assistant {let _=local_ai::local_ai_open_tools(handle.clone(), Some(local_ai::ToolsTab::Assistant));}
             let service_app = handle.clone();
             tauri::async_runtime::spawn(async move {
                 if let Err(error) = local_service::start(&service_app).await {
@@ -865,7 +880,7 @@ pub fn run() {
             Ok(())
         })
         .build(tauri::generate_context!())
-        .expect("error while building Qanot AI")
+        .expect("error while building BIMO AI")
         .run(|app, event| {
             if matches!(event, tauri::RunEvent::Exit) {
                 app.state::<local_service::LocalService>().stop();

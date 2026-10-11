@@ -1,14 +1,14 @@
 {
   "schema": 1,
-  "brand": "Qanot AI",
+  "brand": "BIMO AI",
   "author": "Ahmadjon0worker",
   "license": "MIT",
   "generator": "scripts/generate-qanot-sounds.mjs",
   "sample_rate": 44100,
   "license_notice": {
     "file": "LICENSE.txt",
-    "bytes": 3034,
-    "sha256": "6030783ae75ae8131b0c39afd25204f637fc33ff1e30f035e019ba25c5d66940"
+    "bytes": 3252,
+    "sha256": "27fb8448a309748ba9fdd9b8ce1f7d07b97de19dc4b5b45525b4005ae8a220be"
   },
   "channels": 1,
   "format": "PCM16",

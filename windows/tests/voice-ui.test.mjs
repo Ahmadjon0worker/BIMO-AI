@@ -252,3 +252,73 @@ test('Stop and external Stop release mic, clear selection and never auto-resume 
   byID(view, 'voice-recipient').value = '123456789'; emit('localai-account-invalidated', null);
   assert.equal(byID(view, 'voice-recipient').value, ''); assert.equal(effects.filter(e => e[0] === 'stop').length, 1);
 });
+
+test('hold-to-talk is explicit, releasing permission request cannot start a late microphone', async () => {
+  const permission = deferred(), input = stream(), { view, effects } = await ui();
+  navigator.mediaDevices.getUserMedia = () => permission.promise;
+  const pressing = view.pushToTalk(true); await flush();
+  assert.equal(byID(view, 'voice-hold').getAttribute('aria-pressed'), 'true');
+  assert.match(byID(view, 'voice-status').textContent, /ruxsati kutilmoqda/);
+  await view.pushToTalk(false); permission.resolve(input); await pressing;
+  assert.equal(input.track.stops, 1); assert.equal(contexts.length, 0); assert.equal(view.mic.recording, false);
+  assert.equal(byID(view, 'voice-hold').getAttribute('aria-pressed'), 'false');
+  assert.equal(effects.some(effect => effect[0] === 'transcribe'), false);
+});
+
+test('hold-to-talk release transcribes once without requiring continuous-mode wake prefix', async () => {
+  const { view, effects } = await ui(); byID(view, 'voice-wake').checked = true;
+  await view.pushToTalk(true); const context = contexts.at(-1);
+  context.processor.onaudioprocess({ inputBuffer: { getChannelData: () => new Float32Array(14400).fill(.03) } });
+  context.processor.onaudioprocess({ inputBuffer: { getChannelData: () => new Float32Array(57600) } });
+  assert.equal(view.mic.recording, true);
+  await view.pushToTalk(false); await flush();
+  assert.equal(effects.filter(effect => effect[0] === 'transcribe').length, 1);
+  assert.deepEqual(effects.filter(effect => effect[0] === 'panel'), [['panel', true]]);
+  assert.equal(view.mic.recording, false); assert.equal(byID(view, 'voice-meter').hidden, true);
+  await view.pushToTalk(false); assert.equal(effects.filter(effect => effect[0] === 'transcribe').length, 1);
+});
+
+test('new explicit recording interrupts stale transcript before it can issue a Telegram send', async () => {
+  const old = deferred(); let requests = 0;
+  const { view, effects } = await ui({}, { transcribe: args => ++requests === 1 ? old.promise : Promise.resolve({ ok:true, voice_api:1, execution_performed:false, language:args.language, text:'panelni och' }) });
+  await capture(view); assert.equal(view.controller.busy, true);
+  await view.pushToTalk(true); assert.equal(view.mic.recording, true);
+  old.resolve({ ok:true, voice_api:1, execution_performed:false, language:'uz', text:'@test_user ga salom yubor' }); await flush();
+  assert.equal(effects.some(effect => effect[0] === 'send' || effect[0] === 'command'), false);
+  assert.equal(view.mic.recording, true); await view.pushToTalk(false); await flush();
+});
+
+test('freeform explicit speech asks the assistant brain, while Telegram stays on its fixed route', async () => {
+  const calls = [], { view, effects } = await ui({ localAIToolboxCall: async (name, args) => {
+    calls.push([name, args]); return { ok:true, reply:'Toshkent — O‘zbekiston poytaxti.', provider:'fixture', elapsed_ms:1 };
+  } });
+  await view.run('O‘zbekiston poytaxti qaysi shahar?');
+  assert.deepEqual(calls, [['assistant_brain_reply', {prompt:'O‘zbekiston poytaxti qaysi shahar?', engine:'auto'}]]);
+  assert.match(byID(view, 'voice-result').textContent, /Toshkent/);
+  await view.run('@test_user ga salom yubor');
+  assert.equal(calls.length, 1); assert.equal(effects.filter(effect => effect[0] === 'send').length, 1);
+});
+
+test('barge-in cancels a pending brain answer and rejects its late text without reopening speech', async () => {
+  const answer = deferred(), calls = [], { view } = await ui({ localAIToolboxCall: async (name, args) => {
+    calls.push([name, args]); return name==='assistant_brain_reply'?answer.promise:{ok:true,cancelled:true};
+  } });
+  const pending = view.run('Salom, o‘zing haqingda gapir'); await flush();
+  assert.equal(byID(view, 'voice-hold').disabled, false);
+  await view.pushToTalk(true); await flush();
+  assert.equal(view.mic.recording, true); assert.equal(calls.filter(call => call[0] === 'assistant_cancel').length, 1);
+  answer.resolve({ok:true,reply:'Obsolete private answer.',provider:'fixture',elapsed_ms:1}); await pending;
+  assert.doesNotMatch(byID(view, 'voice-result').textContent, /Obsolete/); assert.equal(view.speech.state.active, false);
+  await view.pushToTalk(false);
+});
+
+test('a typed new turn interrupts old playback without letting its finalizer unlock the new brain turn', async () => {
+  const playback = deferred(), answer = deferred(), { view } = await ui({ localAIToolboxCall: async () => answer.promise }, {status:async()=>ready({tts_available:true})});
+  byID(view, 'voice-spoken').checked = true;
+  view.speech.adapter = {synthesize:async text=>text,play:async()=>playback.promise};
+  const old = view.run('panelni och'); await flush(); assert.equal(view.speech.state.speaking, true);
+  const fresh = view.run('Salom, o‘zingni tanishtir'); await flush(); await old;
+  assert.equal(view.speech.state.active, false); assert.equal(byID(view, 'voice-execute').disabled, true);
+  answer.resolve({ok:true,reply:'Men Moshi yordamchisiman.',provider:'fixture',elapsed_ms:1}); playback.resolve(); await fresh;
+  assert.equal(byID(view, 'voice-execute').disabled, false); assert.match(byID(view, 'voice-result').textContent, /Moshi yordamchisiman/);
+});

@@ -240,3 +240,23 @@ test('callback captured before Stop cannot deliver or append into a new recordin
   mic.stop(); await mic.start(); callback({ inputBuffer: { getChannelData: () => new Float32Array(48000).fill(.03) } });
   assert.equal(delivered.length, 0); assert.equal(mic.level, 0); assert.equal(mic.recording, true); mic.stop();
 });
+
+test('holding push-to-talk retains silence until release, while keeping the 15-second cap', async () => {
+  const { mic, delivered } = microphone(); await mic.start({ finishOnSilence: false });
+  feed(contexts[0], 14400); feed(contexts[0], 57600, 0);
+  assert.equal(mic.recording, true); assert.equal(delivered.length, 0); assert.equal(mic.elapsed, 1.5);
+  mic.finish(); assert.equal(delivered.length, 1); assert.equal(mic.elapsed, 0);
+  await mic.start({ finishOnSilence: false }); feed(contexts[1], 48000 * 16);
+  assert.equal(mic.recording, false); assert.equal(delivered.length, 2); assert.equal(delivered[1].length, 480044);
+});
+
+test('barge-in permits a replacement STT and old finalization cannot clear its busy flag', async () => {
+  const first = deferred(), second = deferred(); let requests = 0;
+  const t = transport({ transcribe: () => (++requests === 1 ? first : second).promise });
+  const c = new VoiceController(t.adapter); await c.refresh();
+  const old = c.transcribe(wav(), 'uz'); await flush(); c.invalidate();
+  const fresh = c.transcribe(wav(), 'uz'); await flush(); assert.equal(requests, 2);
+  first.resolve(transcript('obsolete')); assert.equal(await old, null);
+  assert.equal(c.busy, true); assert.equal(c.text, '');
+  second.resolve(transcript('telegramni och')); assert.equal(await fresh, 'telegramni och'); assert.equal(c.busy, false);
+});

@@ -4,11 +4,11 @@ import { matchesRelease } from "../scripts/bundle-selection.mjs";
 
 const current = { productName: "Coucou", version: "0.3.0", platform: "win32", architecture: "x64", suffix: "-setup.exe" };
 test("pack accepts the new product name including its space and rejects inherited packages", () => {
-  const qanot = { ...current, productName: "Qanot AI", version: "0.6.3" };
-  assert.equal(matchesRelease("Qanot AI_0.6.3_x64-setup.exe", qanot), true);
-  assert.equal(matchesRelease("Qanot AI_0.6.3_x64_en-US.msi", { ...qanot, suffix: ".msi" }), true);
-  for (const file of ["Coucou_0.6.3_x64-setup.exe", "Qanot AI_0.6.2_x64-setup.exe", "Qanot AI_0.6.3_arm64-setup.exe"]) {
-    assert.equal(matchesRelease(file, qanot), false, file);
+  const bimo = { ...current, productName: "BIMO AI", version: "0.7.1" };
+  assert.equal(matchesRelease("BIMO AI_0.7.1_x64-setup.exe", bimo), true);
+  assert.equal(matchesRelease("BIMO AI_0.7.1_x64_en-US.msi", { ...bimo, suffix: ".msi" }), true);
+  for (const file of ["Coucou_0.7.1_x64-setup.exe", "Qanot AI_0.7.1_x64-setup.exe", "BIMO AI_0.7.0_x64-setup.exe", "BIMO AI_0.7.1_arm64-setup.exe"]) {
+    assert.equal(matchesRelease(file, bimo), false, file);
   }
 });
 test("pack rejects stale releases and wrong Windows architecture", () => {
@@ -27,4 +27,11 @@ test("pack retains Tauri Linux naming without selecting another release", () => 
   assert.equal(matchesRelease("coucou-0.3.0-beta.x86_64.rpm", { ...linux, suffix: ".rpm" }), false);
   assert.equal(matchesRelease("coucou-0.3.0-1.x86_64.rpm", { ...linux, suffix: ".rpm" }), true);
   assert.equal(matchesRelease("Coucou_0.3.0_aarch64.AppImage", { ...linux, architecture: "arm64", suffix: ".AppImage" }), true);
+});
+test("BIMO Linux names bind the spaced or package-manager slug to exact version and architecture", () => {
+  const linux = { productName: "BIMO AI", version: "0.7.1", platform: "linux", architecture: "x64", suffix: ".deb" };
+  assert.equal(matchesRelease("bimo-ai_0.7.1_amd64.deb", linux), true);
+  assert.equal(matchesRelease("BIMO AI_0.7.1_x86_64.AppImage", { ...linux, suffix: ".AppImage" }), true);
+  assert.equal(matchesRelease("bimo-ai-0.7.1-1.x86_64.rpm", { ...linux, suffix: ".rpm" }), true);
+  for (const file of ["qanot-ai_0.7.1_amd64.deb", "bimo-ai_0.7.0_amd64.deb", "bimo-ai_0.7.1_arm64.deb", "bimo-ai_0.7.1-beta_amd64.deb"]) assert.equal(matchesRelease(file, linux), false, file);
 });

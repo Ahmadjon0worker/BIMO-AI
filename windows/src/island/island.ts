@@ -23,6 +23,7 @@ import { closePlanCard, openPlanColor, planCardOpen } from "../views/usage";
 import { buildHeader, buildViews, type ViewActions, type ViewHost } from "../views/views";
 import { h } from "../views/dom";
 import { IslandStateMachine } from "./fsm";
+import { HoverDwell } from "../core/hover-dwell";
 import { refreshHookPills } from "./integrations";
 import { DesktopLink } from "./desktop";
 import { DRAG_THRESHOLD } from "../mochi/desktop-logic";
@@ -48,6 +49,9 @@ const modeOrder = (m: IslandMode) => (m === "hidden" ? 0 : m === "compact" ? 1 :
 
 export class Island {
   readonly fsm = new IslandStateMachine();
+  private hoverDwell = new HoverDwell(() => {
+    if (!State.paused && !this.panelDrag.active && this.wasInIsland) this.fsm.mouseEntered();
+  });
   /** Mochi on the desktop: his life cycle and the drag out of the island. */
   readonly desktop: DesktopLink;
 
@@ -84,6 +88,7 @@ export class Island {
   private botSize = new Spring(10);
 
   private engine = new BotEngine();
+  private motionPreference = typeof matchMedia === "function" ? matchMedia("(prefers-reduced-motion: reduce)") : null;
   private greeting = new Greeting();
   private greetingShown = false;
   private seasons = new SeasonCache();
@@ -134,6 +139,13 @@ export class Island {
     this.wireFsm();
     this.wireInput();
     this.engine.onDizzy = () => this.handleDizzy();
+    const syncMaterialMotion = () => {
+      this.engine.reducedMotion = this.motionPreference?.matches ?? false;
+      this.dirty = true; this.ensureRunning();
+    };
+    this.engine.reducedMotion = this.motionPreference?.matches ?? false;
+    this.motionPreference?.addEventListener("change", syncMaterialMotion);
+    window.addEventListener("pagehide", () => { this.hoverDwell.leave(); this.fsm.cancelTimers(); this.motionPreference?.removeEventListener("change", syncMaterialMotion); }, { once: true });
     this.greeting.onComplete = () => {
       if (!this.panelDrag.active) this.fsm.greetComplete();
       this.onGreetingDone?.();
@@ -337,6 +349,7 @@ export class Island {
       if (from === "coucou" && to !== "coucou") this.desktop.launch();
       switch (to) {
         case "hidden":
+          this.hoverDwell.leave();
           this.setMode("hidden");
           break;
         case "petit":
@@ -517,6 +530,7 @@ export class Island {
     State.isPinned = on;
     this.fsm.pinned = on;
     if (on) {
+      this.hoverDwell.leave();
       // The countdown bar reads the state machine's deadline, cleared with it.
       this.fsm.cancelTimers();
     } else if (!this.wasInIsland && this.fsm.state === "home") {
@@ -871,6 +885,7 @@ export class Island {
   private panelDragActive(on: boolean) {
     this.panelHandle.classList.toggle("dragging", on);
     if (on) {
+      this.hoverDwell.leave();
       this.fsm.cancelTimers();
       this.cancelBotHover();
       this.botHovering = false;
@@ -928,7 +943,7 @@ export class Island {
     State.mouse = { x, y };
     const rect = this.islandRect();
     State.mouseInIsland = { x: x - rect.x, y: y - rect.y };
-    if (this.panelDrag.active) return;
+    if (this.panelDrag.active || State.paused) { this.hoverDwell.leave(); return; }
 
     // Windows sends no cursor position with an OLE drag, so the drop sequence is
     // fed from the Win32 cursor poll instead — it runs throughout the drag.
@@ -944,9 +959,11 @@ export class Island {
     this.wasInIsland = inIsland;
     if (inIsland && !wasIn) {
       if (this.fsm.state === "coucou") this.greeting.hover();
-      this.fsm.mouseEntered();
+      if (this.fsm.openOnHover && (this.fsm.state === "hidden" || this.fsm.state === "petit")) this.hoverDwell.enter();
+      else this.fsm.mouseEntered();
     }
     if (!inIsland && wasIn) {
+      this.hoverDwell.leave();
       this.fsm.mouseLeft();
     }
 
@@ -1157,7 +1174,7 @@ export class Island {
     const focus = State.focusTask;
     this.engine.variant = moshiVariantFor(focus?.id ?? State.mainPillId);
     this.botCanvas.dataset.moshiVariant = this.engine.variant;
-    this.botCanvas.setAttribute("aria-label", `Moshi · ${focus?.name ?? "Qanot AI"}`);
+    this.botCanvas.setAttribute("aria-label", `Moshi · ${focus?.name ?? "BIMO AI"}`);
     // While a plan card is open Mochi wears the plan's colour, like its pill.
     this.engine.bodyColor = planCardOpen()
       ? hexToRGB(openPlanColor())
@@ -1281,6 +1298,7 @@ export class Island {
 
   /** Applies settings coming from Rust at boot. */
   applySettings() {
+    this.hoverDwell.leave();
     Sound.setEnabled(State.settings.soundEnabled);
     Sound.setVolume(State.settings.soundVolume);
     this.fsm.homeToPetitDelay = State.settings.autoCloseInterval;

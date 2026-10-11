@@ -6,7 +6,7 @@ import { delimiter, dirname, join } from "node:path";
 import { fingerprint, readJson, validateWindowsProof, verifierPowerShell, verifyWindowsPackages } from "../scripts/installer-proof.mjs";
 
 function fixture(t) {
-  const root = mkdtempSync(join(tmpdir(), "coucou-pack-proof-"));
+  const root = mkdtempSync(join(tmpdir(), "bimo-pack-proof-"));
   t.after(() => rmSync(root, { recursive: true, force: true }));
   const put = (relative, content) => {
     const file = join(root, relative);
@@ -22,16 +22,16 @@ function fixture(t) {
     no_user_config_or_credentials: true, file_count: 1, total_bytes: fingerprint(runtimeFile).bytes,
     files: [{ path: "src/public.py", ...fingerprint(runtimeFile) }] };
   const manifestFile = put("localai-service/bundle/runtime-manifest.json", JSON.stringify(manifest));
-  const plans = [{ kind: "nsis", built: put("bundle/Coucou_0.3.0_x64-setup.exe", "nsis fixture") },
-    { kind: "msi", built: put("bundle/Coucou_0.3.0_x64_en-US.msi", "msi fixture") }];
+  const plans = [{ kind: "nsis", built: put("bundle/BIMO AI_0.7.1_x64-setup.exe", "nsis fixture") },
+    { kind: "msi", built: put("bundle/BIMO AI_0.7.1_x64_en-US.msi", "msi fixture") }];
   const report = { passed: true, noInstallersExecuted: true, errors: [],
-    expected: { product: "Coucou", version: "0.3.0", architecture: "x64" }, artifacts: {} };
+    expected: { product: "BIMO AI", version: "0.7.1", architecture: "x64" }, artifacts: {} };
   for (const plan of plans) report.artifacts[plan.kind] = { path: plan.built, ...fingerprint(plan.built), verification: {
-    passed: true, privateFiles: 0, appMetadata: { product: "Coucou", productVersion: "0.3.0", fileVersion: "0.3.0" },
+    passed: true, privateFiles: 0, appMetadata: { product: "BIMO AI", productVersion: "0.7.1", fileVersion: "0.7.1" },
     appSha256: fingerprint(app).sha256, hookSha256: fingerprint(hook).sha256, guideSha256: fingerprint(guide).sha256,
     runtimeManifestSha256: fingerprint(manifestFile).sha256, runtimeFiles: 1, runtimeBytes: manifest.total_bytes, payloadFiles: 5,
   } };
-  const args = { root, plans, report, productName: "Coucou", version: "0.3.0", architecture: "x64" };
+  const args = { root, plans, report, productName: "BIMO AI", version: "0.7.1", architecture: "x64" };
   return { root, put, plans, report, args, app, hook, guide, runtimeFile, manifestFile, manifest };
 }
 

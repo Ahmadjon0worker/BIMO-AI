@@ -142,11 +142,36 @@ fn interpolate(text: &str, vars: &[(&str, &str)]) -> String {
     out
 }
 
+// The generated Mac catalog and older integrations still use legacy brand keys.
+// Normalize public text before interpolation so paths and user values stay exact.
+fn display_word(text: &str, old: &str, new: &str) -> String {
+    let mut out = String::with_capacity(text.len());
+    let mut from = 0;
+    let word_char = |c: char| c.is_ascii_alphanumeric() || c == '_';
+    for (at, _) in text.match_indices(old) {
+        let end = at + old.len();
+        let before = text[..at].chars().next_back().is_some_and(word_char);
+        let after = text[end..].chars().next().is_some_and(word_char);
+        out.push_str(&text[from..at]);
+        out.push_str(if before || after { old } else { new });
+        from = end;
+    }
+    out.push_str(&text[from..]);
+    out
+}
+
+fn public_brand(text: &str) -> String {
+    let text = display_word(text, "Qanot AI", "BIMO AI");
+    let text = display_word(&text, "Qanot", "BIMO AI");
+    display_word(&text, "Coucou", "BIMO AI")
+}
+
 fn lookup_in(lang: &str, key: &str) -> Option<&'static Value> {
     if lang == "en" {
         return None;
     }
-    table().get(key)?.get(lang)
+    table().get(&public_brand(key)).and_then(|entry| entry.get(lang))
+        .or_else(|| table().get(key)?.get(lang))
 }
 
 /// CLDR plural category of `n` (whole numbers) in `lang`.
@@ -209,7 +234,7 @@ pub fn tf(key: &str, vars: &[(&str, &str)]) -> String {
         Some(Value::Object(forms)) => pick_plural(forms, "other").unwrap_or_else(|| key.to_string()),
         _ => key.to_string(),
     };
-    interpolate(&text, vars)
+    interpolate(&public_brand(&text), vars)
 }
 
 /// A count with its words: `tn("{count} file", "{count} files", n, &[])`.
@@ -225,7 +250,7 @@ pub fn tn(one: &str, other: &str, count: u64, vars: &[(&str, &str)]) -> String {
         _ => None,
     };
     let text = text.unwrap_or_else(|| if count == 1 { one.to_string() } else { other.to_string() });
-    interpolate(&text, &all)
+    interpolate(&public_brand(&text), &all)
 }
 
 #[cfg(test)]
@@ -266,8 +291,8 @@ mod tests {
         // From the Mac's catalog.
         assert_eq!(t("Allow"), "Autoriser");
         // From extra.json.
-        assert_eq!(t("Open Qanot AI"), "Ouvrir Qanot AI");
-        assert_eq!(t("Open Coucou"), "Ouvrir Qanot AI");
+        assert_eq!(t("Open BIMO AI"), "Ouvrir BIMO AI");
+        assert_eq!(t("Open Coucou"), "Ouvrir BIMO AI");
         assert_eq!(t("A string nobody translated"), "A string nobody translated");
         assert_eq!(tf("Open {name}", &[("name", "Vercel")]), "Ouvrir Vercel");
         set_for_test("en");
@@ -293,18 +318,29 @@ mod tests {
     #[test]
     fn public_brand_keeps_compatibility_paths_unchanged() {
         let file = "C:/Users/example/AppData/Roaming/Coucou/settings.json";
-        let key = "{file} isn't a JSON object — Qanot AI won't touch it.";
+        let key = "{file} isn't a JSON object — BIMO AI won't touch it.";
         for lang in LANGUAGES {
             set_for_test(lang);
-            assert!(t("Open Qanot AI").contains("Qanot AI"), "{lang}");
+            assert!(t("Open BIMO AI").contains("BIMO AI"), "{lang}");
+            assert_eq!(t("Open Coucou"), t("Open BIMO AI"), "{lang}");
+            assert_eq!(t("Open Qanot AI"), t("Open BIMO AI"), "{lang}");
             let message = tf(key, &[("file", file)]);
             assert!(message.contains(file), "{lang}: compatibility path changed");
-            assert!(message.contains("Qanot AI"), "{lang}: public brand missing");
+            assert!(message.contains("BIMO AI"), "{lang}: public brand missing");
             assert!(!message.replace(file, "").contains("Coucou"), "{lang}: old app brand shown");
         }
         set_for_test("fr");
-        assert_eq!(t("Open Coucou"), t("Open Qanot AI"));
+        assert_eq!(t("Open Coucou"), t("Open BIMO AI"));
         set_for_test("en");
+    }
+
+    #[test]
+    fn legacy_brand_mapping_does_not_rewrite_interpolated_names_or_command_identifiers() {
+        set_for_test("en");
+        let name = "Moshi / Qanot AI / Coucou";
+        assert_eq!(tf("Ask Coucou about {name}", &[("name", name)]), format!("Ask BIMO AI about {name}"));
+        assert_eq!(t("Qanotli coucou-hook.exe"), "Qanotli coucou-hook.exe");
+        assert_eq!(tn("{count} Coucou item", "{count} Coucou items", 2, &[]), "2 BIMO AI items");
     }
 
     #[test]

@@ -7,7 +7,9 @@ import { buildTelegramAccount } from "./telegram-account";
 import type { ToolboxTransport } from "../core/toolbox";
 import { buildToolbox } from "./toolbox";
 import { buildVoice } from "./voice";
+import { buildAssistant } from "./assistant";
 import { createMoshiAvatar } from "../mochi/avatar";
+import { createThinkingOrb } from "../effects/thinking-orb";
 
 const TRANSPORT: CapabilitiesTransport = {
   capabilities: () => Bridge.localAICapabilities(),
@@ -21,7 +23,9 @@ const TRANSPORT: CapabilitiesTransport = {
 
 export function buildTools(transport: CapabilitiesTransport = TRANSPORT, accountTransport?: AccountTransport, toolboxTransport?: ToolboxTransport) {
   const telegramAvatar = createMoshiAvatar("telegram", "Telegram bot Moshi");
-  let activeTab: "tools" | "account" | "toolbox" | "desktop" | "voice" = "tools", windowVisible = false;
+  const telegramOrb = createThinkingOrb({ size: 20, theme: "dark", accent: "#60caff", visible: false });
+  window.addEventListener?.("pagehide", () => telegramOrb.destroy(), { once: true });
+  let activeTab: "tools" | "account" | "toolbox" | "desktop" | "voice" | "assistant" = "tools", windowVisible = false;
   const status = h("div", { class: "notice", role: "status", "aria-live": "polite" });
   const telegramStatus = h("p", { class: "muted" });
   const token = h("input", { id: "telegram-token", type: "password", autocomplete: "off", maxlength: 256,
@@ -44,6 +48,7 @@ export function buildTools(transport: CapabilitiesTransport = TRANSPORT, account
   const emergency = h("button", { class: "danger", id: "tools-stop", text: tl("Stop Local AI"),
     onclick: () => {
       voice.halt();
+      assistant.stop();
       toolbox.controller.invalidate();
       account.clearSecrets(); account.controller.invalidate(); account.controller.snapshot.pending = "stop"; account.sync();
       void controller.run("stop").finally(() => {
@@ -75,6 +80,8 @@ export function buildTools(transport: CapabilitiesTransport = TRANSPORT, account
   const account = buildTelegramAccount(accountTransport, () => header.getBoundingClientRect?.().height || 120);
   const toolbox = buildToolbox(toolboxTransport);
   const voice = buildVoice(tab => setTab(tab), toolbox.prefillTerminal);
+  const assistant = buildAssistant();
+  const assistantTab = h("button", { id:"assistant-tab",role:"tab","aria-controls":"assistant-panel","aria-selected":"false",text:"Moshi AI va xotira",onclick:()=>setTab("assistant") });
   const voiceTab = h("button", { id: "voice-tab", role: "tab", "aria-controls": "voice-panel", "aria-selected": "false", text: "🎙 Ovoz", onclick: () => setTab("voice") });
   const toolsTab = h("button", { id: "tools-tab", role: "tab", "aria-controls": "bot-windows-panel", "aria-selected": "true",
     text: tl("Bot and Windows"), onclick: () => setTab("tools") });
@@ -90,7 +97,7 @@ export function buildTools(transport: CapabilitiesTransport = TRANSPORT, account
   const toolsPanel = h("div", { id: "bot-windows-panel", role: "tabpanel", "aria-labelledby": "tools-tab" },
     h("div", { class: "columns" },
       h("section", { class: "card" }, h("div", { style: "display:flex;align-items:center;gap:10px" }, telegramAvatar.el,
-        h("h2", { text: tl("Telegram bot") })), telegramStatus,
+        h("h2", { text: tl("Telegram bot") }), telegramOrb.el), telegramStatus,
         h("p", { class: "muted", text: tl("This setup is for a bot. A personal Telegram account needs a separate login flow.") }),
         label("Bot token", token), label("Allowed Telegram chat IDs", chats),
         h("p", { class: "hint", text: tl("The token is saved on this computer. It is never shown again. Saving keeps the bot stopped; start it explicitly.") }),
@@ -108,22 +115,27 @@ export function buildTools(transport: CapabilitiesTransport = TRANSPORT, account
   toolbox.el.setAttribute("aria-labelledby", "toolbox-tab"); toolbox.el.hidden = true;
   toolbox.desktopEl.setAttribute("aria-labelledby", "desktop-tab"); toolbox.desktopEl.hidden = true;
   voice.el.setAttribute("aria-labelledby", "voice-tab"); voice.el.hidden = true;
+  assistant.el.setAttribute("aria-labelledby", "assistant-tab"); assistant.el.hidden = true;
   const el = h("main", {}, header, h("nav", { class: "tools-tabs", role: "tablist", "aria-label": tl("Tools sections") }, toolsTab, accountTab, toolboxTab, desktopTab, voiceTab),
-    status, toolsPanel, account.el, toolbox.el, toolbox.desktopEl, voice.el);
-  function refreshCurrent() { return activeTab === "voice" ? voice.refresh() : activeTab === "account" ? account.controller.refresh() : activeTab === "toolbox" || activeTab === "desktop" ? toolbox.refresh() : controller.refresh(); }
-  function setTab(tab: "tools" | "account" | "toolbox" | "desktop" | "voice") {
+    status, toolsPanel, account.el, toolbox.el, toolbox.desktopEl, voice.el, assistant.el);
+  el.querySelector(".tools-tabs")!.append(assistantTab);
+  function refreshCurrent() { return activeTab === "assistant" ? assistant.refresh() : activeTab === "voice" ? voice.refresh() : activeTab === "account" ? account.controller.refresh() : activeTab === "toolbox" || activeTab === "desktop" ? toolbox.refresh() : controller.refresh(); }
+  function setTab(tab: "tools" | "account" | "toolbox" | "desktop" | "voice" | "assistant", refreshNow = true) {
     activeTab = tab; token.value = ""; account.clearSecrets();
     toolsPanel.hidden = tab !== "tools"; account.el.hidden = tab !== "account";
     toolbox.el.hidden = tab !== "toolbox"; toolbox.desktopEl.hidden = tab !== "desktop";
     voice.el.hidden = tab !== "voice"; voice.setVisible(windowVisible && tab === "voice");
+    assistant.el.hidden = tab !== "assistant"; assistant.setVisible(windowVisible && tab === "assistant");
+    assistantTab.setAttribute("aria-selected",String(tab === "assistant"));
     status.hidden = tab !== "tools";
     account.setVisible(windowVisible && tab === "account");
     telegramAvatar.setVisible(windowVisible && tab === "tools");
+    telegramOrb.setVisible(windowVisible && tab === "tools");
     toolbox.setVisible(windowVisible && (tab === "toolbox" || tab === "desktop"), tab === "desktop" ? "desktop" : "toolbox");
     toolsTab.setAttribute("aria-selected", String(tab === "tools")); accountTab.setAttribute("aria-selected", String(tab === "account"));
     toolboxTab.setAttribute("aria-selected", String(tab === "toolbox")); desktopTab.setAttribute("aria-selected", String(tab === "desktop"));
     voiceTab.setAttribute("aria-selected", String(tab === "voice"));
-    if (windowVisible) void refreshCurrent();
+    if (windowVisible && refreshNow) void refreshCurrent();
   }
   let chatsHydrated = false;
   let lastReviewKey = "";
@@ -131,6 +143,7 @@ export function buildTools(transport: CapabilitiesTransport = TRANSPORT, account
   function sync() {
     const state = controller.snapshot, telegram = state.capabilities?.telegram;
     telegramAvatar.setState(state.pending ? "working" : state.error || telegram?.last_error ? "error" : telegram?.running ? "idle" : "sleeping");
+    telegramOrb.setState(state.pending ? "connecting" : state.error || telegram?.last_error ? "shaping" : "breathing");
     const workspace = state.capabilities?.computer.workspace_root;
     path.placeholder = workspace ? `${workspace}\\test.txt` : "…\\workspace\\test.txt";
     workspaceHint.textContent = workspace
@@ -196,11 +209,13 @@ export function buildTools(transport: CapabilitiesTransport = TRANSPORT, account
     });
   }
   sync();
-  return { el, controller, account, toolbox, voice, setTab, sync: () => { sync(); account.sync(); toolbox.sync(); voice.sync(); }, refresh: refreshCurrent,
+  return { el, controller, account, toolbox, voice, assistant, setTab, sync: () => { sync(); account.sync(); toolbox.sync(); voice.sync(); assistant.sync(); }, refresh: refreshCurrent,
     setVisible: (visible: boolean) => {
       windowVisible = visible; account.setVisible(visible && activeTab === "account"); toolbox.setVisible(visible && (activeTab === "toolbox" || activeTab === "desktop"), activeTab === "desktop" ? "desktop" : "toolbox");
       voice.setVisible(visible && activeTab === "voice");
+      assistant.setVisible(visible && activeTab === "assistant");
       telegramAvatar.setVisible(visible && activeTab === "tools");
+      telegramOrb.setVisible(visible && activeTab === "tools");
       if (!visible) { token.value = ""; account.clearSecrets(); }
     } };
 }

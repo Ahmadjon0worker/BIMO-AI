@@ -33,6 +33,7 @@ const ASLEEP_FRAME_MS = 250;
 
 class DesktopMochi {
   private engine = new BotEngine();
+  private motionPreference = typeof matchMedia === "function" ? matchMedia("(prefers-reduced-motion: reduce)") : null;
   private canvas: HTMLCanvasElement;
   private mode: DesktopMode = "off";
 
@@ -71,6 +72,13 @@ class DesktopMochi {
     this.engine.setState("idle", true);
     // Three pokes: dizzy, and the island shows the confused view (as on macOS).
     this.engine.onDizzy = () => void emitToWindow(ISLAND, DESKTOP_EVENTS.dizzy);
+    const syncMaterialMotion = () => {
+      this.engine.reducedMotion = this.motionPreference?.matches ?? false;
+      this.schedule();
+    };
+    this.engine.reducedMotion = this.motionPreference?.matches ?? false;
+    this.motionPreference?.addEventListener("change", syncMaterialMotion);
+    window.addEventListener("pagehide", () => this.motionPreference?.removeEventListener("change", syncMaterialMotion), { once: true });
     this.wireInput();
   }
 

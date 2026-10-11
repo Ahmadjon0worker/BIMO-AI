@@ -11,17 +11,17 @@ import { t } from "../i18n/i18n";
 const TEXT = {
   get title() { return t("Agents"); },
   get intro() {
-    return t("Show other coding agents in the island. Qanot AI adds its entries to each agent's own config: you see the exact change and where the backup goes before anything is written, and uninstalling removes only what Qanot AI added.");
+    return t("Show other coding agents in the island. BIMO AI adds its entries to each agent's own config: you see the exact change and where the backup goes before anything is written, and uninstalling removes only what BIMO AI added.");
   },
-  get none() { return t("Qanot AI could not list the agents."); },
+  get none() { return t("BIMO AI could not list the agents."); },
   get approvals() { return t("Sessions, and Allow / Deny from the island"); },
   get displayOnly() { return t("Sessions — approvals stay in the agent"); },
   get install() { return t("Install…"); },
   get reinstall() { return t("Reinstall…"); },
   get uninstall() { return t("Uninstall…"); },
-  get relayMissing() { return t("The relay isn't installed yet. Restart Qanot AI."); },
+  get relayMissing() { return t("The relay isn't installed yet. Restart BIMO AI."); },
   previewInstall: (name: string) => t("This is exactly what changes for {name}. Nothing else is touched.", { name }),
-  get previewRemove() { return t("This removes Qanot AI's entries only. Everything else stays."); },
+  get previewRemove() { return t("This removes BIMO AI's entries only. Everything else stays."); },
   backup: (to: string) => (to ? t("Backup → {path}", { path: to }) : t("No existing file — nothing to back up.")),
   get confirmInstall() { return t("Back up and write"); },
   get confirmRemove() { return t("Back up and remove"); },

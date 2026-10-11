@@ -24,7 +24,7 @@ MFC_FILES = ("mfc140u.dll", "mfc140enu.dll")
 CRT_FILES = ("msvcp140.dll", "msvcp140_1.dll", "msvcp140_2.dll", "msvcp140_atomic_wait.dll", "msvcp140_codecvt_ids.dll", "concrt140.dll")
 SERVICE_SOURCES = ("router.py", "capabilities.py", "telegram_account.py", "telegram_intent.py", "local_tools.py",
                    "service_paths.py", "provider_credentials.py", "provider_broker.py", "service_inference.py", "service_main.py",
-                   "toolbox.py", "desktop_tools.py", "toolbox_runtime.py", "tool_client.py", "tools_cli.py", "voice_tools.py")
+                   "toolbox.py", "desktop_tools.py", "toolbox_runtime.py", "tool_client.py", "tools_cli.py", "voice_tools.py", "assistant_tools.py")
 
 
 def sync_sources(bundle):

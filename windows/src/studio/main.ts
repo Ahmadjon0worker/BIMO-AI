@@ -1,5 +1,8 @@
 import "../style.css";
 import "./studio.css";
+import "../effects/liquid.css";
+import { installLiquidSurfaces } from "../effects/liquid";
+import { createThinkingOrb, botStateToOrbState } from "../effects/thinking-orb";
 import { Bridge, IS_TAURI, onEvent } from "../core/bridge";
 import { LOCAL_AI_MODES, LocalAIController } from "../core/local-ai";
 import { activeModel, providerDef } from "../core/providers";
@@ -9,6 +12,9 @@ import { onLanguageChange, resolveLanguage, setLanguage, systemLanguages, t, tl 
 import { buildProviderSetup } from "../settings/providers";
 import { buildPrompt } from "../views/chat";
 import { h } from "../views/dom";
+import { SentenceSpeechQueue, createWavSpeechAdapter } from "../core/speech-queue";
+import { isTelegramCommand } from "../core/telegram-command";
+import type { VoiceLanguage } from "../core/voice";
 
 // Studio has its own webview state and native Chat instance. Telegram remains
 // on the existing fixed local action route, independent of provider fallback.
@@ -23,14 +29,27 @@ const error = h("div", { class: "studio-error", role: "alert", hidden: true }, e
   } }),
 );
 const serviceBadge = h("span", { class: "studio-service-badge", role: "status", text: "Xizmat tekshirilmoqda" });
-const version = h("span", { class: "studio-version", text: "Qanot AI Studio" });
+const studioOrb = createThinkingOrb({ size: 64, state: "breathing", theme: "dark", accent: "#b7dfff" });
+studioOrb.el.style.margin = "0 auto 14px";
+let studioVisible = !document.hidden;
+const spokenReply = h("input", { id: "studio-spoken", type: "checkbox" });
+const speechStatus = h("span", { class: "studio-speech-status", role: "status", "aria-live": "polite" });
+const speechStop = h("button", { type: "button", class: "studio-button secondary", text: "Ovozni to‘xtatish", disabled: true, onclick: () => studioSpeech.cancel() });
+const studioSpeech = new SentenceSpeechQueue(createWavSpeechAdapter(args => Bridge.localAIVoiceSpeak(args)), () => {
+  speechStop.disabled = !studioSpeech.state.active;
+  speechStatus.textContent = studioSpeech.state.error || (studioSpeech.state.active ? `Mahalliy ovoz · ${studioSpeech.state.remaining} jumla` : "");
+});
+let speechHistory = State.chatHistory;
+let lastSpeechID = speechHistory.at(-1)?.id ?? -1;
+let speechTurn = false;
+const version = h("span", { class: "studio-version", text: "BIMO AI Studio" });
 const currentProvider = h("span", { class: "studio-current-provider" });
 const chatNavigation = h("button", { type: "button", class: "studio-nav on", text: "Suhbat", "aria-pressed": "true" });
 const healthNavigation = h("button", { type: "button", class: "studio-nav", text: "Tizim holati", "aria-pressed": "false" });
 const providerMount = h("div", { class: "studio-provider-mount" });
 const sidebar = h("aside", { class: "studio-sidebar", "aria-label": "Studio boshqaruvi" },
   h("div", { class: "studio-brand" }, h("span", { class: "studio-mark", text: "C" }),
-    h("div", {}, h("strong", { text: "Qanot AI" }), h("span", { text: "STUDIO" }))),
+    h("div", {}, h("strong", { text: "BIMO AI" }), h("span", { text: "STUDIO" }))),
   h("nav", { class: "studio-navigation", "aria-label": "Bo‘limlar" }, chatNavigation, healthNavigation),
   providerMount,
   h("div", { class: "studio-sidebar-links" },
@@ -44,7 +63,7 @@ const sidebar = h("aside", { class: "studio-sidebar", "aria-label": "Studio bosh
 const chat = buildPrompt(() => sync());
 chat.el.classList.add("on", "studio-chat-view");
 const welcome = h("div", { class: "studio-welcome" },
-  h("span", { class: "studio-welcome-icon", text: "✦", "aria-hidden": "true" }),
+  studioOrb.el,
   h("h2", { text: "Bugun nimani qilamiz?" }),
   h("p", { text: "Savol yozing, ish uchun matn tayyorlang yoki Telegram buyrug‘ini bering." }),
   h("div", { class: "studio-examples" },
@@ -59,6 +78,8 @@ const chatPage = h("section", { class: "studio-chat-page", "aria-label": "AI suh
   h("header", { class: "studio-page-header" },
     h("div", {}, h("p", { class: "studio-eyebrow", text: "SHAXSIY AI YORDAMCHI" }), h("h1", { text: "Suhbat" }), currentProvider), newChat),
   chatContent,
+  h("div", { class: "studio-speech-controls" },
+    h("label", { class: "studio-speech-label", for: "studio-spoken" }, spokenReply, h("span", { text: "Javobni mahalliy ovozda o‘qish" })), speechStop, speechStatus),
   h("p", { class: "studio-keyboard-hint", text: "Enter — yuborish. Provider va modelni pastdagi tanlov orqali ham o‘zgartirish mumkin." }),
 );
 
@@ -103,6 +124,8 @@ const healthPage = h("section", { class: "studio-health-page", hidden: true, "ar
   ),
 );
 root.append(sidebar, h("main", { class: "studio-main" }, error, chatPage, healthPage));
+const destroyGlass = installLiquidSurfaces(root, "studio");
+window.addEventListener("pagehide", () => { studioSpeech.cancel(); destroyGlass(); studioOrb.destroy(); }, { once: true });
 
 let page: "chat" | "health" = "chat";
 let initialized = false;
@@ -156,15 +179,39 @@ function sync(): void {
   const selected = providerDef(State.settings.chatProvider);
   currentProvider.textContent = `${selected.id === "auto" ? "Auto · Ollama → Gemini → Groq" : `${selected.name} · ${activeModel(State.settings) || "Model tanlang"}`}`;
   welcome.hidden = State.chatHistory.length > 0 || State.stateOverride === "thinking";
+  studioOrb.setState(botStateToOrbState(State.effectiveState));
+  studioOrb.setVisible(studioVisible && !welcome.hidden && page === "chat" && !document.hidden);
   newChat.disabled = State.stateOverride === "thinking";
   error.hidden = !State.noteMessage;
   errorText.textContent = State.noteMessage || "";
+  syncSpeech();
+}
+
+function syncSpeech(): void {
+  if (speechHistory !== State.chatHistory) {
+    speechHistory = State.chatHistory; lastSpeechID = speechHistory.at(-1)?.id ?? -1; speechTurn = false; studioSpeech.cancel();
+    return;
+  }
+  if (State.stateOverride === "thinking") {
+    if (!speechTurn) studioSpeech.cancel();
+    speechTurn = true;
+    return;
+  }
+  const completed = speechTurn; speechTurn = false;
+  const reply = State.chatHistory.at(-1), question = State.chatHistory.at(-2);
+  if (!reply || reply.id === lastSpeechID) return;
+  lastSpeechID = reply.id;
+  if (!completed || reply.role !== "assistant" || question?.role !== "user" || isTelegramCommand(question.content, true)
+    || !spokenReply.checked || !studioVisible || document.hidden || page !== "chat") return;
+  const language: VoiceLanguage = State.settings.language === "ru" ? "ru" : State.settings.language === "en" ? "en" : "uz";
+  void studioSpeech.speak(reply.content, language);
 }
 
 function drawHealth(): void {
   const snapshot = health.snapshot;
   const connected = snapshot.connection === "connected";
   const value = snapshot.health;
+  if(value?.halted && studioSpeech.state.active)studioSpeech.cancel();
   serviceBadge.classList.toggle("connected", connected);
   serviceBadge.textContent = connected ? "Mahalliy xizmat ulangan" : snapshot.connection === "checking" ? "Xizmat tekshirilmoqda" : "Mahalliy xizmat mavjud emas";
   healthValue.textContent = connected ? "Ulangan" : snapshot.connection === "checking" ? "Tekshirilmoqda" : "Ulanmagan";
@@ -201,11 +248,13 @@ function selectPage(next: "chat" | "health"): void {
     button.setAttribute("aria-pressed", String(active));
   }
   chat.setVisible?.(next === "chat" && !document.hidden);
+  studioOrb.setVisible(studioVisible && !welcome.hidden && next === "chat" && !document.hidden);
   if (next === "chat") chat.focus?.();
+  else studioSpeech.cancel();
 }
 
 async function openSettings(): Promise<void> {
-  if (!IS_TAURI) { showError("Sozlamalar o‘rnatilgan Qanot AI ilovasida ochiladi."); return; }
+  if (!IS_TAURI) { showError("Sozlamalar o‘rnatilgan BIMO AI ilovasida ochiladi."); return; }
   await Bridge.openSettingsWindow();
 }
 
@@ -239,6 +288,7 @@ async function startServices(): Promise<void> {
 
 async function resetChat(): Promise<void> {
   if (State.stateOverride === "thinking") return;
+  studioSpeech.cancel();
   await Bridge.chatReset();
   State.chatHistory = [];
   State.noteMessage = null;
@@ -250,11 +300,18 @@ async function resetChat(): Promise<void> {
 
 chatNavigation.addEventListener("click", () => selectPage("chat"));
 healthNavigation.addEventListener("click", () => selectPage("health"));
+spokenReply.addEventListener("change", () => { if (!spokenReply.checked) studioSpeech.cancel(); });
+stopLocal.addEventListener("click", () => studioSpeech.cancel());
+// Pressing Send/Enter interrupts the previous reply before another turn starts.
+chat.el.addEventListener("pointerdown", () => studioSpeech.cancel());
+chat.el.addEventListener("keydown", event => { if ((event as KeyboardEvent).key === "Enter") studioSpeech.cancel(); });
 State.subscribe(sync);
 onLanguageChange(() => { if (initialized) { mountProviders(); sync(); } });
 document.addEventListener("visibilitychange", () => {
+  if (document.hidden) studioSpeech.cancel();
   health.setVisible(!document.hidden);
   chat.setVisible?.(!document.hidden && page === "chat");
+  studioOrb.setVisible(studioVisible && !welcome.hidden && !document.hidden && page === "chat");
 });
 document.addEventListener("keydown", (event) => {
   if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "n") {
@@ -269,7 +326,7 @@ async function main(): Promise<void> {
   const boot = await Bridge.boot();
   if (boot) {
     State.settings = { ...State.settings, ...boot.settings };
-    version.textContent = `Qanot AI ${boot.version}`;
+    version.textContent = `BIMO AI ${boot.version}`;
   }
   applyLanguage();
   State.view = "prompt";
@@ -284,9 +341,13 @@ async function main(): Promise<void> {
     State.notify();
   });
   await onEvent<boolean>("studio-visible", (visible) => {
+    studioVisible = visible;
+    if (!visible) studioSpeech.cancel();
     health.setVisible(visible && !document.hidden);
     chat.setVisible?.(visible && page === "chat");
+    studioOrb.setVisible(visible && !welcome.hidden && !document.hidden && page === "chat");
   });
+  await onEvent("voice-barge-in", () => studioSpeech.cancel());
   chat.focus?.();
 }
 

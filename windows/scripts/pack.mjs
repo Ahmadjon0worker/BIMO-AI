@@ -35,22 +35,22 @@ const PACKAGES = {
     {
       dir: "nsis",
       suffix: "-setup.exe",
-      names: [`QanotAI-Windows-${version}-setup.exe`, "QanotAI-Windows-setup.exe"],
+      names: [`BIMOAI-Windows-${version}-setup.exe`, "BIMOAI-Windows-setup.exe"],
     },
     {
       dir: "msi",
       suffix: ".msi",
-      names: [`QanotAI-Windows-${version}.msi`, "QanotAI-Windows.msi"],
+      names: [`BIMOAI-Windows-${version}.msi`, "BIMOAI-Windows.msi"],
     },
   ],
   linux: [
     {
       dir: "appimage",
       suffix: ".AppImage",
-      names: [`QanotAI-Linux-${version}-${arch}.AppImage`, `QanotAI-Linux-${arch}.AppImage`],
+      names: [`BIMOAI-Linux-${version}-${arch}.AppImage`, `BIMOAI-Linux-${arch}.AppImage`],
     },
-    { dir: "deb", suffix: ".deb", names: [`QanotAI-Linux-${version}-${debArch}.deb`] },
-    { dir: "rpm", suffix: ".rpm", names: [`QanotAI-Linux-${version}-${arch}.rpm`] },
+    { dir: "deb", suffix: ".deb", names: [`BIMOAI-Linux-${version}-${debArch}.deb`] },
+    { dir: "rpm", suffix: ".rpm", names: [`BIMOAI-Linux-${version}-${arch}.rpm`] },
   ],
 };
 

@@ -125,7 +125,8 @@ class DesktopTests(unittest.TestCase):
 
     def test_schema_names_and_action_hash_are_required(self):
         self.assertEqual([value['name'] for value in DESKTOP_TOOLS],
-                         ['desktop_windows', 'desktop_start', 'desktop_observe', 'desktop_action', 'desktop_finish'])
+                         ['desktop_windows', 'desktop_start', 'desktop_observe', 'desktop_action', 'desktop_finish',
+                          'desktop_targets', 'desktop_point', 'desktop_target_action', 'desktop_check'])
         action = DESKTOP_TOOLS[3]['inputSchema']
         self.assertIn('expected_state_hash', action['required'])
         self.assertFalse(action['additionalProperties'])
@@ -388,6 +389,156 @@ class DesktopTests(unittest.TestCase):
         self.assertEqual(self.backend.calls, [])
 
 
+class GuidanceTests(unittest.TestCase):
+    setUp = DesktopTests.setUp
+    tearDown = DesktopTests.tearDown
+    start = DesktopTests.start
+    observe = DesktopTests.observe
+    assertDenied = DesktopTests.assertDenied
+
+    def controls(self, *values):
+        self.backend.ui['controls'] = list(values)
+
+    @staticmethod
+    def control(name='Saqlash', **extra):
+        return dict(name=name, type='Button', enabled=True, bounds=[-90, 30, -30, 70], **extra)
+
+    def guided(self, name='desktop_point', observation=None, **extra):
+        observed = observation or self.observe()
+        return self.tools.call(name, {'session_id': observed['session_id'],
+            'expected_state_hash': observed['state_hash'], **extra})
+
+    def test_real_targets_clip_bounds_and_negative_monitor_point_has_no_input(self):
+        self.controls(self.control(), dict(name='Off screen', type='Button', enabled=True, bounds=[800, 1, 900, 2]),
+                      dict(name='Partially visible', type='Text', enabled=True, bounds=[-120, 10, -80, 40]))
+        self.start()
+        observed = self.observe()
+        targets = self.guided('desktop_targets', observation=observed)['targets']
+        self.assertEqual(len(targets), 2)
+        self.assertEqual(targets[0]['rect'], [10, 10, 70, 50])
+        self.assertEqual(targets[1]['rect'], [0, 0, 20, 20])
+        point = self.guided(observation=observed, target_id=targets[0]['id'])
+        self.assertEqual((point['x'], point['y']), (-61, 49))
+        self.assertEqual(point['coordinate_space'], 'screen_physical_pixels')
+        self.assertFalse(point['executed'])
+        self.assertEqual(self.backend.inputs, [])
+
+    def test_uzbek_cyrillic_apostrophes_case_and_whitespace_match_exactly(self):
+        self.controls(self.control("O‘zgarishni saqlash"))
+        self.start()
+        for label in ("Ўзгаришни сақлаш", "  o'ZGARISHNI   SAQLASH ", 'Oʻzgarishni saqlash'):
+            point = self.guided(label=label)
+            self.assertEqual(point['label'], 'O‘zgarishni saqlash')
+        self.assertDenied(lambda: self.guided(label='saqlash'))
+
+    def test_ambiguous_disabled_and_missing_targets_never_guess(self):
+        self.controls(self.control(), self.control())
+        self.start()
+        self.assertDenied(lambda: self.guided(label='Сақлаш'))
+        observed = self.observe()
+        self.assertNotEqual(observed['targets'][0]['id'], observed['targets'][1]['id'])
+        self.assertTrue(self.guided(observation=observed, target_id=observed['targets'][0]['id']))
+        self.backend.ui['controls'][0]['enabled'] = False
+        self.assertDenied(lambda: self.guided(target_id=self.observe()['targets'][0]['id']))
+        self.assertDenied(lambda: self.guided(label='Not present'))
+
+    def test_point_listing_and_goal_check_reject_stale_pixels_or_geometry(self):
+        self.controls(self.control())
+        self.start()
+        for name in ('desktop_point', 'desktop_targets', 'desktop_check'):
+            observed = self.observe()
+            self.backend.png += b'changed'
+            extra = {'label': 'Saqlash'} if name == 'desktop_point' else {'expected_text': 'Synthetic'} if name == 'desktop_check' else {}
+            self.assertDenied(lambda: self.guided(name, observation=observed, **extra))
+        observed = self.observe()
+        self.backend.value['rect'][0] -= 1
+        self.assertDenied(lambda: self.guided(observation=observed, label='Saqlash'))
+
+    def test_target_click_returns_fresh_observation_and_only_exact_outcome_evidence(self):
+        self.controls(self.control())
+        self.start()
+        self.backend.on_action = lambda check: self.backend.ui.update(text='Saqlandi: 1 ta fayl')
+        observed = self.observe()
+        result = self.guided('desktop_target_action', observation=observed, label='Сақлаш', action='click', expected_text='Saqlandi: 1 ta fayl')
+        self.assertTrue(result['executed'])
+        self.assertTrue(result['verified_task_success'])
+        self.assertNotEqual(result['post_observation']['state_hash'], observed['state_hash'])
+        self.assertEqual(result['evidence']['state_hash'], result['post_observation']['state_hash'])
+        self.assertEqual(len(self.backend.inputs), 1)
+        with self.assertRaises(DesktopError):
+            self.guided('desktop_target_action', observation=observed, label='Saqlash', action='click')
+        self.assertEqual(len(self.backend.inputs), 1)
+
+    def test_pixel_change_alone_never_claims_success_or_retries(self):
+        self.controls(self.control())
+        self.start()
+        self.backend.on_action = lambda check: setattr(self.backend, 'png', self.backend.png + b'pixels')
+        result = self.guided('desktop_target_action', label='Saqlash', action='click', expected_text='Saqlandi')
+        self.assertFalse(result['verified_task_success'])
+        self.assertFalse(result['evidence']['verified'])
+        self.assertEqual(len(self.backend.inputs), 1)
+
+    def test_unknown_effect_consumes_proof_and_action_budget(self):
+        self.controls(self.control())
+        self.start()
+        self.backend.failure = 'input'
+        observed = self.observe()
+        with self.assertRaises(DesktopError):
+            self.guided('desktop_target_action', observation=observed, label='Saqlash', action='click')
+        self.assertIsNone(self.tools.session['observation'])
+        self.assertEqual(self.tools.session['actions'], 1)
+        with self.assertRaises(DesktopError):
+            self.guided('desktop_target_action', observation=observed, label='Saqlash', action='click')
+        self.assertEqual(self.tools.session['actions'], 1)
+
+    def test_post_capture_failure_preserves_known_effect_without_success(self):
+        self.controls(self.control())
+        self.start()
+        self.backend.on_action = lambda check: setattr(self.backend, 'png', b'bad capture')
+        result = self.guided('desktop_target_action', label='Saqlash', action='click', expected_text='Done')
+        self.assertTrue(result['executed'])
+        self.assertFalse(result['verified_task_success'])
+        self.assertTrue(result['observe_required'])
+        self.assertIsNone(result['post_observation'])
+        self.assertIsNone(self.tools.session['observation'])
+        self.assertEqual(len(self.backend.inputs), 1)
+
+    def test_exact_text_and_unique_label_checks_are_read_only(self):
+        self.controls(self.control())
+        self.start()
+        self.backend.ui['text'] = 'Saqlandi: synthetic result'
+        self.assertTrue(self.guided('desktop_check', expected_text='Saqlandi: synthetic result')['verified_task_success'])
+        self.assertFalse(self.guided('desktop_check', expected_text='saqlandi')['verified_task_success'])
+        self.assertTrue(self.guided('desktop_check', expected_label='Сақлаш')['verified_task_success'])
+        self.assertEqual(self.backend.inputs, [])
+
+    def test_targeted_type_requires_editor_and_uses_backend_target_focus_boundary(self):
+        self.controls(self.control())
+        self.start()
+        self.assertDenied(lambda: self.guided('desktop_target_action', label='Saqlash', action='type', text='Salom'))
+        self.backend.ui['controls'][0]['type'] = 'Edit'
+        recorded = []
+        def type_target(value, target, text, check):
+            check()
+            recorded.append((target['name'], text))
+            self.backend.ui['text'] = text
+        self.backend.type_target = type_target
+        result = self.guided('desktop_target_action', label='Saqlash', action='type', text='Salom 🤝', expected_text='Salom 🤝')
+        self.assertTrue(result['evidence']['verified'])
+        self.assertEqual(recorded, [('Saqlash', 'Salom 🤝')])
+        self.assertEqual(self.backend.inputs, [])
+
+    def test_scroll_targets_pane_center_and_rejects_zero_or_extra_fields(self):
+        self.controls(self.control())
+        self.start()
+        self.assertDenied(lambda: self.guided('desktop_target_action', label='Saqlash', action='scroll', amount=0))
+        self.assertDenied(lambda: self.guided('desktop_target_action', label='Saqlash', action='click', text='extra'))
+        result = self.guided('desktop_target_action', label='Saqlash', action='scroll', amount=-2)
+        self.assertFalse(result['verified_task_success'])
+        self.assertEqual(self.backend.inputs[0][2]['x'], 39)
+        self.assertEqual(self.backend.inputs[0][2]['y'], 29)
+
+
 class NativeBoundaryTests(unittest.TestCase):
     """Exercise native boundary code with fake Win32 functions only."""
     def setUp(self):
@@ -418,6 +569,50 @@ class NativeBoundaryTests(unittest.TestCase):
         with self.assertRaises(DesktopError):
             self.backend.action(window(), 'click', {'x': 1, 'y': 1}, lambda: None)
         self.assertEqual([event[0] for event in self.events], ['pointer'])
+
+    def targeted_editor_fixture(self, *, read_only=False, focus_succeeds=True, changed_focus=False):
+        focused = NS(CurrentHasKeyboardFocus=False, CurrentIsPassword=False, GetRuntimeId=lambda: [42, 123])
+        info = NS(name='Editor', control_type='Edit', element=focused, iter_children=lambda: iter(()))
+        control = NS(element_info=info, is_visible=lambda: True, is_enabled=lambda: True,
+            rectangle=lambda: NS(left=-90, top=30, right=-30, bottom=70),
+            iface_value=NS(CurrentIsReadOnly=read_only), set_focus=lambda: setattr(focused, 'CurrentHasKeyboardFocus', focus_succeeds))
+        other = NS(CurrentHasKeyboardFocus=True, CurrentIsPassword=False, GetRuntimeId=lambda: [42, 999])
+        modules = {'pywinauto': NS(Desktop=lambda **kw: NS(window=lambda **args: NS(wrapper_object=lambda: control))),
+                   'pywinauto.controls.uiawrapper': NS(UIAWrapper=lambda item: item),
+                   'pywinauto.uia_defines': NS(IUIA=lambda: NS(iuia=NS(GetFocusedElement=lambda: other if changed_focus else focused)))}
+        target = {'name': 'Editor', 'type': 'Edit', 'bounds': [-90, 30, -30, 70], 'runtime_id': [42, 123]}
+        self.backend._read = lambda fn: fn()
+        return target, modules
+
+    def test_targeted_editor_focus_and_readonly_checks_prevent_wrong_control_typing(self):
+        writes = []
+        self.backend._unicode = lambda value, text, check: (check(), writes.append(text))
+        for flags in ({'read_only': True}, {'focus_succeeds': False}, {'changed_focus': True}):
+            target, modules = self.targeted_editor_fixture(**flags)
+            with mock.patch.dict(sys.modules, modules):
+                with self.assertRaises(DesktopError):
+                    self.backend.type_target(window(), target, 'literal', lambda: None)
+        self.assertEqual(writes, [])
+        target, modules = self.targeted_editor_fixture()
+        with mock.patch.dict(sys.modules, modules):
+            self.backend.type_target(window(), target, 'Salom 🤝', lambda: None)
+        self.assertEqual(writes, ['Salom 🤝'])
+
+    def test_targeted_editor_rechecks_focus_for_each_packet_and_cancellation(self):
+        target, modules = self.targeted_editor_fixture()
+        focused = modules['pywinauto.uia_defines'].IUIA().iuia.GetFocusedElement()
+        writes = []
+        def type_two_packets(value, text, check):
+            check()
+            writes.append('first')
+            focused.CurrentHasKeyboardFocus = False
+            check()
+            writes.append('second')
+        self.backend._unicode = type_two_packets
+        with mock.patch.dict(sys.modules, modules):
+            with self.assertRaises(DesktopError):
+                self.backend.type_target(window(), target, 'literal', lambda: None)
+        self.assertEqual(writes, ['first'])
 
     def test_overlay_after_pointer_move_issues_no_click(self):
         self.api.SetCursorPos = lambda point: setattr(self.gui, 'WindowFromPoint', lambda point: 999)

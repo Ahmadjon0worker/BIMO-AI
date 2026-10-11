@@ -7,7 +7,8 @@ export function matchesRelease(file, { productName, version, platform, architect
     return file.startsWith(stem) && ["_", "-", "."].includes(file[stem.length]);
   }
   const escaped = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  const product = escaped(productName.toLowerCase());
+  const products = [...new Set([productName.toLowerCase(), productName.toLowerCase().replace(/\s+/g, "-")])].map(escaped);
+  const product = `(?:${products.join("|")})`;
   const release = escaped(version);
   const arch = architecture === "arm64" ? "(?:aarch64|arm64)" : "(?:x86_64|amd64)";
   if (suffix === ".rpm") {

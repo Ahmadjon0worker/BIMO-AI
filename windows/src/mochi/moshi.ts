@@ -1,6 +1,8 @@
-// Moshi adapts Mochi's soft material and expressive face to a rounded five-sided
-// body. The shared paint mirrors the original Mochi gradients and highlights;
-// BotEngine supplies its original animation controller and emotional gestures.
+// Moshi keeps Mochi's expressive face and soft five-sided silhouette. Its liquid
+// shell is transparent, so the backdrop remains visible through the body.
+// Fresnel rim lighting follows QuickLiquid's specular model (Amarnath, MIT):
+// https://github.com/amarnath3003/quickLiquid · math/specular.ts.
+// BotEngine continues to supply the original motion and emotional gestures.
 
 export type MoshiVariant = "moshi" | "codex" | "opencode" | "telegram" | "claude"
   | "github" | "automation" | "vercel" | "cursor" | "gemini" | "copilot"
@@ -25,6 +27,10 @@ export interface MoshiVisual {
   bodyColor?: string;
   tint?: string;
   tintStrength?: number;
+  /** Freeze the liquid's moving highlights without changing its material. */
+  reducedMotion?: boolean;
+  /** Clothing paints between the shell and the final reflective surface. */
+  reflections?: boolean;
 }
 
 interface Palette { top: string; bottom: string; accent: string; ink: string }
@@ -139,6 +145,25 @@ function diamond(ctx: CanvasRenderingContext2D, x: number, y: number, r: number)
   polygon(ctx, [[x, y - r], [x + r * .65, y], [x, y + r], [x - r * .65, y]]);
 }
 
+/** Pure lighting geometry shared by the main body, minis and export renderer. */
+export function moshiLiquidLight(visual: MoshiVisual = {}) {
+  const phase = visual.reducedMotion ? 0 : (visual.phase ?? 0);
+  const yaw = clamp(visual.yaw ?? 0, -1.5, 1.5);
+  const pitch = clamp(visual.pitch ?? 0, -1.5, 1.5);
+  return {
+    x: .34 + Math.sin(phase * .42) * .045 + Math.sin(yaw) * .14,
+    y: -.46 + Math.cos(phase * .33) * .028 - Math.sin(pitch) * .10,
+    drift: Math.sin(phase * .31) * .055,
+  };
+}
+
+/** Schlick's approximation: clear at the centre, reflective at a grazing rim. */
+export function moshiFresnel(cosTheta: number, ior = 1.5): number {
+  const r0 = ((ior - 1) / (ior + 1)) ** 2;
+  const grazing = 1 - clamp(cosTheta);
+  return r0 + (1 - r0) * grazing ** 5;
+}
+
 /** Body paint used by the full engine as well as the standalone renderer. */
 export function drawMoshiShell(ctx: CanvasRenderingContext2D, R: number, visual: MoshiVisual = {}, body?: Path2D) {
   const rx = R * 1.14, ry = R * .88;
@@ -148,25 +173,105 @@ export function drawMoshiShell(ctx: CanvasRenderingContext2D, R: number, visual:
   const gradient = ctx.createLinearGradient(rx * .7, -ry * .85, -rx * .8, ry * .9);
   const [top, bottom] = moshiBodyColors(variant, visual.bodyColor);
   gradient.addColorStop(0, top);
+  gradient.addColorStop(.50, bottom);
   gradient.addColorStop(1, bottom);
   ctx.fillStyle = gradient;
+  // Tint is a coloured film, rather than an opaque fill. Canvas alpha preserves
+  // actual page/desktop pixels behind the five-sided companion.
+  ctx.globalAlpha *= visual.bodyColor ? .32 : .25;
   ctx.fill(path);
+  ctx.restore(); ctx.save(); ctx.clip(path);
+
+  const light = moshiLiquidLight(visual);
+  const volume = ctx.createLinearGradient(-rx, -ry, rx * .7, ry);
+  volume.addColorStop(0, "rgba(255,255,255,.23)");
+  volume.addColorStop(.38, "rgba(255,255,255,.035)");
+  volume.addColorStop(.70, "rgba(158,186,217,.025)");
+  volume.addColorStop(1, "rgba(27,43,65,.13)");
+  ctx.fillStyle = volume; ctx.fill(path);
+  const caustic = ctx.createRadialGradient(-rx * .35, ry * .68, 0,
+    -rx * .35, ry * .68, R * .95);
+  caustic.addColorStop(0, "rgba(162,219,255,.16)");
+  caustic.addColorStop(.45, "rgba(196,236,255,.045)");
+  caustic.addColorStop(1, "rgba(255,255,255,0)");
+  ctx.fillStyle = caustic; ctx.fill(path);
+
+  // A soft inner lens reflection keeps Mochi's face readable on a detailed
+  // backdrop, with no opaque face panel or change to the original black eyes.
+  const lens = ctx.createRadialGradient(rx * light.x * .25, ry * .08, R * .08,
+    rx * light.x * .25, ry * .08, R * .74);
+  lens.addColorStop(0, "rgba(244,248,255,.27)");
+  lens.addColorStop(.6, "rgba(244,248,255,.09)");
+  lens.addColorStop(1, "rgba(255,255,255,0)");
+  ctx.fillStyle = lens; ctx.fill(path);
   if (visual.tint && (visual.tintStrength ?? 0) > 0) {
-    ctx.save(); ctx.globalAlpha *= clamp(visual.tintStrength ?? 0) * .72;
+    ctx.save(); ctx.globalAlpha *= clamp(visual.tintStrength ?? 0) * .34;
     const tint = ctx.createLinearGradient(0, ry, 0, -ry);
     tint.addColorStop(0, visual.tint); tint.addColorStop(1, "rgba(0,0,0,0)");
     ctx.fillStyle = tint; ctx.fill(path);
     ctx.restore();
   }
+  ctx.restore();
+  if (visual.reflections !== false) drawMoshiReflection(ctx, R, visual, path);
+}
+
+/** Curved glass rim and moving specular sheen, clipped to the actual silhouette. */
+export function drawMoshiReflection(ctx: CanvasRenderingContext2D, R: number, visual: MoshiVisual = {}, body?: Path2D) {
+  const rx = R * 1.14, ry = R * .88;
+  const path = body ?? moshiBodyPath(rx, ry, visual.mailbox);
+  const light = moshiLiquidLight(visual);
+  ctx.save(); ctx.clip(path);
   const shadow = ctx.createRadialGradient(0, 0, R * .15, 0, 0, R * 1.25);
   shadow.addColorStop(0, "rgba(0,0,0,0)");
-  shadow.addColorStop(.6, "rgba(0,0,0,0)");
-  shadow.addColorStop(1, "rgba(0,0,0,.2)");
+  shadow.addColorStop(.60, "rgba(12,24,43,.015)");
+  shadow.addColorStop(1, "rgba(4,16,32,.27)");
   ctx.fillStyle = shadow; ctx.fill(path);
-  const reflection = ctx.createRadialGradient(rx * .34, -ry * .46, 0, rx * .34, -ry * .46, R * .42);
-  reflection.addColorStop(0, "rgba(255,255,255,.55)");
+
+  // A broad bevel and a narrow grazing line approximate the 1-D Fresnel band
+  // without per-pixel readback, filters or a second animation loop for minis.
+  const rim = ctx.createLinearGradient(rx * .65, -ry, -rx * .65, ry);
+  rim.addColorStop(0, "rgba(255,255,255,.91)");
+  rim.addColorStop(.24, "rgba(228,243,255,.26)");
+  rim.addColorStop(.48, "rgba(163,204,239,.045)");
+  rim.addColorStop(.72, "rgba(184,222,253,.37)");
+  rim.addColorStop(1, "rgba(255,255,255,.73)");
+  ctx.lineJoin = "round"; ctx.strokeStyle = rim;
+  ctx.globalAlpha *= .36 + moshiFresnel(.3) * .42;
+  ctx.lineWidth = Math.max(1.5, R * .18); ctx.stroke(path);
+  ctx.restore(); ctx.save(); ctx.clip(path);
+
+  // Very narrow channel offsets live only in the bezel, like QuickLiquid's
+  // chromatic dispersion. They never colour or soften Mochi's facial features.
+  const edgeWidth = Math.max(.55, R * .015);
+  for (const [dx, color] of [[-R * .012, "rgba(114,218,255,.43)"],
+    [R * .012, "rgba(255,173,213,.31)"]] as const) {
+    ctx.save(); ctx.translate(dx, 0); ctx.strokeStyle = color;
+    ctx.lineWidth = edgeWidth; ctx.stroke(path); ctx.restore();
+  }
+  ctx.strokeStyle = rim; ctx.lineWidth = Math.max(.7, R * .029); ctx.stroke(path);
+  ctx.save(); ctx.scale(.947, .947);
+  const innerRim = ctx.createLinearGradient(-rx, -ry, rx, ry);
+  innerRim.addColorStop(0, "rgba(255,255,255,.17)");
+  innerRim.addColorStop(.40, "rgba(255,255,255,.015)");
+  innerRim.addColorStop(1, "rgba(159,213,252,.23)");
+  ctx.strokeStyle = innerRim; ctx.lineWidth = Math.max(.5, R * .018); ctx.stroke(path);
+  ctx.restore();
+
+  const reflection = ctx.createRadialGradient(rx * light.x, ry * light.y, 0,
+    rx * light.x, ry * light.y, R * .56);
+  reflection.addColorStop(0, "rgba(255,255,255,.58)");
+  reflection.addColorStop(.23, "rgba(255,255,255,.23)");
   reflection.addColorStop(1, "rgba(255,255,255,0)");
   ctx.fillStyle = reflection; ctx.fill(path);
+
+  // The large curved glint reads as a soft lens rather than a rigid prism.
+  ctx.save(); ctx.translate(rx * (.11 + light.drift), -ry * .56);
+  ctx.rotate(-.19 + Math.sin(visual.yaw ?? 0) * .12); ctx.scale(1, .26);
+  const glint = ctx.createRadialGradient(0, 0, 0, 0, 0, R * .69);
+  glint.addColorStop(0, "rgba(255,255,255,.31)");
+  glint.addColorStop(.56, "rgba(255,255,255,.095)");
+  glint.addColorStop(1, "rgba(255,255,255,0)");
+  ctx.fillStyle = glint; ctx.beginPath(); ctx.arc(0, 0, R * .69, 0, Math.PI * 2); ctx.fill(); ctx.restore();
   ctx.restore();
 }
 

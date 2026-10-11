@@ -6,7 +6,7 @@ from pathlib import Path
 
 
 SERVICE_ID = "coucou-localai-service"
-SERVICE_VERSION = "1.3.1"
+SERVICE_VERSION = "1.4.1"
 
 
 def data_root() -> Path:

@@ -1,7 +1,7 @@
 [package]
 name = "coucou"
-description = "Qanot AI for Windows — local AI Studio, Telegram and voice controls"
-authors = ["Qanot AI contributors", "Louis Raille (upstream MIT code)"]
+description = "BIMO AI for Windows — local AI Studio, Telegram and voice controls"
+authors = ["BIMO AI contributors", "Louis Raille (upstream MIT code)"]
 version.workspace = true
 edition.workspace = true
 license.workspace = true

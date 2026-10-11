@@ -1,0 +1,15 @@
+{
+  "repository": "https://github.com/hussainn7/plip-oss",
+  "revision": "b53949745126141b3133710f71e8380b3cdd2e58",
+  "license": "MIT",
+  "adapted_code": [
+    "src/mcp_vision/buddy/flight.py"
+  ],
+  "design_references": [
+    "actions/control.py",
+    "controller.py",
+    "speech_out.py",
+    "engines.py",
+    "memory/"
+  ]
+}

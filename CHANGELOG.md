@@ -1,5 +1,13 @@
 # Changelog
 
+## BIMO AI for Windows 0.7.1 — October 12, 2026
+
+- Rename the Windows product and GitHub repository to BIMO AI; retain compatible storage, credential, service, hook and executable identities.
+- Preserve liquid pentagonal Moshi, Telegram and LocalAI Studio. Include the previously local 0.6.5 Thinking Orbs/QuickLiquid visuals and 0.7.0 Plip-inspired desktop and voice additions.
+- Add explicit UIA targets, Moshi pointing and verified guide steps; hold-to-talk, sentence speech with cancellation, AI CLI readiness, encrypted preferences and activity metadata.
+- Accept “OK Bimo” while retaining existing wake phrases. Migrate verified per-user Qanot AI/Coucou installer and startup records without resetting user data.
+- Publish the tested x64 EXE with extraction checks and SHA-256 sums. MSI remains a local candidate pending renamed installation-path/startup migration testing. Preserve the upstream and bundled third-party licenses.
+
 ## Windows and Linux 0.2.0 — unreleased
 
 The Windows and Linux app catches up with the Mac, from 0.1.1 to 0.2.1 — everything except Apple Music and the iPhone, which depend on macOS and iCloud.

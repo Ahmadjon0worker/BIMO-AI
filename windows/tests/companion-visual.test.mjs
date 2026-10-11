@@ -367,7 +367,7 @@ test("the animated five-sided mailbox preserves the sequence's suction target", 
   } finally { UploadSeq.deactivate(); }
 });
 
-test("shared recap image renders Moshi while preserving Qanot AI branding", () => {
+test("shared recap image renders Moshi while preserving BIMO AI branding", () => {
   const records = fakeCanvasDom();
   const date = new Date(2026, 9, 5);
   const canvas = renderShareImage({ weekStart: date, weekEnd: date, totalMinutes: 0, sessionCount: 0,
@@ -376,7 +376,7 @@ test("shared recap image renders Moshi while preserving Qanot AI branding", () =
     busiestDay: null, longestSessionMinutes: 0 }, false);
   assert.equal(canvas.width, 1080); assert.equal(canvas.height, 1920);
   const r = records[0], texts = r.ops.filter(op => op.kind === "text").map(op => op.text);
-  assert.ok(texts.includes("Qanot AI"));
-  assert.ok(texts.some(text => text === "Qanot AI · github.com/Ahmadjon0worker/CouCou-Uzbek-edition-"));
+  assert.ok(texts.includes("BIMO AI"));
+  assert.ok(texts.some(text => text === "BIMO AI · github.com/Ahmadjon0worker/BIMO-AI"));
   assert.ok(hasMoshiBody(r.ops, 140)); r.balanced();
 });

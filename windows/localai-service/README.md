@@ -1,4 +1,4 @@
-# Qanot AI LocalAI bridge
+# BIMO AI LocalAI bridge
 
 The installer includes an isolated Windows x64 CPython 3.12.14 runtime and the
 Telegram, document, terminal, GitHub and window-bound desktop capability code. No Python, Node.js,
@@ -12,7 +12,7 @@ Installed resource contract:
 localai-service/runtime/pythonw.exe -B localai-service/src/service_main.py
 ```
 
-The native Qanot AI launcher owns this child process. It reuses an existing
+The native BIMO AI launcher owns this child process. It reuses an existing
 service only after verifying the compatible `coucou-localai-service` marker, toolbox API major 1, Telegram API major 2,
 voice API major 1 and its supported messenger features. Port 11435 is preferred; an occupied
 legacy or unrelated service is preserved while the bundle uses port 11437.
@@ -28,9 +28,9 @@ Tools GUI uses the correct document directory.
 Auto generation tries Ollama, then Gemini, then Groq. Cloud providers are used
 only when their keys have been configured. An explicit provider uses only that
 provider. Current model lists are discovered, and an available saved model is
-preserved. The per-user Qanot AI Settings file contains provider/model preferences;
+preserved. The per-user BIMO AI Settings file contains provider/model preferences;
 keys are read directly from Windows Credential Manager using the same UTF-16
-layout and entry targets as Qanot AI's Rust keyring. No key is copied to the bundle,
+layout and entry targets as BIMO AI's Rust keyring. No key is copied to the bundle,
 written to JSON, or included in health/errors/logs.
 
 The broker honors the saved loopback Ollama port 11434 or 11436. Another address,
@@ -67,7 +67,7 @@ automatic port fallback. See [Uzbek tools guide](TOOLS-UZ.md).
 OpenCode is not included and its button reports that clearly.
 
 The bridge buffers generation before returning OpenAI SSE or Ollama NDJSON;
-Qanot AI's native provider chat independently streams tokens to its windows.
+BIMO AI's native provider chat independently streams tokens to its windows.
 
 ## Prepare a fresh source checkout
 
@@ -140,4 +140,4 @@ See `VOICE-UZ.md` for user instructions. Supported language does not imply perfe
 
 ## Branding and existing installations
 
-Qanot AI is the public Windows product name and Qanot is its companion. New EXE installs default to `%LOCALAPPDATA%\Qanot AI`. Per-user settings/data paths retain `Coucou`, including `%APPDATA%\Coucou` and `%LOCALAPPDATA%\Coucou\LocalAI`; credential targets, `coucou.exe`, CLI/hook names and service markers remain compatible. Do not rename these paths. Existing panel/provider settings and Telegram sessions use the same storage. Historical 0.6.2 voice/test evidence remains historical; a new 0.6.3 build requires fresh validation. The human microphone test is pending.
+BIMO AI is the public Windows product name; the existing liquid companion design remains. New EXE installs default to `%LOCALAPPDATA%\BIMO AI`. Per-user settings/data paths retain `Coucou`, including `%APPDATA%\Coucou` and `%LOCALAPPDATA%\Coucou\LocalAI`; credential targets, `coucou.exe`, CLI/hook names and service markers remain compatible. Do not rename these paths. Existing panel/provider settings and Telegram sessions use the same storage. Historical voice/test evidence remains historical; each new release requires fresh validation. The human microphone test is pending.

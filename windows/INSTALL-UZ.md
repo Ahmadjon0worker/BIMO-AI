@@ -1,12 +1,16 @@
-# Qanot AI + LocalAI Studio 0.6.3 — Windows x64
+# BIMO AI + LocalAI Studio 0.7.1 — Windows x64, liquid Moshi yordamchisi
 
 ## O‘rnatish va ochish
 
-`release/QanotAI-Windows-0.6.3-setup.exe` faylini ishga tushiring. Installer joriy Windows foydalanuvchisi uchun Qanot AI paneli, LocalAI Studio, Telegram va Windows vositalari hamda Python xizmatini birga o‘rnatadi. Node.js, Rust va Python’ni alohida o‘rnatish kerak emas. Microsoft WebView2 kompyuterda bo‘lmasa, installer uni internet orqali o‘rnatadi.
+`release/BIMOAI-Windows-0.7.1-setup.exe` faylini ishga tushiring. Installer joriy Windows foydalanuvchisi uchun BIMO AI paneli, LocalAI Studio, Telegram va Windows vositalari hamda Python xizmatini birga o‘rnatadi. Node.js, Rust va Python’ni alohida o‘rnatish kerak emas. Microsoft WebView2 kompyuterda bo‘lmasa, installer uni internet orqali o‘rnatadi.
 
-Yangi o‘rnatishda Studio ochiladi. Keyinchalik Start menyusidagi **Qanot AI LocalAI Studio** yorlig‘i, Qanot AI tray menyusi yoki panelning Local AI bo‘limidagi **LocalAI Studio** tugmasidan foydalaning. `coucou.exe --studio` ham Studio oynasini ochadi. Studio’ni yopish uni yashiradi; tray menyusidagi **Chiqish** ilova va unga tegishli mahalliy xizmatni to‘xtatadi.
+0.7.1 **Moshi AI va xotira**, Desktop’da tugma ko‘rsatgichi va tekshiriladigan qadamlar, **Ctrl+Shift+Space** orqali ushlab gapirish hamda jumlalab ovozli javobni qo‘shadi. Quyidagi qo‘llanma oxirida yangi imkoniyatlar tushuntirilgan. `coucou.exe --assistant` yangi Moshi yordamchisi oynasini ochadi.
 
-Mahalliy xizmat Qanot AI ochilganda ishga tushadi. Studio → **Tizim holati** orqali ulanishni tekshiring; zarur bo‘lsa **Mahalliy xizmatlarni ishga tushirish** tugmasini bosing. Xizmat faqat shu kompyuterdagi `127.0.0.1:11435` yoki `127.0.0.1:11437` manzilida ishlaydi. Yangi Telegram imkoniyatlarini qo‘llaydigan xizmatdan foydalaniladi. 11435 portini eski xizmat band qilgan bo‘lsa, u saqlanadi va yangi xizmat 11437 portida ochiladi. Ikkala port band bo‘lsa, ilova sababini ko‘rsatadi. Windows’da bo‘sh portni aniqlash TCP ulanishining sekin rad etilishiga bog‘liq emas; 0.6.2 shu boshlash xatosini tuzatadi.
+Liquid Moshi va oynalar shaffof shisha materialini, QuickLiquid optikasini va Thinking Orbs holat animatsiyalarini ishlatadi. Telegram, providerlar, ovozli boshqaruv va saqlangan sozlamalar mavjud oqimlar orqali ishlaydi. BIMO AI 0.7.1 [GitHub Release](https://github.com/Ahmadjon0worker/BIMO-AI/releases/tag/v0.7.1) orqali tarqatiladi. Windows’dagi «Animation effects» kamaytirilsa, dekorativ yorug‘lik va orblar sokin ko‘rinishga o‘tadi.
+
+Yangi o‘rnatishda Studio ochiladi. Keyinchalik Start menyusidagi **BIMO AI LocalAI Studio** yorlig‘i, BIMO AI tray menyusi yoki panelning Local AI bo‘limidagi **LocalAI Studio** tugmasidan foydalaning. `coucou.exe --studio` ham Studio oynasini ochadi. Studio’ni yopish uni yashiradi; tray menyusidagi **Chiqish** ilova va unga tegishli mahalliy xizmatni to‘xtatadi.
+
+Mahalliy xizmat BIMO AI ochilganda ishga tushadi. Studio → **Tizim holati** orqali ulanishni tekshiring; zarur bo‘lsa **Mahalliy xizmatlarni ishga tushirish** tugmasini bosing. Xizmat faqat shu kompyuterdagi `127.0.0.1:11435` yoki `127.0.0.1:11437` manzilida ishlaydi. Yangi Telegram imkoniyatlarini qo‘llaydigan xizmatdan foydalaniladi. 11435 portini eski xizmat band qilgan bo‘lsa, u saqlanadi va yangi xizmat 11437 portida ochiladi. Ikkala port band bo‘lsa, ilova sababini ko‘rsatadi. Windows’da bo‘sh portni aniqlash TCP ulanishining sekin rad etilishiga bog‘liq emas; 0.6.2 shu boshlash xatosini tuzatadi.
 
 ## Ollama, Gemini va Groq
 
@@ -33,13 +37,13 @@ Eshitilgan matnni tahrirlang; xabarni avval ko‘rish uchun «darhol yuborish»n
 «Panelni och», «Sozlamalarni och», «Shu chatga salom yubor», «GitHub holatini ko‘rsat» buyruqlari mavjud vositalarga ulanadi.
 Telegram qabul qiluvchisini oldindan tanlang. Aniq yuborish buyrug‘i darhol yuboriladi; xabarni ko‘rib yuborish ham tanlanadi.
 O‘zbekcha javobni eshitish uchun eSpeak ovozini yoqing; u ham installer ichida. Buning uchun Ollama/Gemini/Groq kaliti shart emas.
-Ixtiyoriy davomli tinglash «OK Qanot» bilan boshlanadi; mikrofon foydalanuvchi tugmani bosgandagina ochiladi.
+Ixtiyoriy davomli tinglash «OK Bimo» yoki «OK Moshi» bilan boshlanadi; «OK Qanot», «OK Coucou» va «OK Kuku» ham ishlaydi. Mikrofon foydalanuvchi tugmani bosgandagina ochiladi.
 Mikrofon ruxsatlari va barcha namunalar: `localai-service/VOICE-UZ.md`.
 
 General sozlamalarida **kursor bilan ochish**ni yoqing. Panel ustiga kursor kelsa ochiladi, chiqqach 0,6 soniyada yig‘iladi;
 drag va qo‘lda ixcham qilish tugmasi saqlanadi. Aktiv pill rangini palette orqali o‘zgartirish/reset qilish mumkin.
 Maxsus notification ovozlari uchun sozlamadan Sounds papkasini oching, faylni joylang, **Reload** bosing.
-GitHub’da Ctrl+↑/↓ tanlash, Ctrl+O ochish, Ctrl+E diff; Ctrl+Alt+D desktop Qanot’ni olib chiqish/qaytarish.
+GitHub’da Ctrl+↑/↓ tanlash, Ctrl+O ochish, Ctrl+E diff; Ctrl+Alt+D desktop Moshi’ni olib chiqish/qaytarish.
 Tepa/past gorizontal, yonlar vertikal, burchaklar kvadrat va erkin joylashuv saqlanadi.
 
 ## Telegram va Windows vositalari
@@ -54,7 +58,7 @@ Shaxsiy akkaunt ulanganidan keyin chatlar oynasidan foydalaning:
 - Pastdagi maydonda xabar yozing, kerak bo‘lsa xabardagi **Reply** tugmasini bosing. **Yuborish** yoki **Ctrl+Enter** darhol yuboradi; Enter yangi qator ochadi.
 - AI yordamchisida javob tayyorlang, matnni tahrirlang yoki aniq **AI va yuborish** amalini tanlang. Qisqa javob, tarjima va suhbat xulosasi ham mavjud. Xulosa o‘zicha chatga yuborilmaydi.
 
-Studio yoki Qanot AI chatida `@username ga salom yubor` kabi aniq buyruq xabarni darhol yuboradi. Avval ko‘rmoqchi bo‘lsangiz, qoralama so‘rang. Tanlangan Telegram chatiga `shunga shuni yubor` kabi buyruq berish ham mumkin. Qaysi odam yoki chat ekanligi noaniq buyruqda ilova tanlashni so‘raydi. Javob kelmay qolgan yuborishda natija noma’lum deb ko‘rsatiladi; aynan shu matnni qayta yuborish bloklanadi. Telegram chatini tekshirib, **Telegramni tekshirdim** tugmasini bosing. Bu tugma hech narsa yubormaydi; keyingi yuborish alohida buyruq yoki tugmani talab qiladi.
+Studio yoki BIMO AI chatida `@username ga salom yubor` kabi aniq buyruq xabarni darhol yuboradi. Avval ko‘rmoqchi bo‘lsangiz, qoralama so‘rang. Tanlangan Telegram chatiga `shunga shuni yubor` kabi buyruq berish ham mumkin. Qaysi odam yoki chat ekanligi noaniq buyruqda ilova tanlashni so‘raydi. Javob kelmay qolgan yuborishda natija noma’lum deb ko‘rsatiladi; aynan shu matnni qayta yuborish bloklanadi. Telegram chatini tekshirib, **Telegramni tekshirdim** tugmasini bosing. Bu tugma hech narsa yubormaydi; keyingi yuborish alohida buyruq yoki tugmani talab qiladi.
 
 Telegram kirishi har bir Windows foydalanuvchisi uchun alohida saqlanadi. Eski `D:\LocalAI` xizmatidagi sessiya yangi xizmatga avtomatik ko‘chirilmaydi; bunday holatda shu oynada yana kiring. AI uchun faqat siz ochgan chatning cheklangan tarixi va berilgan ko‘rsatma ishlatiladi; fon rejimida barcha chatlarga avtomatik javob yuborilmaydi.
 
@@ -62,13 +66,13 @@ Telegram kirishi har bir Windows foydalanuvchisi uchun alohida saqlanadi. Eski `
 
 ## Fayllar va yangilash
 
-Qanot AI yangi nom bilan ishlaydi; Qanot hamroh ko‘rinishi ham yangilangan. Yangi standart EXE papkasi `%LOCALAPPDATA%\Qanot AI`. Eski sozlamalar, panel joyi, provider tanlovi va Telegram sessiyasi saqlanishi uchun quyidagi Coucou ma’lumot yo‘llari, credential yozuvlari, `coucou.exe` va CLI/hook nomlari ataylab o‘zgartirilmagan. Ularni qo‘lda qayta nomlamang. «OK Coucou / Kuku» kabi eski uyg‘otish iboralari ham moslik uchun saqlanadi.
+BIMO AI yangi nom bilan ishlaydi; liquid Moshi hamroh ko‘rinishi saqlanadi. Yangi standart EXE papkasi `%LOCALAPPDATA%\BIMO AI`. Eski per-user Qanot AI yoki Coucou o‘rnatmasi tekshirilgan avvalgi papkada yangilanadi. Sozlamalar, panel joyi, provider tanlovi va Telegram sessiyasi saqlanishi uchun quyidagi Coucou ma’lumot yo‘llari, credential yozuvlari, `coucou.exe` va CLI/hook nomlari o‘zgartirilmagan. Ularni qo‘lda qayta nomlamang. Eski uyg‘otish iboralari ham moslik uchun saqlanadi.
 
 - Sozlamalar: `%APPDATA%\Coucou\settings.json`.
 - Yangi xizmatning workspace, Telegram sessiyasi va ishchi fayllari: `%LOCALAPPDATA%\Coucou\LocalAI`.
 - Ilova bilan kelgan Python va kutubxonalar: o‘rnatish papkasidagi `localai-service`.
 - O‘chirish/yangilash foydalanuvchi sozlamalari va LocalAI ishchi fayllarini saqlaydi. Mavjud `D:\LocalAI` papkasiga tegmaydi. Eski xizmatdagi akkaunt fayllari yangi per-user xizmatga avtomatik ko‘chirilmaydi.
-- Codex yoki Claude hooklarini ham olib tashlash kerak bo‘lsa, ilovani o‘chirishdan oldin Qanot AI sozlamalaridan ularni olib tashlang. Uninstaller ushbu agentlarning shaxsiy konfiguratsiyasini o‘zgartirmaydi.
+- Codex yoki Claude hooklarini ham olib tashlash kerak bo‘lsa, ilovani o‘chirishdan oldin BIMO AI sozlamalaridan ularni olib tashlang. Uninstaller ushbu agentlarning shaxsiy konfiguratsiyasini o‘zgartirmaydi.
 - Installer va runtime fayllarining nazorat summalari: `release/SHA256SUMS.txt`, `release/release-manifest.json`, `localai-service/runtime-manifest.json`.
 
 ## Manbadan yig‘ish
@@ -80,4 +84,118 @@ Node.js 24, Python 3.12+, Rust MSVC va C++ Build Tools kerak. [Joriy README](../
 
 ## Tekshiruv holati
 
-Yuqoridagi ovoz sonlari oldingi 0.6.2 natijasidir. 0.6.3 build va installer tekshiruvlari relizda alohida qayd etiladi. Haqiqiy mikrofon/xona, MSI o‘rnatish va toza VM sinovi hali bajarilmagan. Eshitilgan matn, oluvchi va xabarni tekshirib yuboring.
+Yuqoridagi ovoz sonlari oldingi 0.6.2 natijasidir. BIMO AI 0.7.1 uchun build, installer va yangilash tekshiruvlari GitHub Release hamda manbadagi `VERIFICATION-0.7.1-UZ.md` faylida qayd etiladi. Haqiqiy mikrofon/xona, MSI o‘rnatish va toza VM sinovi hali bajarilmagan. Eshitilgan matn, oluvchi va xabarni tekshirib yuboring.
+
+
+## Bundled third-party code notices
+
+The executable contains code from the following MIT-licensed projects. These notices apply to their code. Mochi artwork terms remain separate.
+
+### Coucou upstream
+
+Source: https://github.com/Louis-CFM/coucou
+
+MIT License
+
+Copyright (c) 2026 Louis Raillé
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+
+### Thinking Orbs
+
+Source: https://github.com/Jakubantalik/thinking-orbs
+
+MIT License
+
+Copyright (c) 2026 Jakub Antalik
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+
+### QuickLiquid
+
+Source: https://github.com/amarnath3003/quickLiquid
+
+MIT License
+
+Copyright (c) 2026 Amarnath
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+
+## Plip’dan moslashtirilgan funksiyalar — 0.7.0
+
+Moshi AI va xotira bo‘limi: AI ulanish holati, shifrlangan mahalliy afzalliklar, amallar tarixi. Desktop’da oynani tanlab kuzating, tugmani tanlang va «Moshi bilan ko‘rsat»ni bosing. Ctrl+Shift+Space: ushlab gapiring, qo‘yib yuborganda nutq taniladi. Shortcut Sozlamalar’da o‘zgartiriladi. O‘zbekcha Whisper va mahalliy eSpeak saqlangan.
+
+Plip manbasi: https://github.com/hussainn7/plip-oss, revision b53949745126141b3133710f71e8380b3cdd2e58. Uchish matematikasi MIT asosida moslashtirilgan. Boshqa funksiyalar mavjud Windows backendiga mos yozilgan.
+
+MIT License
+
+Copyright (c) 2026 Hussain
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.

@@ -60,9 +60,9 @@ def safe_name(name):
 
 def load_pins():
     pins = json.loads(PINS.read_text('utf-8'))
-    if (pins.get('version') != '0.6.3' or pins.get('file') != 'QanotAI-Windows-0.6.3-runtime.zip'
-            or pins.get('release_version') != '0.6.4'
-            or pins.get('url') != 'https://github.com/Ahmadjon0worker/CouCou-Uzbek-edition-/releases/download/v0.6.4/QanotAI-Windows-0.6.3-runtime.zip'
+    if (pins.get('version') != '0.6.3' or pins.get('file') != 'BIMOAI-Windows-runtime-base.zip'
+            or pins.get('release_version') != '0.7.1'
+            or pins.get('url') != 'https://github.com/Ahmadjon0worker/BIMO-AI/releases/download/v0.7.1/BIMOAI-Windows-runtime-base.zip'
             or not re.fullmatch('[a-f0-9]{64}', pins.get('sha256', ''))
             or not re.fullmatch('[a-f0-9]{64}', pins.get('manifest_sha256', ''))
             or type(pins.get('bytes')) is not int or not 1 <= pins['bytes'] < 600 * 1024 * 1024
@@ -80,7 +80,7 @@ def download(path, pins):
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = path.parent / (path.name + '.' + uuid.uuid4().hex + '.partial')
     value, count = hashlib.sha256(), 0
-    request = urllib.request.Request(pins['url'], headers={'User-Agent': 'QanotAI-public-runtime-bootstrap/0.6.4'})
+    request = urllib.request.Request(pins['url'], headers={'User-Agent': 'BIMOAI-public-runtime-bootstrap/0.7.1'})
     with urllib.request.urlopen(request, timeout=60) as response, temporary.open('xb') as output:
         while block := response.read(1024 * 1024):
             count += len(block)
@@ -230,7 +230,7 @@ def main():
         download(archive, pins)
     if args.verify_only:
         manifest = verify_archive(archive, pins)
-        print(f'Verified v0.6.3 runtime ZIP: {manifest["file_count"]} files, {manifest["total_bytes"]} public payload bytes.')
+        print(f'Verified frozen v0.6.3 runtime base: {manifest["file_count"]} files, {manifest["total_bytes"]} public payload bytes.')
         return
     if sys.platform != 'win32':
         raise ValueError('Hydration and native source synchronization require Windows x64')

@@ -62,7 +62,8 @@ def telegram_catalog():
 def advanced_catalog():
     from toolbox import TOOLBOX_TOOLS
     from desktop_tools import DESKTOP_TOOLS
-    return [*TOOLBOX_TOOLS, *DESKTOP_TOOLS, *telegram_catalog(), {
+    from assistant_tools import ASSISTANT_TOOLS
+    return [*TOOLBOX_TOOLS, *DESKTOP_TOOLS, *ASSISTANT_TOOLS, *telegram_catalog(), {
         "name": "toolbox_status", "description": "Read terminal, GitHub and manual desktop readiness; AI is optional.",
         "inputSchema": {"type": "object", "properties": {}, "additionalProperties": False}}]
 
@@ -109,7 +110,7 @@ class ToolClient:
                     return port
             except (ClientError, TypeError, AttributeError):
                 continue
-        raise ClientError("Coucou 0.5.0 xizmatini ishga tushiring: Studio → Xizmatlarni boshlash")
+        raise ClientError("BIMO AI xizmatini ishga tushiring: Studio → Xizmatlarni boshlash")
 
     def call(self, name, arguments):
         if not isinstance(arguments, dict):
@@ -119,7 +120,7 @@ class ToolClient:
         if name == "toolbox_status":
             if arguments:
                 raise ClientError("Holat so‘rovida argument kerak emas")
-            return self._request(self.port, "/tools/status", timeout=15)
+            return self._request(self.port, "/tools/status", timeout=30)
         if name in TELEGRAM_ENDPOINTS:
             method, endpoint = TELEGRAM_ENDPOINTS[name]
             if method == "GET" and arguments:
@@ -128,4 +129,5 @@ class ToolClient:
         names = {item["name"] for item in advanced_catalog()}
         if name not in names:
             raise ClientError("Noma’lum vosita")
-        return self._request(self.port, "/tools/call", {"name": name, "arguments": arguments})
+        return self._request(self.port, "/tools/call", {"name": name, "arguments": arguments},
+                             timeout=15 if name == "assistant_cancel" else 210)
