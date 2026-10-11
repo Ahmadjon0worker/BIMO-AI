@@ -8,6 +8,7 @@ on:
 
 jobs:
   build:
+    if: github.repository == 'Louis-CFM/coucou'
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4

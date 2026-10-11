@@ -26,7 +26,7 @@ let view;
 beforeEach(() => {
   calls.length = 0;
   answers = {};
-  State.settings = { ...DEFAULT_SETTINGS, chatModels: {} };
+  State.settings = { ...DEFAULT_SETTINGS, chatProvider: "anthropic", chatModels: {} };
   State.chatHistory = [];
   State.stateOverride = null;
   State.view = "prompt";
@@ -40,13 +40,13 @@ const chips = () => view.el.find(".picker-chip").map((c) => c.textContent);
 const models = () => view.el.find(".picker-model").map((m) => m.textContent);
 
 test("the model button shows the active provider's model", () => {
-  assert.equal($(".model-name").textContent, "claude-opus-5");
+  assert.equal($(".model-name").textContent, "Anthropic · claude-opus-5");
   State.settings = { ...State.settings, chatProvider: "google" };
   view.sync();
-  assert.equal($(".model-name").textContent, "gemini-2.0-flash");
+  assert.equal($(".model-name").textContent, "Gemini · gemini-3.8-flash");
   State.settings = { ...State.settings, chatProvider: "ollama" };
   view.sync();
-  assert.equal($(".model-name").textContent, "Choose a model");
+  assert.equal($(".model-name").textContent, "Ollama · Choose a model");
 });
 
 test("a provider without a key is never asked for its models", async () => {
@@ -54,7 +54,7 @@ test("a provider without a key is never asked for its models", async () => {
   $(".model-btn").fire("click");
   await flush();
   assert.ok($(".chat-body").classList.contains("picking"));
-  assert.deepEqual(chips(), ["Anthropic", "Google", "OpenAI", "OpenRouter"]);
+  assert.deepEqual(chips(), ["Automatic", "Anthropic", "Gemini", "Groq", "OpenAI", "OpenRouter", "Ollama"]);
   assert.deepEqual(sent("secret_present"), [{ key: "anthropic-api-key" }]);
   assert.deepEqual(sent("chat_models"), []);
   assert.match($(".picker-status").textContent, /No API key/);
@@ -74,7 +74,7 @@ test("with a key, the models are listed and picking one saves it", async () => {
   assert.equal(State.settings.model, "claude-sonnet-5");
   assert.equal(sent("save_settings").at(-1).settings.model, "claude-sonnet-5");
   assert.ok(!$(".chat-body").classList.contains("picking"));
-  assert.equal($(".model-name").textContent, "claude-sonnet-5");
+  assert.equal($(".model-name").textContent, "Anthropic · claude-sonnet-5");
 });
 
 test("switching provider saves it and asks the new provider only", async () => {
@@ -83,7 +83,7 @@ test("switching provider saves it and asks the new provider only", async () => {
   $(".model-btn").fire("click");
   await flush();
   assert.deepEqual(sent("chat_models"), []);
-  view.el.find(".picker-chip")[1].fire("click");
+  view.el.find(".picker-chip").find((c) => c.textContent === "Gemini").fire("click");
   await flush();
   assert.equal(State.settings.chatProvider, "google");
   assert.deepEqual(sent("chat_models"), [{ provider: "google" }]);
@@ -121,4 +121,39 @@ test("a local answer streams into one reply, then the finished text replaces it"
   assert.equal(view.el.find(".reply")[0].textContent, "Hello there!");
   assert.deepEqual(State.chatHistory.map((m) => m.role), ["user", "assistant"]);
   assert.ok(!$(".model-btn").disabled);
+});
+
+test("fresh Automatic chat shows the cloud provider that actually answered", async () => {
+  State.settings = { ...DEFAULT_SETTINGS, chatModels: {} };
+  view.sync();
+  assert.equal($(".model-name").textContent, "Automatic");
+  answers.chat_send = { text: "Hello", provider: "groq", model: "llama-3.3-70b-versatile" };
+  $(".chat-input").value = "hello";
+  $(".send-btn").fire("click");
+  await flush();
+  view.sync();
+  assert.equal($(".model-name").textContent, "Automatic · Groq · llama-3.3-70b-versatile");
+  assert.equal(State.chatHistory.at(-1).content, "Hello");
+  State.chatHistory = [];
+  view.sync();
+  assert.equal($(".model-name").textContent, "Automatic", "a new chat clears the previous reply's provider status");
+});
+
+test("Groq uses its own credential and the picker can refresh or save a manual model", async () => {
+  answers.secret_present = (args) => args.key === "groq-api-key";
+  answers.chat_models = [{ id: "llama-3.3-70b-versatile", label: "Llama" }];
+  $(".model-btn").fire("click");
+  await flush();
+  view.el.find(".picker-chip").find((c) => c.textContent === "Groq").fire("click");
+  await flush();
+  assert.equal(State.settings.chatProvider, "groq");
+  assert.deepEqual(sent("chat_models"), [{ provider: "groq" }]);
+  assert.ok(sent("secret_present").some((v) => v.key === "groq-api-key"));
+  $(".picker-refresh").fire("click");
+  await flush();
+  assert.equal(sent("chat_models").length, 2);
+  $(".picker-model-input").value = "my-model";
+  $(".picker-use-model").fire("click");
+  assert.equal(State.settings.chatModels.groq, "my-model");
+  assert.equal($(".model-name").textContent, "Groq · my-model");
 });

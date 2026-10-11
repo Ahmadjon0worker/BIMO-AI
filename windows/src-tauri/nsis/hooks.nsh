@@ -11,7 +11,16 @@
 ; printing anything, so a leftover entry costs nothing beyond a dead path.
 
 !macro NSIS_HOOK_PREUNINSTALL
+  !insertmacro IsShortcutTarget "$SMPROGRAMS\Coucou LocalAI Studio.lnk" "$INSTDIR\${MAINBINARYNAME}.exe"
+  Pop $0
+  ${If} $0 = 1
+    Delete "$SMPROGRAMS\Coucou LocalAI Studio.lnk"
+  ${EndIf}
   RMDir /r "$LOCALAPPDATA\Coucou\bin"
   RMDir /r "$LOCALAPPDATA\Coucou\inbox"
   Delete "$LOCALAPPDATA\Coucou\coucou.log"
+!macroend
+
+!macro NSIS_HOOK_POSTINSTALL
+  CreateShortcut "$SMPROGRAMS\Coucou LocalAI Studio.lnk" "$INSTDIR\${MAINBINARYNAME}.exe" "--studio"
 !macroend

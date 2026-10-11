@@ -146,6 +146,24 @@ pub mod logic {
         })
     }
 
+    /// A missing saved display falls back only on an explicit shortcut.
+    pub fn target_spot(
+        saved: Option<(f64, f64)>,
+        displays: &[Display],
+        size: f64,
+        margin: f64,
+        anywhere: bool,
+        corner: impl FnOnce() -> Option<(f64, f64)>,
+    ) -> Option<(f64, f64)> {
+        match saved {
+            Some(spot) => {
+                let restored = restore_spot(spot, displays, size, margin);
+                if anywhere { restored.or_else(corner) } else { restored }
+            }
+            None => corner(),
+        }
+    }
+
     /// First visit: the bottom-right corner of the work area, like the Mac.
     pub fn default_spot(d: &Display, size: f64, margin: f64) -> (f64, f64) {
         let s = size * d.scale;
@@ -167,6 +185,13 @@ pub mod logic {
     /// under the top edge, where the flights start and end.
     pub fn island_spot(island_center_x: f64, island_top: f64, size: f64, scale: f64) -> (f64, f64) {
         (island_center_x - size * scale / 2.0, island_top)
+    }
+
+    /// A dock can live on any edge: put the round body's center in the actual
+    /// opaque island rather than the center of its transparent native window.
+    pub fn visible_island_spot(rect: Rect, size: f64, scale: f64) -> (f64, f64) {
+        let (x, y) = rect.center();
+        (x - size * scale / 2.0, y - size * scale / 2.0)
     }
 
     pub fn ease_in_out(t: f64) -> f64 {
@@ -376,11 +401,28 @@ fn island_anchor(app: &AppHandle, d: &Desktop) -> Option<(f64, f64, f64)> {
         let (w, _) = d.inner.lock().unwrap().display?;
         return Some((w / 2.0, 0.0, 1.0));
     }
+    if d.mode == DesktopMode::Poll {
+        let rect = island::visible_rect_physical(app)?;
+        return Some((rect.x + rect.w / 2.0, rect.y, rect.scale));
+    }
     let win = island::window(app)?;
     let pos = win.outer_position().ok()?;
     let size = win.outer_size().ok()?;
     let scale = win.scale_factor().unwrap_or(1.0);
     Some((pos.x as f64 + size.width as f64 / 2.0, pos.y as f64, scale))
+}
+
+fn visible_home_rect(app: &AppHandle) -> Option<(logic::Rect, f64)> {
+    let rect = island::visible_rect_physical(app)?;
+    Some((logic::Rect { x: rect.x, y: rect.y, w: rect.w, h: rect.h }, rect.scale))
+}
+
+fn island_flight_spot(app: &AppHandle, d: &Desktop) -> Option<(f64, f64)> {
+    if d.mode == DesktopMode::Poll {
+        let (rect, scale) = visible_home_rect(app)?;
+        return Some(logic::visible_island_spot(rect, SIZE, scale));
+    }
+    island_anchor(app, d).map(|(cx, top, scale)| logic::island_spot(cx, top, SIZE, scale))
 }
 
 /// The window side in the mode's space.
@@ -569,22 +611,18 @@ fn remember_spot(app: &AppHandle, d: &Desktop, pos: (f64, f64), on_desktop: bool
 }
 
 /// Where he lands when he flies out, or `None` when his spot is on a display
-/// that is no longer connected.
-fn target_spot(app: &AppHandle, d: &Desktop) -> Option<(f64, f64)> {
+/// that is no longer connected. An explicit desktop shortcut can choose the
+/// first-visit corner instead; launch and alert return preserve the old rule.
+fn target_spot(app: &AppHandle, d: &Desktop, anywhere: bool) -> Option<(f64, f64)> {
     let all = displays(app, d);
     let saved = app.try_state::<crate::Shared>().and_then(|s| s.settings.lock().unwrap().desktop_mochi.spot.clone());
-    match saved {
-        Some(spot) if spot.space == d.mode.space() => {
-            logic::restore_spot((spot.x, spot.y), &all, SIZE, MARGIN)
-        }
-        // Never placed, or placed under another kind of session: a fresh start
-        // in the corner of the island's display.
-        _ => {
-            let (cx, top, _) = island_anchor(app, d)?;
-            let home = logic::display_near((cx, top + 1.0), &all)?;
-            Some(logic::default_spot(&home, SIZE, MARGIN))
-        }
-    }
+    let corner = || {
+        let (cx, top, _) = island_anchor(app, d)?;
+        let home = logic::display_near((cx, top + 1.0), &all)?;
+        Some(logic::default_spot(&home, SIZE, MARGIN))
+    };
+    let saved = saved.filter(|spot| spot.space == d.mode.space()).map(|spot| (spot.x, spot.y));
+    logic::target_spot(saved, &all, SIZE, MARGIN, anywhere, corner)
 }
 
 /// The drop, wherever it came from: home if it is over the island's panel,
@@ -592,9 +630,11 @@ fn target_spot(app: &AppHandle, d: &Desktop) -> Option<(f64, f64)> {
 async fn finish_drop(app: &AppHandle, d: &Desktop, pos: (f64, f64), from: Source) {
     let s = side(app, d);
     let center = (pos.0 + s / 2.0, pos.1 + s / 2.0);
-    let home = island_anchor(app, d)
-        .map(|(cx, top, scale)| logic::home_zone(cx, top, scale).contains(center))
-        .unwrap_or(false);
+    let home = if d.mode == DesktopMode::Poll {
+        visible_home_rect(app).is_some_and(|(rect, _)| rect.contains(center))
+    } else {
+        island_anchor(app, d).map(|(cx, top, scale)| logic::home_zone(cx, top, scale).contains(center)).unwrap_or(false)
+    };
     {
         let mut i = d.inner.lock().unwrap();
         i.carry = None;
@@ -804,21 +844,21 @@ pub async fn desktop_mochi_drag_end(app: AppHandle, x: f64, y: f64) {
 
 /// Launch or the end of an alert: from the island to his spot. False when the
 /// spot is on a display that is gone — he then stays home, and is forgotten
-/// there so the next launch doesn't try again.
+/// there so the next launch doesn't try again. `anywhere` is an explicit
+/// desktop shortcut: it uses the first-visit corner if that display is gone.
 #[tauri::command]
-pub async fn desktop_mochi_fly_out(app: AppHandle) -> bool {
+pub async fn desktop_mochi_fly_out(app: AppHandle, anywhere: Option<bool>) -> bool {
     let d = app.state::<Arc<Desktop>>().inner().clone();
     if d.mode == DesktopMode::Off || window(&app).is_none() {
         return false;
     }
     refresh_layer_display(&app, &d);
-    let Some(target) = target_spot(&app, &d) else {
+    let Some(target) = target_spot(&app, &d, anywhere.unwrap_or(false)) else {
         crate::log::line("desktop Mochi: his spot is on a display that is gone — he stays home");
         remember(&app, |p| p.on_desktop = false);
         return false;
     };
-    let Some((cx, top, scale)) = island_anchor(&app, &d) else { return false };
-    let start = logic::island_spot(cx, top, SIZE, scale);
+    let Some(start) = island_flight_spot(&app, &d) else { return false };
     {
         let mut i = d.inner.lock().unwrap();
         i.landed = false;
@@ -856,9 +896,8 @@ pub async fn desktop_mochi_fly_home(app: AppHandle, forget: bool) -> bool {
     }
     refresh(&app, &d);
     let _ = app.emit_to(LABEL, "desktop-flight", "home");
-    let done = match island_anchor(&app, &d) {
-        Some((cx, top, scale)) => {
-            let to = logic::island_spot(cx, top, SIZE, scale);
+    let done = match island_flight_spot(&app, &d) {
+        Some(to) => {
             fly(&app, &d, to, FLIGHT_MS, logic::ease_in_out).await
         }
         None => true,
@@ -949,6 +988,20 @@ mod tests {
     }
 
     #[test]
+    fn explicit_desktop_shortcut_can_recover_a_disconnected_saved_display() {
+        let all = two_displays();
+        let connected = &all[..1];
+        let saved = Some((3000.0, 1000.0));
+        assert_eq!(target_spot(saved, connected, 120.0, 24.0, false, || panic!("launch must stay home")), None);
+        assert_eq!(target_spot(saved, connected, 120.0, 24.0, true, || Some(default_spot(&all[0], 120.0, 24.0))),
+            Some((1776.0, 888.0)));
+        assert_eq!(target_spot(Some((800.0, 600.0)), connected, 120.0, 24.0, true, || panic!("keep valid saved spot")),
+            Some((800.0, 600.0)));
+        assert_eq!(target_spot(None, connected, 120.0, 24.0, false, || Some((1776.0, 888.0))), Some((1776.0, 888.0)));
+        assert_eq!(target_spot(saved, &[], 120.0, 24.0, true, || None), None);
+    }
+
+    #[test]
     fn a_spot_that_a_taller_taskbar_now_covers_moves_up() {
         let d = two_displays();
         let (x, y) = restore_spot((800.0, 1000.0), &d, 120.0, 24.0).unwrap();
@@ -993,6 +1046,23 @@ mod tests {
     fn he_leaves_and_returns_under_the_top_centre() {
         assert_eq!(island_spot(960.0, 0.0, 120.0, 1.0), (900.0, 0.0));
         assert_eq!(island_spot(2880.0, -200.0, 120.0, 2.0), (2760.0, -200.0));
+    }
+
+    #[test]
+    fn side_dock_home_is_the_visible_rect_instead_of_transparent_window_center() {
+        let rect = Rect { x: -40.0, y: 64.0, w: 40.0, h: 192.0 };
+        assert!(rect.contains((-20.0, 160.0)));
+        assert!(!rect.contains((-360.0, 160.0)));
+        assert_eq!(visible_island_spot(rect, 120.0, 1.0), (-80.0, 100.0));
+    }
+
+    #[test]
+    fn corner_and_bottom_flights_center_the_body_at_negative_origins_and_mixed_dpi() {
+        let corner = Rect { x: -160.0, y: -160.0, w: 160.0, h: 160.0 };
+        assert_eq!(visible_island_spot(corner, 120.0, 2.0), (-200.0, -200.0));
+        let bottom = Rect { x: 600.0, y: 1008.0, w: 288.0, h: 32.0 };
+        assert_eq!(visible_island_spot(bottom, 120.0, 1.0), (684.0, 964.0));
+        assert!(!bottom.contains((960.0, 720.0)));
     }
 
     #[test]

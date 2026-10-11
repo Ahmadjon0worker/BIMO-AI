@@ -420,12 +420,14 @@ function handleHook(island: Island, payload: HookPayload) {
     case "Interrupt":
       // Codex: the user stopped the turn. Back to idle, nothing to celebrate.
       supersedeStop();
+      clearFinalLine(agentId);
       State.updateTask(agentId, "idle");
       State.setPillBadge(agentId, null);
       break;
 
     case "StopFailure":
       supersedeStop();
+      clearFinalLine(agentId);
       State.updateTask(agentId, "error");
       Sound.play("error");
       if (focused && !State.pendingApproval) surface("error", true);

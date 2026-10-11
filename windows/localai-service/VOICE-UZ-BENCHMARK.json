@@ -1,0 +1,1419 @@
+{
+  "schema": 1,
+  "created_utc": "2026-10-11T13:17:20.022525+00:00",
+  "dataset": {
+    "schema": 1,
+    "dataset": "google/fleurs",
+    "publisher": "Google",
+    "config": "uz_uz",
+    "split": "validation",
+    "source": "https://huggingface.co/datasets/google/fleurs",
+    "metadata_source": "https://datasets-server.huggingface.co/first-rows?dataset=google%2Ffleurs&config=uz_uz&split=validation",
+    "license": "CC-BY-4.0",
+    "selection": "First 8 preview rows with duration<=15s, selected before new decoding; no filtering by ASR result",
+    "attribution": "Google FLEURS; Conneau et al. (2022)",
+    "packaged": false,
+    "created_utc": "2026-10-11T12:58:50.757374+00:00",
+    "fixtures": [
+      {
+        "row_index": 0,
+        "id": 1658,
+        "expected": "Bir kunda bor-yo'g'i o'n sakkizta medal bo'lgani sababli bir qator mamlakatlar medal shohsupasiga ko'tarila olmadi.",
+        "dataset_normalized_text": "bir kunda bor-yoʻgʻi oʻn sakkizta medal boʻlgani sababli bir qator mamlakatlar medal shohsupasiga koʻtarila olmadi",
+        "file": "fleurs-uz-validation-0.wav",
+        "original_bytes": 625978,
+        "original_sha256": "6768d8daf91e204d9760c603ade6b4f9ea9000ff31fc5eda860059bef6021814",
+        "pcm_sha256": "e4d2efed8ca67ae8180a65b3e6a853b86bc40d8884cac66f54b52d4f5652b486",
+        "original_format_tag": 3,
+        "original_bits": 32,
+        "sample_rate": 16000,
+        "channels": 1,
+        "duration_seconds": 9.78,
+        "samples": 156480,
+        "source": "https://datasets-server.huggingface.co/assets/google/fleurs/--/70bb2e84b976b7e960aa89f1c648e09c59f894dd/--/uz_uz/validation/0/audio/audio.wav",
+        "gender": 1,
+        "speaker_id": null
+      },
+      {
+        "row_index": 1,
+        "id": 1571,
+        "expected": "Arablar bu yerlarga islomni ham olib kelishdi va bu Komor orollari hamda Mayottada katta ahamiyat kasb etdi.",
+        "dataset_normalized_text": "arablar bu yerlarga islomni ham olib kelishdi va bu komor orollari hamda mayottada katta ahamiyat kasb etdi",
+        "file": "fleurs-uz-validation-1.wav",
+        "original_bytes": 430138,
+        "original_sha256": "375b259407f3e6102a2e927c710b3d6610c51353cb76de06e7d0a7639783052a",
+        "pcm_sha256": "f7fa4ebc2efe29de83185bd5251f47a4dbfa3ce873e094303336653dd64aba92",
+        "original_format_tag": 3,
+        "original_bits": 32,
+        "sample_rate": 16000,
+        "channels": 1,
+        "duration_seconds": 6.72,
+        "samples": 107520,
+        "source": "https://datasets-server.huggingface.co/assets/google/fleurs/--/70bb2e84b976b7e960aa89f1c648e09c59f894dd/--/uz_uz/validation/1/audio/audio.wav",
+        "gender": 1,
+        "speaker_id": null
+      },
+      {
+        "row_index": 2,
+        "id": 1554,
+        "expected": "U WiFi eshik qo'ng'irog'ini yasadi, dedi u.",
+        "dataset_normalized_text": "u wifi eshik qoʻngʻirogʻini yasadi dedi u",
+        "file": "fleurs-uz-validation-2.wav",
+        "original_bytes": 199738,
+        "original_sha256": "86c9034b057bec128872d0d5304d12b10cf73a533db09886c52a74f79ccf655c",
+        "pcm_sha256": "24679c0523d85cf27b2dcbe8f95170296dc02f14dd78070eeb2baac9021cc42a",
+        "original_format_tag": 3,
+        "original_bits": 32,
+        "sample_rate": 16000,
+        "channels": 1,
+        "duration_seconds": 3.12,
+        "samples": 49920,
+        "source": "https://datasets-server.huggingface.co/assets/google/fleurs/--/70bb2e84b976b7e960aa89f1c648e09c59f894dd/--/uz_uz/validation/2/audio/audio.wav",
+        "gender": 1,
+        "speaker_id": null
+      },
+      {
+        "row_index": 4,
+        "id": 1516,
+        "expected": "Iltimos, bu joyga u loyiq bo'lgan sharaf, jiddiylik va hurmat bilan munosabatda bo'ling. Xolokast yoki fashistlar haqida hazil qilmang.",
+        "dataset_normalized_text": "iltimos bu joyga u loyiq boʻlgan sharaf jiddiylik va hurmat bilan munosabatda boʻling xolokast yoki fashistlar haqida hazil qilmang",
+        "file": "fleurs-uz-validation-4.wav",
+        "original_bytes": 633658,
+        "original_sha256": "1265cab641d0e1e5ce270ced272c35d935c38ef43a5a03391f971cf57540267a",
+        "pcm_sha256": "6db6414d78dfe63878037828ed752f618fc9e0b5f0686a3ad8bc25090998fdb2",
+        "original_format_tag": 3,
+        "original_bits": 32,
+        "sample_rate": 16000,
+        "channels": 1,
+        "duration_seconds": 9.9,
+        "samples": 158400,
+        "source": "https://datasets-server.huggingface.co/assets/google/fleurs/--/70bb2e84b976b7e960aa89f1c648e09c59f894dd/--/uz_uz/validation/4/audio/audio.wav",
+        "gender": 1,
+        "speaker_id": null
+      },
+      {
+        "row_index": 5,
+        "id": 1605,
+        "expected": "Qit'adan bo'lgan uzoq masofa sababli, sutemizuvchilar safar qila olmasdi, bu ulkan toshbaqalarni Galapagosdagi asosiy o'tlovchi hayvonga aylantirdi.",
+        "dataset_normalized_text": "qitʼadan boʻlgan uzoq masofa sababli sutemizuvchilar safar qila olmasdi bu ulkan toshbaqalarni galapagosdagi asosiy oʻtlovchi hayvonga aylantirdi",
+        "file": "fleurs-uz-validation-5.wav",
+        "original_bytes": 537658,
+        "original_sha256": "5172eb7f85d69502b6bb91f7df9f4adc4554337905f54f6fa9ff9bffe089c94e",
+        "pcm_sha256": "a1caab29d82af89324a3f15ddfb1c71452a91da8bf5836754a880a700b3363d6",
+        "original_format_tag": 3,
+        "original_bits": 32,
+        "sample_rate": 16000,
+        "channels": 1,
+        "duration_seconds": 8.4,
+        "samples": 134400,
+        "source": "https://datasets-server.huggingface.co/assets/google/fleurs/--/70bb2e84b976b7e960aa89f1c648e09c59f894dd/--/uz_uz/validation/5/audio/audio.wav",
+        "gender": 1,
+        "speaker_id": null
+      },
+      {
+        "row_index": 6,
+        "id": 1625,
+        "expected": "Mamlakat bo'ylab mashhur xonandalar Shri Shyamga bag'ishlab qo'shiqlar, bhajanlar namoyish etishdi.",
+        "dataset_normalized_text": "mamlakat boʻylab mashhur xonandalar shri shyamga bagʻishlab qoʻshiqlar bhajanlar namoyish etishdi",
+        "file": "fleurs-uz-validation-6.wav",
+        "original_bytes": 625978,
+        "original_sha256": "60e7b7cab421a2d054a1a3450a93120b8c48719d7ee6ab21fea83a60f6cd634f",
+        "pcm_sha256": "7db6cd33ed846661aeb32b84921a09ad261cf6c1ceafb55a26c9461a24d430f7",
+        "original_format_tag": 3,
+        "original_bits": 32,
+        "sample_rate": 16000,
+        "channels": 1,
+        "duration_seconds": 9.78,
+        "samples": 156480,
+        "source": "https://datasets-server.huggingface.co/assets/google/fleurs/--/70bb2e84b976b7e960aa89f1c648e09c59f894dd/--/uz_uz/validation/6/audio/audio.wav",
+        "gender": 1,
+        "speaker_id": null
+      },
+      {
+        "row_index": 7,
+        "id": 1592,
+        "expected": "Ilk marta xorijga chiqqaningizda odamlar sayyohlar yangi davlatga moslashishi zarurligini bilib, hoynahoy, sabrli va tushunuvchan bo'lgan.",
+        "dataset_normalized_text": "ilk marta xorijga chiqqaningizda odamlar sayyohlar yangi davlatga moslashishi zarurligini bilib hoynahoy sabrli va tushunuvchan boʻlgan",
+        "file": "fleurs-uz-validation-7.wav",
+        "original_bytes": 437818,
+        "original_sha256": "beffe3c8630c7dfbe461f542323f502e2cd729ba7df7b05c6c62cc4a00cf72f2",
+        "pcm_sha256": "8c221681f8b09e9db2fb0269a1cc0b0420dc90005ed5a011f11caac64bf11802",
+        "original_format_tag": 3,
+        "original_bits": 32,
+        "sample_rate": 16000,
+        "channels": 1,
+        "duration_seconds": 6.84,
+        "samples": 109440,
+        "source": "https://datasets-server.huggingface.co/assets/google/fleurs/--/70bb2e84b976b7e960aa89f1c648e09c59f894dd/--/uz_uz/validation/7/audio/audio.wav",
+        "gender": 1,
+        "speaker_id": null
+      },
+      {
+        "row_index": 8,
+        "id": 1549,
+        "expected": "Mazkur nazariyalar shuni ko'rsatadiki, insonlar balog'at yoshiga qadam qo'yguniga qadar, ularda muayyan ichki ehtiyojlar va/yoki xohishlar bo'ladi.",
+        "dataset_normalized_text": "mazkur nazariyalar shuni ko'rsatadiki insonlar balog'at yoshiga qadam qo'yguniga qadar ularda muayyan ichki ehtiyojlar va/yoki xohishlar bo'ladi",
+        "file": "fleurs-uz-validation-8.wav",
+        "original_bytes": 741178,
+        "original_sha256": "1bc4892db9e004ba3f3d6a50885dafcff0ae88af41018c13e1cebb687f01754b",
+        "pcm_sha256": "18a26f0165610f121343a255a07664f194da0eed74877a8522025e68d31c6f84",
+        "original_format_tag": 3,
+        "original_bits": 32,
+        "sample_rate": 16000,
+        "channels": 1,
+        "duration_seconds": 11.58,
+        "samples": 185280,
+        "source": "https://datasets-server.huggingface.co/assets/google/fleurs/--/70bb2e84b976b7e960aa89f1c648e09c59f894dd/--/uz_uz/validation/8/audio/audio.wav",
+        "gender": 1,
+        "speaker_id": null
+      }
+    ]
+  },
+  "model_provenance": {
+    "repository": "navai-uz/whisper-small-uzbek",
+    "revision": "4b432caf21c2752bca3384b5df1d41cf0da2801d",
+    "license": "Apache-2.0",
+    "original_weights": {
+      "path": "model.safetensors",
+      "size": 966995080,
+      "sha256": "3662e1baf3a9bc9a3b3df9bb75060c99708f8c461df19e0e3acd80ae6814411e",
+      "source": "https://huggingface.co/navai-uz/whisper-small-uzbek/resolve/4b432caf21c2752bca3384b5df1d41cf0da2801d/model.safetensors?download=true",
+      "declared_lfs_sha256": "3662e1baf3a9bc9a3b3df9bb75060c99708f8c461df19e0e3acd80ae6814411e",
+      "declared_git_blob": "a7bb2b802e580c5bb875474a7d04f4df58939a11"
+    },
+    "conversion": {
+      "input_sha256": "3662e1baf3a9bc9a3b3df9bb75060c99708f8c461df19e0e3acd80ae6814411e",
+      "output": "ggml-navai-small-uz-f16.bin",
+      "bytes": 487601984,
+      "sha256": "adea71a82cfea807d1f5d733fb388e4c416a84218c99594eb0f2bef08052de2a",
+      "sha1": "2eb45c71c4b1f3bf6486ba169a6e4445ecce3f9b",
+      "tensor_count": 479,
+      "converter_reference": "https://github.com/ggml-org/whisper.cpp/blob/v1.9.4/models/convert-h5-to-ggml.py",
+      "official_converter_sha256": "9cc282dfcd9a24da03ffa1b4123b5508ee935e19e369c33520b1a73f89440094",
+      "adaptation": "Safetensors JSON header + numpy memory mapping; no checkpoint code; same tensor names, F16/F32 layout, tokenizer and mel filters.",
+      "mel_reference": "https://github.com/openai/whisper/blob/v20250625/whisper/assets/mel_filters.npz",
+      "mel_sha256": "7450ae70723a5ef9d341e3cee628c7cb0177f36ce42c44b7ed2bf3325f0f6d4c"
+    },
+    "conversion_script_sha256": "7275c541eb3870c8e12b3ff720706ee7482bf8793bb82144356d9eedd3c0e657",
+    "quantization": {
+      "mode": "q5_1",
+      "engine": "whisper.cpp",
+      "version": "1.9.4-b5130",
+      "binary": "https://github.com/ggml-org/whisper.cpp/releases/tag/b5130",
+      "release_archive_sha256": "f9ec6c52a2e949b62ab51fa21d0d497958f9e41c3010c157c4e42932d5316f3c",
+      "quantizer_sha256": "282a6e5e30ea10b0b63624ec32193ffdb6f3cd0f6a2fbc7d9099e1ec4d972466",
+      "model_sha256": "b37c8935d4c2603404bdd7659a9e98c4f1f780712392de43d7a2c96fc5a8196b",
+      "model_sha1": "5a549f1750434650c3bcbc2fb2c85ff91b30cbcc",
+      "model_bytes": 190085504
+    },
+    "notes": "Derived F16 GGML from pinned safetensors data and quantized with native whisper.cpp. Modified format/precision; original licenses and required dataset attributions preserved. No pickle, torch, transformers, or model repository code executed."
+  },
+  "vad_provenance": {
+    "model": "silero-v6.2.0",
+    "repository": "ggml-org/whisper-vad",
+    "revision": "c5c26827b67dfd053856f92e824e14fdcc123daf",
+    "source": "https://huggingface.co/ggml-org/whisper-vad/resolve/c5c26827b67dfd053856f92e824e14fdcc123daf/ggml-silero-v6.2.0.bin",
+    "model_file": "ggml-silero-v6.2.0.bin",
+    "bytes": 885098,
+    "sha256": "2aa269b785eeb53a82983a20501ddf7c1d9c48e33ab63a41391ac6c9f7fb6987",
+    "license": "MIT",
+    "license_source": "https://raw.githubusercontent.com/snakers4/silero-vad/be95df9152c0d7618fa1edfeb296fc3dae32376f/LICENSE",
+    "license_revision": "be95df9152c0d7618fa1edfeb296fc3dae32376f",
+    "license_sha256": "2e63e9a38b6e8fc0c7bc37ce174caca1862870856c6daf5697cfb785e925520b",
+    "purpose": "Offline native speech activity detection before Uzbek decoding; no automatic downloading."
+  },
+  "decoder_manifest_version": "1.9.4-b5130",
+  "decoder_executable_identity": {
+    "path": "whisper-cli.exe",
+    "size": 479232,
+    "sha256": "19b976e037c02c0de712fa26096842d4ebafca03c976b12e8e6123215e7aab58"
+  },
+  "baseline": {
+    "schema": 1,
+    "label": "small-default",
+    "model": "small-q5_1",
+    "model_identity": {
+      "path": "ggml-small-q5_1.bin",
+      "size": 190085487,
+      "sha256": "ae85e4a935d7a567bd102fe55afc16bb595bdb618e11b2fc7591bc08120411bb"
+    },
+    "language": "uz",
+    "prompt": null,
+    "extra_flags": [],
+    "threads": 4,
+    "fixtures_manifest_sha256": "919defdb8480184d9ced4c9a9de05bb7019c4ec5edd4b79a52ce4c450b206011",
+    "tested_utc": "2026-10-11T12:58:56.646216+00:00",
+    "microphone_recordings": 0,
+    "actions_executed": 0,
+    "limitations": "Eight available public human read-speech validation clips, deterministic preview subset (all metadata gender1; speaker IDs unavailable). Turbo tested only first two. Not population, microphone, noise, accents, or conversational accuracy. Each timing includes process/model load.",
+    "normalization": {
+      "raw": "NFKC lowercase, apostrophe variants unified, punctuation split, boundary apostrophes stripped.",
+      "uzbek": "raw + standard Uzbek Cyrillic-to-Latin transliteration + decimal digits to Uzbek words. No fuzzy spelling correction.",
+      "phonetic_cyrillic": "uzbek + deterministic transliteration of Kazakh-like alternative Cyrillic letters (і ұ ү ө ә ң һ); indicative only."
+    },
+    "utterances": [
+      {
+        "row_index": 0,
+        "duration_seconds": 9.78,
+        "expected": "Bir kunda bor-yo'g'i o'n sakkizta medal bo'lgani sababli bir qator mamlakatlar medal shohsupasiga ko'tarila olmadi.",
+        "recognized": "Byrqunda bor yogu 18xta midal bulgian sababli, byrqator mamleketle midal shoxs pazgya qotarela olma'da.",
+        "processing_ms": 5296,
+        "model": "small-q5_1",
+        "raw": {
+          "word_edits": 14,
+          "reference_words": 16,
+          "char_edits": 35,
+          "reference_chars": 99,
+          "normalized_expected": "bir kunda bor yo'g'i o'n sakkizta medal bo'lgani sababli bir qator mamlakatlar medal shohsupasiga ko'tarila olmadi",
+          "normalized_actual": "byrqunda bor yogu 18xta midal bulgian sababli byrqator mamleketle midal shoxs pazgya qotarela olma'da"
+        },
+        "uzbek": {
+          "word_edits": 14,
+          "reference_words": 16,
+          "char_edits": 35,
+          "reference_chars": 99,
+          "normalized_expected": "bir kunda bor yo'g'i o'n sakkizta medal bo'lgani sababli bir qator mamlakatlar medal shohsupasiga ko'tarila olmadi",
+          "normalized_actual": "byrqunda bor yogu 18xta midal bulgian sababli byrqator mamleketle midal shoxs pazgya qotarela olma'da"
+        },
+        "phonetic_cyrillic": {
+          "word_edits": 14,
+          "reference_words": 16,
+          "char_edits": 35,
+          "reference_chars": 99,
+          "normalized_expected": "bir kunda bor yo'g'i o'n sakkizta medal bo'lgani sababli bir qator mamlakatlar medal shohsupasiga ko'tarila olmadi",
+          "normalized_actual": "byrqunda bor yogu 18xta midal bulgian sababli byrqator mamleketle midal shoxs pazgya qotarela olma'da"
+        }
+      },
+      {
+        "row_index": 1,
+        "duration_seconds": 6.72,
+        "expected": "Arablar bu yerlarga islomni ham olib kelishdi va bu Komor orollari hamda Mayottada katta ahamiyat kasb etdi.",
+        "recognized": "ʃarak ʃarbu yelarg ʃaslamn ʃamal pili ʃtibabukum ʃarak ʃandam ayut ʃadiket ʃakha ʃanid qasbiyet ʃaqt.",
+        "processing_ms": 7579,
+        "model": "small-q5_1",
+        "raw": {
+          "word_edits": 17,
+          "reference_words": 17,
+          "char_edits": 47,
+          "reference_chars": 91,
+          "normalized_expected": "arablar bu yerlarga islomni ham olib kelishdi va bu komor orollari hamda mayottada katta ahamiyat kasb etdi",
+          "normalized_actual": "ʃarak ʃarbu yelarg ʃaslamn ʃamal pili ʃtibabukum ʃarak ʃandam ayut ʃadiket ʃakha ʃanid qasbiyet ʃaqt"
+        },
+        "uzbek": {
+          "word_edits": 17,
+          "reference_words": 17,
+          "char_edits": 47,
+          "reference_chars": 91,
+          "normalized_expected": "arablar bu yerlarga islomni ham olib kelishdi va bu komor orollari hamda mayottada katta ahamiyat kasb etdi",
+          "normalized_actual": "ʃarak ʃarbu yelarg ʃaslamn ʃamal pili ʃtibabukum ʃarak ʃandam ayut ʃadiket ʃakha ʃanid qasbiyet ʃaqt"
+        },
+        "phonetic_cyrillic": {
+          "word_edits": 17,
+          "reference_words": 17,
+          "char_edits": 47,
+          "reference_chars": 91,
+          "normalized_expected": "arablar bu yerlarga islomni ham olib kelishdi va bu komor orollari hamda mayottada katta ahamiyat kasb etdi",
+          "normalized_actual": "ʃarak ʃarbu yelarg ʃaslamn ʃamal pili ʃtibabukum ʃarak ʃandam ayut ʃadiket ʃakha ʃanid qasbiyet ʃaqt"
+        }
+      },
+      {
+        "row_index": 2,
+        "duration_seconds": 3.12,
+        "expected": "U WiFi eshik qo'ng'irog'ini yasadi, dedi u.",
+        "recognized": "ʃu wai fai shi kon kon kon kon nya sa dedu.",
+        "processing_ms": 5625,
+        "model": "small-q5_1",
+        "raw": {
+          "word_edits": 11,
+          "reference_words": 7,
+          "char_edits": 17,
+          "reference_chars": 35,
+          "normalized_expected": "u wifi eshik qo'ng'irog'ini yasadi dedi u",
+          "normalized_actual": "ʃu wai fai shi kon kon kon kon nya sa dedu"
+        },
+        "uzbek": {
+          "word_edits": 11,
+          "reference_words": 7,
+          "char_edits": 17,
+          "reference_chars": 35,
+          "normalized_expected": "u wifi eshik qo'ng'irog'ini yasadi dedi u",
+          "normalized_actual": "ʃu wai fai shi kon kon kon kon nya sa dedu"
+        },
+        "phonetic_cyrillic": {
+          "word_edits": 11,
+          "reference_words": 7,
+          "char_edits": 17,
+          "reference_chars": 35,
+          "normalized_expected": "u wifi eshik qo'ng'irog'ini yasadi dedi u",
+          "normalized_actual": "ʃu wai fai shi kon kon kon kon nya sa dedu"
+        }
+      },
+      {
+        "row_index": 4,
+        "duration_seconds": 9.9,
+        "expected": "Iltimos, bu joyga u loyiq bo'lgan sharaf, jiddiylik va hurmat bilan munosabatda bo'ling. Xolokast yoki fashistlar haqida hazil qilmang.",
+        "recognized": "Liltama suh bujya ek e ula yuk bul yanzharaf jitili ek wa khormat bul amunasa bat tabuli. Hula kazd yake fashistlar haqada khazl qalme.",
+        "processing_ms": 15250,
+        "model": "small-q5_1",
+        "raw": {
+          "word_edits": 23,
+          "reference_words": 19,
+          "char_edits": 46,
+          "reference_chars": 113,
+          "normalized_expected": "iltimos bu joyga u loyiq bo'lgan sharaf jiddiylik va hurmat bilan munosabatda bo'ling xolokast yoki fashistlar haqida hazil qilmang",
+          "normalized_actual": "liltama suh bujya ek e ula yuk bul yanzharaf jitili ek wa khormat bul amunasa bat tabuli hula kazd yake fashistlar haqada khazl qalme"
+        },
+        "uzbek": {
+          "word_edits": 23,
+          "reference_words": 19,
+          "char_edits": 46,
+          "reference_chars": 113,
+          "normalized_expected": "iltimos bu joyga u loyiq bo'lgan sharaf jiddiylik va hurmat bilan munosabatda bo'ling xolokast yoki fashistlar haqida hazil qilmang",
+          "normalized_actual": "liltama suh bujya ek e ula yuk bul yanzharaf jitili ek wa khormat bul amunasa bat tabuli hula kazd yake fashistlar haqada khazl qalme"
+        },
+        "phonetic_cyrillic": {
+          "word_edits": 23,
+          "reference_words": 19,
+          "char_edits": 46,
+          "reference_chars": 113,
+          "normalized_expected": "iltimos bu joyga u loyiq bo'lgan sharaf jiddiylik va hurmat bilan munosabatda bo'ling xolokast yoki fashistlar haqida hazil qilmang",
+          "normalized_actual": "liltama suh bujya ek e ula yuk bul yanzharaf jitili ek wa khormat bul amunasa bat tabuli hula kazd yake fashistlar haqada khazl qalme"
+        }
+      },
+      {
+        "row_index": 5,
+        "duration_seconds": 8.4,
+        "expected": "Qit'adan bo'lgan uzoq masofa sababli, sutemizuvchilar safar qila olmasdi, bu ulkan toshbaqalarni Galapagosdagi asosiy o'tlovchi hayvonga aylantirdi.",
+        "recognized": "Adan bor gnawzaq mazaqas qe ba du simi luqsya faza parqa almas, bulqan tash baq lanen qa wa paqa us te qasasi ut luqsya hay ban yain adirth.",
+        "processing_ms": 50156,
+        "model": "small-q5_1",
+        "raw": {
+          "word_edits": 28,
+          "reference_words": 17,
+          "char_edits": 70,
+          "reference_chars": 129,
+          "normalized_expected": "qit'adan bo'lgan uzoq masofa sababli sutemizuvchilar safar qila olmasdi bu ulkan toshbaqalarni galapagosdagi asosiy o'tlovchi hayvonga aylantirdi",
+          "normalized_actual": "adan bor gnawzaq mazaqas qe ba du simi luqsya faza parqa almas bulqan tash baq lanen qa wa paqa us te qasasi ut luqsya hay ban yain adirth"
+        },
+        "uzbek": {
+          "word_edits": 28,
+          "reference_words": 17,
+          "char_edits": 70,
+          "reference_chars": 129,
+          "normalized_expected": "qit'adan bo'lgan uzoq masofa sababli sutemizuvchilar safar qila olmasdi bu ulkan toshbaqalarni galapagosdagi asosiy o'tlovchi hayvonga aylantirdi",
+          "normalized_actual": "adan bor gnawzaq mazaqas qe ba du simi luqsya faza parqa almas bulqan tash baq lanen qa wa paqa us te qasasi ut luqsya hay ban yain adirth"
+        },
+        "phonetic_cyrillic": {
+          "word_edits": 28,
+          "reference_words": 17,
+          "char_edits": 70,
+          "reference_chars": 129,
+          "normalized_expected": "qit'adan bo'lgan uzoq masofa sababli sutemizuvchilar safar qila olmasdi bu ulkan toshbaqalarni galapagosdagi asosiy o'tlovchi hayvonga aylantirdi",
+          "normalized_actual": "adan bor gnawzaq mazaqas qe ba du simi luqsya faza parqa almas bulqan tash baq lanen qa wa paqa us te qasasi ut luqsya hay ban yain adirth"
+        }
+      },
+      {
+        "row_index": 6,
+        "duration_seconds": 9.78,
+        "expected": "Mamlakat bo'ylab mashhur xonandalar Shri Shyamga bag'ishlab qo'shiqlar, bhajanlar namoyish etishdi.",
+        "recognized": "Mamlaqat boilab mashkhor hanandalar shri ishiamga baghislab koshkhlar bhaqha janlar namayi shiit shti.",
+        "processing_ms": 27719,
+        "model": "small-q5_1",
+        "raw": {
+          "word_edits": 12,
+          "reference_words": 11,
+          "char_edits": 23,
+          "reference_chars": 87,
+          "normalized_expected": "mamlakat bo'ylab mashhur xonandalar shri shyamga bag'ishlab qo'shiqlar bhajanlar namoyish etishdi",
+          "normalized_actual": "mamlaqat boilab mashkhor hanandalar shri ishiamga baghislab koshkhlar bhaqha janlar namayi shiit shti"
+        },
+        "uzbek": {
+          "word_edits": 12,
+          "reference_words": 11,
+          "char_edits": 23,
+          "reference_chars": 87,
+          "normalized_expected": "mamlakat bo'ylab mashhur xonandalar shri shyamga bag'ishlab qo'shiqlar bhajanlar namoyish etishdi",
+          "normalized_actual": "mamlaqat boilab mashkhor hanandalar shri ishiamga baghislab koshkhlar bhaqha janlar namayi shiit shti"
+        },
+        "phonetic_cyrillic": {
+          "word_edits": 12,
+          "reference_words": 11,
+          "char_edits": 23,
+          "reference_chars": 87,
+          "normalized_expected": "mamlakat bo'ylab mashhur xonandalar shri shyamga bag'ishlab qo'shiqlar bhajanlar namoyish etishdi",
+          "normalized_actual": "mamlaqat boilab mashkhor hanandalar shri ishiamga baghislab koshkhlar bhaqha janlar namayi shiit shti"
+        }
+      },
+      {
+        "row_index": 7,
+        "duration_seconds": 6.84,
+        "expected": "Ilk marta xorijga chiqqaningizda odamlar sayyohlar yangi davlatga moslashishi zarurligini bilib, hoynahoy, sabrli va tushunuvchan bo'lgan.",
+        "recognized": "ʰikmata xaʃ qaʃ qaʃ qanmiz adama ʰasar yangidaywakhi masaj ʰagliqin bada ʰakhaʃ ʰabrli bachin ʰuʃan buliyin.",
+        "processing_ms": 41765,
+        "model": "small-q5_1",
+        "raw": {
+          "word_edits": 16,
+          "reference_words": 16,
+          "char_edits": 68,
+          "reference_chars": 120,
+          "normalized_expected": "ilk marta xorijga chiqqaningizda odamlar sayyohlar yangi davlatga moslashishi zarurligini bilib hoynahoy sabrli va tushunuvchan bo'lgan",
+          "normalized_actual": "hikmata xaʃ qaʃ qaʃ qanmiz adama hasar yangidaywakhi masaj hagliqin bada hakhaʃ habrli bachin huʃan buliyin"
+        },
+        "uzbek": {
+          "word_edits": 16,
+          "reference_words": 16,
+          "char_edits": 68,
+          "reference_chars": 120,
+          "normalized_expected": "ilk marta xorijga chiqqaningizda odamlar sayyohlar yangi davlatga moslashishi zarurligini bilib hoynahoy sabrli va tushunuvchan bo'lgan",
+          "normalized_actual": "hikmata xaʃ qaʃ qaʃ qanmiz adama hasar yangidaywakhi masaj hagliqin bada hakhaʃ habrli bachin huʃan buliyin"
+        },
+        "phonetic_cyrillic": {
+          "word_edits": 16,
+          "reference_words": 16,
+          "char_edits": 68,
+          "reference_chars": 120,
+          "normalized_expected": "ilk marta xorijga chiqqaningizda odamlar sayyohlar yangi davlatga moslashishi zarurligini bilib hoynahoy sabrli va tushunuvchan bo'lgan",
+          "normalized_actual": "hikmata xaʃ qaʃ qaʃ qanmiz adama hasar yangidaywakhi masaj hagliqin bada hakhaʃ habrli bachin huʃan buliyin"
+        }
+      },
+      {
+        "row_index": 8,
+        "duration_seconds": 11.58,
+        "expected": "Mazkur nazariyalar shuni ko'rsatadiki, insonlar balog'at yoshiga qadam qo'yguniga qadar, ularda muayyan ichki ehtiyojlar va/yoki xohishlar bo'ladi.",
+        "recognized": "Masqun nazaryalar shunukursetade ki insallar balagad yash yakadan qoybun nge qadar ulardam mo ayan hk iqdeojlar waya ke khakhshlar bulad.",
+        "processing_ms": 16906,
+        "model": "small-q5_1",
+        "raw": {
+          "word_edits": 19,
+          "reference_words": 18,
+          "char_edits": 44,
+          "reference_chars": 127,
+          "normalized_expected": "mazkur nazariyalar shuni ko'rsatadiki insonlar balog'at yoshiga qadam qo'yguniga qadar ularda muayyan ichki ehtiyojlar va yoki xohishlar bo'ladi",
+          "normalized_actual": "masqun nazaryalar shunukursetade ki insallar balagad yash yakadan qoybun nge qadar ulardam mo ayan hk iqdeojlar waya ke khakhshlar bulad"
+        },
+        "uzbek": {
+          "word_edits": 19,
+          "reference_words": 18,
+          "char_edits": 44,
+          "reference_chars": 127,
+          "normalized_expected": "mazkur nazariyalar shuni ko'rsatadiki insonlar balog'at yoshiga qadam qo'yguniga qadar ularda muayyan ichki ehtiyojlar va yoki xohishlar bo'ladi",
+          "normalized_actual": "masqun nazaryalar shunukursetade ki insallar balagad yash yakadan qoybun nge qadar ulardam mo ayan hk iqdeojlar waya ke khakhshlar bulad"
+        },
+        "phonetic_cyrillic": {
+          "word_edits": 19,
+          "reference_words": 18,
+          "char_edits": 44,
+          "reference_chars": 127,
+          "normalized_expected": "mazkur nazariyalar shuni ko'rsatadiki insonlar balog'at yoshiga qadam qo'yguniga qadar ularda muayyan ichki ehtiyojlar va yoki xohishlar bo'ladi",
+          "normalized_actual": "masqun nazaryalar shunukursetade ki insallar balagad yash yakadan qoybun nge qadar ulardam mo ayan hk iqdeojlar waya ke khakhshlar bulad"
+        }
+      }
+    ],
+    "temporary_voice_state_removed": true,
+    "summary": {
+      "raw": {
+        "word_edits": 140,
+        "reference_words": 121,
+        "char_edits": 350,
+        "reference_chars": 801,
+        "wer": 1.1570247933884297,
+        "cer": 0.4369538077403246
+      },
+      "uzbek": {
+        "word_edits": 140,
+        "reference_words": 121,
+        "char_edits": 350,
+        "reference_chars": 801,
+        "wer": 1.1570247933884297,
+        "cer": 0.4369538077403246
+      },
+      "phonetic_cyrillic": {
+        "word_edits": 140,
+        "reference_words": 121,
+        "char_edits": 350,
+        "reference_chars": 801,
+        "wer": 1.1570247933884297,
+        "cer": 0.4369538077403246
+      },
+      "latency": {
+        "utterances": 8,
+        "total_ms": 170296,
+        "mean_ms": 21287,
+        "median_ms": 16078.0,
+        "audio_seconds": 66.12,
+        "aggregate_real_time_factor": 2.575559588626739
+      }
+    },
+    "model_sha1": "6fe57ddcfdd1c6b07cdcc73aaf620810ce5fc771",
+    "cpu_only": true,
+    "beam_size": 5,
+    "best_of": 5,
+    "offline_candidate_registry_only": false,
+    "timing_note": "Initial small and two-clip turbo batches briefly overlapped. Variable host load and one measurement per item make these timings indicative; do not claim speed improvement from comparing them."
+  },
+  "final": {
+    "schema": 1,
+    "label": "navai-small-uz-vad",
+    "model": "navai-small-uz-q5_1",
+    "model_identity": {
+      "path": "ggml-navai-small-uz-q5_1.bin",
+      "size": 190085504,
+      "sha256": "b37c8935d4c2603404bdd7659a9e98c4f1f780712392de43d7a2c96fc5a8196b"
+    },
+    "model_sha1": "5a549f1750434650c3bcbc2fb2c85ff91b30cbcc",
+    "offline_candidate_registry_only": false,
+    "runtime_source_sha256": "77e83416cc1ec3a57c07b7b3124c1f1ecd0af67962ab266081f8797abf9683d5",
+    "language": "uz",
+    "prompt": null,
+    "extra_flags": [],
+    "threads": 4,
+    "fixtures_manifest_sha256": "919defdb8480184d9ced4c9a9de05bb7019c4ec5edd4b79a52ce4c450b206011",
+    "tested_utc": "2026-10-11T13:11:31.344996+00:00",
+    "microphone_recordings": 0,
+    "actions_executed": 0,
+    "limitations": "8 public read-speech validation clips, deterministic preview subset (all available metadata gender1, speaker IDs unavailable); not population, microphone, noise, accents, or conversational accuracy. One timed run per item includes process/model load. Per-utterance timing may vary with other system load. Initial small and 2-clip turbo batches briefly overlapped; their timing is indicative only.",
+    "normalization": {
+      "raw": "NFKC lowercase, apostrophe variants unified, punctuation split, boundary apostrophes stripped.",
+      "uzbek": "raw + standard Uzbek Cyrillic-to-Latin transliteration + decimal digits to Uzbek words. No fuzzy spelling correction.",
+      "phonetic_cyrillic": "uzbek + deterministic transliteration of Kazakh-like alternative Cyrillic letters (і ұ ү ө ә ң һ); indicative only."
+    },
+    "utterances": [
+      {
+        "row_index": 0,
+        "duration_seconds": 9.78,
+        "expected": "Bir kunda bor-yo'g'i o'n sakkizta medal bo'lgani sababli bir qator mamlakatlar medal shohsupasiga ko'tarila olmadi.",
+        "recognized": "bir kunda bor yoʻgʻi oʻn sakkizta medal boʻlgani sababli bir qator mamlakatlar medal shohsupasiga koʻtarila olmadi",
+        "processing_ms": 5297,
+        "decoder_argv": [
+          [
+            "${WORKSPACE}\\coucou-source\\windows\\localai-service\\public-voice-uzbek\\whisper-cli.exe",
+            "-m",
+            "${WORKSPACE}\\coucou-source\\windows\\localai-service\\public-voice-uzbek\\ggml-navai-small-uz-q5_1.bin",
+            "-f",
+            "<public-fixture.wav>",
+            "-l",
+            "uz",
+            "-t",
+            "4",
+            "-p",
+            "1",
+            "-ng",
+            "-np",
+            "-oj",
+            "-of",
+            "<temporary-result>",
+            "--no-timestamps",
+            "--vad",
+            "-vm",
+            "${WORKSPACE}\\coucou-source\\windows\\localai-service\\public-voice-uzbek\\ggml-silero-v6.2.0.bin",
+            "-vt",
+            "0.5",
+            "-vp",
+            "200"
+          ]
+        ],
+        "model": "navai-small-uz-q5_1",
+        "raw": {
+          "word_edits": 0,
+          "reference_words": 16,
+          "char_edits": 0,
+          "reference_chars": 99,
+          "normalized_expected": "bir kunda bor yo'g'i o'n sakkizta medal bo'lgani sababli bir qator mamlakatlar medal shohsupasiga ko'tarila olmadi",
+          "normalized_actual": "bir kunda bor yo'g'i o'n sakkizta medal bo'lgani sababli bir qator mamlakatlar medal shohsupasiga ko'tarila olmadi"
+        },
+        "uzbek": {
+          "word_edits": 0,
+          "reference_words": 16,
+          "char_edits": 0,
+          "reference_chars": 99,
+          "normalized_expected": "bir kunda bor yo'g'i o'n sakkizta medal bo'lgani sababli bir qator mamlakatlar medal shohsupasiga ko'tarila olmadi",
+          "normalized_actual": "bir kunda bor yo'g'i o'n sakkizta medal bo'lgani sababli bir qator mamlakatlar medal shohsupasiga ko'tarila olmadi"
+        },
+        "phonetic_cyrillic": {
+          "word_edits": 0,
+          "reference_words": 16,
+          "char_edits": 0,
+          "reference_chars": 99,
+          "normalized_expected": "bir kunda bor yo'g'i o'n sakkizta medal bo'lgani sababli bir qator mamlakatlar medal shohsupasiga ko'tarila olmadi",
+          "normalized_actual": "bir kunda bor yo'g'i o'n sakkizta medal bo'lgani sababli bir qator mamlakatlar medal shohsupasiga ko'tarila olmadi"
+        }
+      },
+      {
+        "row_index": 1,
+        "duration_seconds": 6.72,
+        "expected": "Arablar bu yerlarga islomni ham olib kelishdi va bu Komor orollari hamda Mayottada katta ahamiyat kasb etdi.",
+        "recognized": "arablar bu yerlarga islomni ham olib kelishdi va bu komil orollari hamda mayuttada katta ahamiyat kasb etdi",
+        "processing_ms": 4609,
+        "decoder_argv": [
+          [
+            "${WORKSPACE}\\coucou-source\\windows\\localai-service\\public-voice-uzbek\\whisper-cli.exe",
+            "-m",
+            "${WORKSPACE}\\coucou-source\\windows\\localai-service\\public-voice-uzbek\\ggml-navai-small-uz-q5_1.bin",
+            "-f",
+            "<public-fixture.wav>",
+            "-l",
+            "uz",
+            "-t",
+            "4",
+            "-p",
+            "1",
+            "-ng",
+            "-np",
+            "-oj",
+            "-of",
+            "<temporary-result>",
+            "--no-timestamps",
+            "--vad",
+            "-vm",
+            "${WORKSPACE}\\coucou-source\\windows\\localai-service\\public-voice-uzbek\\ggml-silero-v6.2.0.bin",
+            "-vt",
+            "0.5",
+            "-vp",
+            "200"
+          ]
+        ],
+        "model": "navai-small-uz-q5_1",
+        "raw": {
+          "word_edits": 2,
+          "reference_words": 17,
+          "char_edits": 3,
+          "reference_chars": 91,
+          "normalized_expected": "arablar bu yerlarga islomni ham olib kelishdi va bu komor orollari hamda mayottada katta ahamiyat kasb etdi",
+          "normalized_actual": "arablar bu yerlarga islomni ham olib kelishdi va bu komil orollari hamda mayuttada katta ahamiyat kasb etdi"
+        },
+        "uzbek": {
+          "word_edits": 2,
+          "reference_words": 17,
+          "char_edits": 3,
+          "reference_chars": 91,
+          "normalized_expected": "arablar bu yerlarga islomni ham olib kelishdi va bu komor orollari hamda mayottada katta ahamiyat kasb etdi",
+          "normalized_actual": "arablar bu yerlarga islomni ham olib kelishdi va bu komil orollari hamda mayuttada katta ahamiyat kasb etdi"
+        },
+        "phonetic_cyrillic": {
+          "word_edits": 2,
+          "reference_words": 17,
+          "char_edits": 3,
+          "reference_chars": 91,
+          "normalized_expected": "arablar bu yerlarga islomni ham olib kelishdi va bu komor orollari hamda mayottada katta ahamiyat kasb etdi",
+          "normalized_actual": "arablar bu yerlarga islomni ham olib kelishdi va bu komil orollari hamda mayuttada katta ahamiyat kasb etdi"
+        }
+      },
+      {
+        "row_index": 2,
+        "duration_seconds": 3.12,
+        "expected": "U WiFi eshik qo'ng'irog'ini yasadi, dedi u.",
+        "recognized": "bu wifi eshik qoʻngʻiroqini yasadi dedi u",
+        "processing_ms": 4266,
+        "decoder_argv": [
+          [
+            "${WORKSPACE}\\coucou-source\\windows\\localai-service\\public-voice-uzbek\\whisper-cli.exe",
+            "-m",
+            "${WORKSPACE}\\coucou-source\\windows\\localai-service\\public-voice-uzbek\\ggml-navai-small-uz-q5_1.bin",
+            "-f",
+            "<public-fixture.wav>",
+            "-l",
+            "uz",
+            "-t",
+            "4",
+            "-p",
+            "1",
+            "-ng",
+            "-np",
+            "-oj",
+            "-of",
+            "<temporary-result>",
+            "--no-timestamps",
+            "--vad",
+            "-vm",
+            "${WORKSPACE}\\coucou-source\\windows\\localai-service\\public-voice-uzbek\\ggml-silero-v6.2.0.bin",
+            "-vt",
+            "0.5",
+            "-vp",
+            "200"
+          ]
+        ],
+        "model": "navai-small-uz-q5_1",
+        "raw": {
+          "word_edits": 2,
+          "reference_words": 7,
+          "char_edits": 3,
+          "reference_chars": 35,
+          "normalized_expected": "u wifi eshik qo'ng'irog'ini yasadi dedi u",
+          "normalized_actual": "bu wifi eshik qo'ng'iroqini yasadi dedi u"
+        },
+        "uzbek": {
+          "word_edits": 2,
+          "reference_words": 7,
+          "char_edits": 3,
+          "reference_chars": 35,
+          "normalized_expected": "u wifi eshik qo'ng'irog'ini yasadi dedi u",
+          "normalized_actual": "bu wifi eshik qo'ng'iroqini yasadi dedi u"
+        },
+        "phonetic_cyrillic": {
+          "word_edits": 2,
+          "reference_words": 7,
+          "char_edits": 3,
+          "reference_chars": 35,
+          "normalized_expected": "u wifi eshik qo'ng'irog'ini yasadi dedi u",
+          "normalized_actual": "bu wifi eshik qo'ng'iroqini yasadi dedi u"
+        }
+      },
+      {
+        "row_index": 4,
+        "duration_seconds": 9.9,
+        "expected": "Iltimos, bu joyga u loyiq bo'lgan sharaf, jiddiylik va hurmat bilan munosabatda bo'ling. Xolokast yoki fashistlar haqida hazil qilmang.",
+        "recognized": "iltimos bu joyga ulov yoʻq boʻlgan sharaf jiddiylik va hurmat bilan munosabatda boʻling xolokaz yoki fashistlar haqida hazil qilmang",
+        "processing_ms": 5188,
+        "decoder_argv": [
+          [
+            "${WORKSPACE}\\coucou-source\\windows\\localai-service\\public-voice-uzbek\\whisper-cli.exe",
+            "-m",
+            "${WORKSPACE}\\coucou-source\\windows\\localai-service\\public-voice-uzbek\\ggml-navai-small-uz-q5_1.bin",
+            "-f",
+            "<public-fixture.wav>",
+            "-l",
+            "uz",
+            "-t",
+            "4",
+            "-p",
+            "1",
+            "-ng",
+            "-np",
+            "-oj",
+            "-of",
+            "<temporary-result>",
+            "--no-timestamps",
+            "--vad",
+            "-vm",
+            "${WORKSPACE}\\coucou-source\\windows\\localai-service\\public-voice-uzbek\\ggml-silero-v6.2.0.bin",
+            "-vt",
+            "0.5",
+            "-vp",
+            "200"
+          ]
+        ],
+        "model": "navai-small-uz-q5_1",
+        "raw": {
+          "word_edits": 3,
+          "reference_words": 19,
+          "char_edits": 5,
+          "reference_chars": 113,
+          "normalized_expected": "iltimos bu joyga u loyiq bo'lgan sharaf jiddiylik va hurmat bilan munosabatda bo'ling xolokast yoki fashistlar haqida hazil qilmang",
+          "normalized_actual": "iltimos bu joyga ulov yo'q bo'lgan sharaf jiddiylik va hurmat bilan munosabatda bo'ling xolokaz yoki fashistlar haqida hazil qilmang"
+        },
+        "uzbek": {
+          "word_edits": 3,
+          "reference_words": 19,
+          "char_edits": 5,
+          "reference_chars": 113,
+          "normalized_expected": "iltimos bu joyga u loyiq bo'lgan sharaf jiddiylik va hurmat bilan munosabatda bo'ling xolokast yoki fashistlar haqida hazil qilmang",
+          "normalized_actual": "iltimos bu joyga ulov yo'q bo'lgan sharaf jiddiylik va hurmat bilan munosabatda bo'ling xolokaz yoki fashistlar haqida hazil qilmang"
+        },
+        "phonetic_cyrillic": {
+          "word_edits": 3,
+          "reference_words": 19,
+          "char_edits": 5,
+          "reference_chars": 113,
+          "normalized_expected": "iltimos bu joyga u loyiq bo'lgan sharaf jiddiylik va hurmat bilan munosabatda bo'ling xolokast yoki fashistlar haqida hazil qilmang",
+          "normalized_actual": "iltimos bu joyga ulov yo'q bo'lgan sharaf jiddiylik va hurmat bilan munosabatda bo'ling xolokaz yoki fashistlar haqida hazil qilmang"
+        }
+      },
+      {
+        "row_index": 5,
+        "duration_seconds": 8.4,
+        "expected": "Qit'adan bo'lgan uzoq masofa sababli, sutemizuvchilar safar qila olmasdi, bu ulkan toshbaqalarni Galapagosdagi asosiy o'tlovchi hayvonga aylantirdi.",
+        "recognized": "dadam boʻlgan uzoq masofa sababli semizuvchilar safar qila olmasdi boʻlgan toshboqilarni galapagoslik asosiy oʻtiruvchi hayvonga aylantirdi",
+        "processing_ms": 5375,
+        "decoder_argv": [
+          [
+            "${WORKSPACE}\\coucou-source\\windows\\localai-service\\public-voice-uzbek\\whisper-cli.exe",
+            "-m",
+            "${WORKSPACE}\\coucou-source\\windows\\localai-service\\public-voice-uzbek\\ggml-navai-small-uz-q5_1.bin",
+            "-f",
+            "<public-fixture.wav>",
+            "-l",
+            "uz",
+            "-t",
+            "4",
+            "-p",
+            "1",
+            "-ng",
+            "-np",
+            "-oj",
+            "-of",
+            "<temporary-result>",
+            "--no-timestamps",
+            "--vad",
+            "-vm",
+            "${WORKSPACE}\\coucou-source\\windows\\localai-service\\public-voice-uzbek\\ggml-silero-v6.2.0.bin",
+            "-vt",
+            "0.5",
+            "-vp",
+            "200"
+          ]
+        ],
+        "model": "navai-small-uz-q5_1",
+        "raw": {
+          "word_edits": 7,
+          "reference_words": 17,
+          "char_edits": 19,
+          "reference_chars": 129,
+          "normalized_expected": "qit'adan bo'lgan uzoq masofa sababli sutemizuvchilar safar qila olmasdi bu ulkan toshbaqalarni galapagosdagi asosiy o'tlovchi hayvonga aylantirdi",
+          "normalized_actual": "dadam bo'lgan uzoq masofa sababli semizuvchilar safar qila olmasdi bo'lgan toshboqilarni galapagoslik asosiy o'tiruvchi hayvonga aylantirdi"
+        },
+        "uzbek": {
+          "word_edits": 7,
+          "reference_words": 17,
+          "char_edits": 19,
+          "reference_chars": 129,
+          "normalized_expected": "qit'adan bo'lgan uzoq masofa sababli sutemizuvchilar safar qila olmasdi bu ulkan toshbaqalarni galapagosdagi asosiy o'tlovchi hayvonga aylantirdi",
+          "normalized_actual": "dadam bo'lgan uzoq masofa sababli semizuvchilar safar qila olmasdi bo'lgan toshboqilarni galapagoslik asosiy o'tiruvchi hayvonga aylantirdi"
+        },
+        "phonetic_cyrillic": {
+          "word_edits": 7,
+          "reference_words": 17,
+          "char_edits": 19,
+          "reference_chars": 129,
+          "normalized_expected": "qit'adan bo'lgan uzoq masofa sababli sutemizuvchilar safar qila olmasdi bu ulkan toshbaqalarni galapagosdagi asosiy o'tlovchi hayvonga aylantirdi",
+          "normalized_actual": "dadam bo'lgan uzoq masofa sababli semizuvchilar safar qila olmasdi bo'lgan toshboqilarni galapagoslik asosiy o'tiruvchi hayvonga aylantirdi"
+        }
+      },
+      {
+        "row_index": 6,
+        "duration_seconds": 9.78,
+        "expected": "Mamlakat bo'ylab mashhur xonandalar Shri Shyamga bag'ishlab qo'shiqlar, bhajanlar namoyish etishdi.",
+        "recognized": "mamlakat boʻylab mashhur xonandalar shiraishyamga bagʻishlab qoʻshiqlar bxajonlar namoyish etishdi",
+        "processing_ms": 4797,
+        "decoder_argv": [
+          [
+            "${WORKSPACE}\\coucou-source\\windows\\localai-service\\public-voice-uzbek\\whisper-cli.exe",
+            "-m",
+            "${WORKSPACE}\\coucou-source\\windows\\localai-service\\public-voice-uzbek\\ggml-navai-small-uz-q5_1.bin",
+            "-f",
+            "<public-fixture.wav>",
+            "-l",
+            "uz",
+            "-t",
+            "4",
+            "-p",
+            "1",
+            "-ng",
+            "-np",
+            "-oj",
+            "-of",
+            "<temporary-result>",
+            "--no-timestamps",
+            "--vad",
+            "-vm",
+            "${WORKSPACE}\\coucou-source\\windows\\localai-service\\public-voice-uzbek\\ggml-silero-v6.2.0.bin",
+            "-vt",
+            "0.5",
+            "-vp",
+            "200"
+          ]
+        ],
+        "model": "navai-small-uz-q5_1",
+        "raw": {
+          "word_edits": 3,
+          "reference_words": 11,
+          "char_edits": 4,
+          "reference_chars": 87,
+          "normalized_expected": "mamlakat bo'ylab mashhur xonandalar shri shyamga bag'ishlab qo'shiqlar bhajanlar namoyish etishdi",
+          "normalized_actual": "mamlakat bo'ylab mashhur xonandalar shiraishyamga bag'ishlab qo'shiqlar bxajonlar namoyish etishdi"
+        },
+        "uzbek": {
+          "word_edits": 3,
+          "reference_words": 11,
+          "char_edits": 4,
+          "reference_chars": 87,
+          "normalized_expected": "mamlakat bo'ylab mashhur xonandalar shri shyamga bag'ishlab qo'shiqlar bhajanlar namoyish etishdi",
+          "normalized_actual": "mamlakat bo'ylab mashhur xonandalar shiraishyamga bag'ishlab qo'shiqlar bxajonlar namoyish etishdi"
+        },
+        "phonetic_cyrillic": {
+          "word_edits": 3,
+          "reference_words": 11,
+          "char_edits": 4,
+          "reference_chars": 87,
+          "normalized_expected": "mamlakat bo'ylab mashhur xonandalar shri shyamga bag'ishlab qo'shiqlar bhajanlar namoyish etishdi",
+          "normalized_actual": "mamlakat bo'ylab mashhur xonandalar shiraishyamga bag'ishlab qo'shiqlar bxajonlar namoyish etishdi"
+        }
+      },
+      {
+        "row_index": 7,
+        "duration_seconds": 6.84,
+        "expected": "Ilk marta xorijga chiqqaningizda odamlar sayyohlar yangi davlatga moslashishi zarurligini bilib, hoynahoy, sabrli va tushunuvchan bo'lgan.",
+        "recognized": "ilk marta xorijga chiqqanimiz odamlar saygʻoqlari yangi tartibga moslash zarurligini bilib qaynahak sabrli bir shuning uchun boʻlgan",
+        "processing_ms": 5735,
+        "decoder_argv": [
+          [
+            "${WORKSPACE}\\coucou-source\\windows\\localai-service\\public-voice-uzbek\\whisper-cli.exe",
+            "-m",
+            "${WORKSPACE}\\coucou-source\\windows\\localai-service\\public-voice-uzbek\\ggml-navai-small-uz-q5_1.bin",
+            "-f",
+            "<public-fixture.wav>",
+            "-l",
+            "uz",
+            "-t",
+            "4",
+            "-p",
+            "1",
+            "-ng",
+            "-np",
+            "-oj",
+            "-of",
+            "<temporary-result>",
+            "--no-timestamps",
+            "--vad",
+            "-vm",
+            "${WORKSPACE}\\coucou-source\\windows\\localai-service\\public-voice-uzbek\\ggml-silero-v6.2.0.bin",
+            "-vt",
+            "0.5",
+            "-vp",
+            "200"
+          ]
+        ],
+        "model": "navai-small-uz-q5_1",
+        "raw": {
+          "word_edits": 8,
+          "reference_words": 16,
+          "char_edits": 30,
+          "reference_chars": 120,
+          "normalized_expected": "ilk marta xorijga chiqqaningizda odamlar sayyohlar yangi davlatga moslashishi zarurligini bilib hoynahoy sabrli va tushunuvchan bo'lgan",
+          "normalized_actual": "ilk marta xorijga chiqqanimiz odamlar sayg'oqlari yangi tartibga moslash zarurligini bilib qaynahak sabrli bir shuning uchun bo'lgan"
+        },
+        "uzbek": {
+          "word_edits": 8,
+          "reference_words": 16,
+          "char_edits": 30,
+          "reference_chars": 120,
+          "normalized_expected": "ilk marta xorijga chiqqaningizda odamlar sayyohlar yangi davlatga moslashishi zarurligini bilib hoynahoy sabrli va tushunuvchan bo'lgan",
+          "normalized_actual": "ilk marta xorijga chiqqanimiz odamlar sayg'oqlari yangi tartibga moslash zarurligini bilib qaynahak sabrli bir shuning uchun bo'lgan"
+        },
+        "phonetic_cyrillic": {
+          "word_edits": 8,
+          "reference_words": 16,
+          "char_edits": 30,
+          "reference_chars": 120,
+          "normalized_expected": "ilk marta xorijga chiqqaningizda odamlar sayyohlar yangi davlatga moslashishi zarurligini bilib hoynahoy sabrli va tushunuvchan bo'lgan",
+          "normalized_actual": "ilk marta xorijga chiqqanimiz odamlar sayg'oqlari yangi tartibga moslash zarurligini bilib qaynahak sabrli bir shuning uchun bo'lgan"
+        }
+      },
+      {
+        "row_index": 8,
+        "duration_seconds": 11.58,
+        "expected": "Mazkur nazariyalar shuni ko'rsatadiki, insonlar balog'at yoshiga qadam qo'yguniga qadar, ularda muayyan ichki ehtiyojlar va/yoki xohishlar bo'ladi.",
+        "recognized": "mazkur nazariyalar shuni koʻrsatadiki insonlar balogʻat yoshiga qadam qoʻyguniga qadar ularda muayyan ichki ehtiyojlar va yoki xohishlar boʻladi",
+        "processing_ms": 6172,
+        "decoder_argv": [
+          [
+            "${WORKSPACE}\\coucou-source\\windows\\localai-service\\public-voice-uzbek\\whisper-cli.exe",
+            "-m",
+            "${WORKSPACE}\\coucou-source\\windows\\localai-service\\public-voice-uzbek\\ggml-navai-small-uz-q5_1.bin",
+            "-f",
+            "<public-fixture.wav>",
+            "-l",
+            "uz",
+            "-t",
+            "4",
+            "-p",
+            "1",
+            "-ng",
+            "-np",
+            "-oj",
+            "-of",
+            "<temporary-result>",
+            "--no-timestamps",
+            "--vad",
+            "-vm",
+            "${WORKSPACE}\\coucou-source\\windows\\localai-service\\public-voice-uzbek\\ggml-silero-v6.2.0.bin",
+            "-vt",
+            "0.5",
+            "-vp",
+            "200"
+          ]
+        ],
+        "model": "navai-small-uz-q5_1",
+        "raw": {
+          "word_edits": 0,
+          "reference_words": 18,
+          "char_edits": 0,
+          "reference_chars": 127,
+          "normalized_expected": "mazkur nazariyalar shuni ko'rsatadiki insonlar balog'at yoshiga qadam qo'yguniga qadar ularda muayyan ichki ehtiyojlar va yoki xohishlar bo'ladi",
+          "normalized_actual": "mazkur nazariyalar shuni ko'rsatadiki insonlar balog'at yoshiga qadam qo'yguniga qadar ularda muayyan ichki ehtiyojlar va yoki xohishlar bo'ladi"
+        },
+        "uzbek": {
+          "word_edits": 0,
+          "reference_words": 18,
+          "char_edits": 0,
+          "reference_chars": 127,
+          "normalized_expected": "mazkur nazariyalar shuni ko'rsatadiki insonlar balog'at yoshiga qadam qo'yguniga qadar ularda muayyan ichki ehtiyojlar va yoki xohishlar bo'ladi",
+          "normalized_actual": "mazkur nazariyalar shuni ko'rsatadiki insonlar balog'at yoshiga qadam qo'yguniga qadar ularda muayyan ichki ehtiyojlar va yoki xohishlar bo'ladi"
+        },
+        "phonetic_cyrillic": {
+          "word_edits": 0,
+          "reference_words": 18,
+          "char_edits": 0,
+          "reference_chars": 127,
+          "normalized_expected": "mazkur nazariyalar shuni ko'rsatadiki insonlar balog'at yoshiga qadam qo'yguniga qadar ularda muayyan ichki ehtiyojlar va yoki xohishlar bo'ladi",
+          "normalized_actual": "mazkur nazariyalar shuni ko'rsatadiki insonlar balog'at yoshiga qadam qo'yguniga qadar ularda muayyan ichki ehtiyojlar va yoki xohishlar bo'ladi"
+        }
+      }
+    ],
+    "temporary_voice_state_removed": true,
+    "summary": {
+      "raw": {
+        "word_edits": 25,
+        "reference_words": 121,
+        "char_edits": 64,
+        "reference_chars": 801,
+        "wer": 0.2066115702479339,
+        "cer": 0.07990012484394507
+      },
+      "uzbek": {
+        "word_edits": 25,
+        "reference_words": 121,
+        "char_edits": 64,
+        "reference_chars": 801,
+        "wer": 0.2066115702479339,
+        "cer": 0.07990012484394507
+      },
+      "phonetic_cyrillic": {
+        "word_edits": 25,
+        "reference_words": 121,
+        "char_edits": 64,
+        "reference_chars": 801,
+        "wer": 0.2066115702479339,
+        "cer": 0.07990012484394507
+      },
+      "latency": {
+        "utterances": 8,
+        "total_ms": 41439,
+        "mean_ms": 5179.875,
+        "median_ms": 5242.5,
+        "audio_seconds": 66.12,
+        "aggregate_real_time_factor": 0.6267241379310344
+      }
+    }
+  },
+  "controls": {
+    "schema": 1,
+    "tested_utc": "2026-10-11T13:12:45.218891+00:00",
+    "model": "navai-small-uz-q5_1",
+    "model_identity": {
+      "path": "ggml-navai-small-uz-q5_1.bin",
+      "size": 190085504,
+      "sha256": "b37c8935d4c2603404bdd7659a9e98c4f1f780712392de43d7a2c96fc5a8196b"
+    },
+    "random_seed": 20261011,
+    "runtime_source_sha256": "77e83416cc1ec3a57c07b7b3124c1f1ecd0af67962ab266081f8797abf9683d5",
+    "microphone_recordings": 0,
+    "actions_executed": 0,
+    "limitations": "Synthetic controls, not real microphone/acoustic-room noise. White-noise SNR15dB is a stress probe on one human public validation utterance.",
+    "controls": [
+      {
+        "label": "digital-silence-3s",
+        "sample_rate": 16000,
+        "duration_seconds": 3.0,
+        "peak": 0,
+        "rms": 0.0,
+        "pcm_sha256": "d303811b8c84619667cd0501342f84ec6cbe69f7aa3856dcf52fabda374c92b8",
+        "decoder_calls": 0,
+        "decoder_argv": [],
+        "decoder_json_summary": [],
+        "recognized": "",
+        "speech_detected": false,
+        "processing_ms": 78,
+        "execution_performed": false,
+        "non_speech_hallucination": false
+      },
+      {
+        "label": "very-low-noise-peak20-3s",
+        "sample_rate": 16000,
+        "duration_seconds": 3.0,
+        "peak": 20,
+        "rms": 11.859014679418635,
+        "pcm_sha256": "29c43bc0304be3bf44b8e7e403194e011ca2e65e6166fce3a7a24089223657ff",
+        "decoder_calls": 0,
+        "decoder_argv": [],
+        "decoder_json_summary": [],
+        "recognized": "",
+        "speech_detected": false,
+        "processing_ms": 78,
+        "execution_performed": false,
+        "non_speech_hallucination": false
+      },
+      {
+        "label": "electrical-hum50hz-3s",
+        "sample_rate": 16000,
+        "duration_seconds": 3.0,
+        "peak": 800.0,
+        "rms": 565.685424949238,
+        "pcm_sha256": "4b7572f9db9ec02eede11d311483ead3eb3d9c506587788e49a2d8ec130ba856",
+        "decoder_calls": 1,
+        "decoder_argv": [
+          [
+            "${WORKSPACE}\\coucou-source\\windows\\localai-service\\public-voice-uzbek\\whisper-cli.exe",
+            "-m",
+            "${WORKSPACE}\\coucou-source\\windows\\localai-service\\public-voice-uzbek\\ggml-navai-small-uz-q5_1.bin",
+            "-f",
+            "<synthetic-control.wav>",
+            "-l",
+            "uz",
+            "-t",
+            "4",
+            "-p",
+            "1",
+            "-ng",
+            "-np",
+            "-oj",
+            "-of",
+            "<temporary-result>",
+            "--no-timestamps",
+            "--vad",
+            "-vm",
+            "${WORKSPACE}\\coucou-source\\windows\\localai-service\\public-voice-uzbek\\ggml-silero-v6.2.0.bin",
+            "-vt",
+            "0.5",
+            "-vp",
+            "200"
+          ]
+        ],
+        "decoder_json_summary": [
+          {
+            "exists": true,
+            "top_level_keys": [
+              "model",
+              "params",
+              "result",
+              "systeminfo",
+              "transcription"
+            ],
+            "transcription_is_list": true,
+            "transcription_segments": 0,
+            "empty_transcription": true
+          }
+        ],
+        "recognized": "",
+        "speech_detected": false,
+        "processing_ms": 406,
+        "execution_performed": false,
+        "non_speech_hallucination": false
+      },
+      {
+        "label": "white-noise-rms400-3s",
+        "sample_rate": 16000,
+        "duration_seconds": 3.0,
+        "peak": 1905.4512344912523,
+        "rms": 400.5083214032012,
+        "pcm_sha256": "daec8e9c66067ee077e23a1ff31005d99732c3da1114456966bde8de7dc65a36",
+        "decoder_calls": 1,
+        "decoder_argv": [
+          [
+            "${WORKSPACE}\\coucou-source\\windows\\localai-service\\public-voice-uzbek\\whisper-cli.exe",
+            "-m",
+            "${WORKSPACE}\\coucou-source\\windows\\localai-service\\public-voice-uzbek\\ggml-navai-small-uz-q5_1.bin",
+            "-f",
+            "<synthetic-control.wav>",
+            "-l",
+            "uz",
+            "-t",
+            "4",
+            "-p",
+            "1",
+            "-ng",
+            "-np",
+            "-oj",
+            "-of",
+            "<temporary-result>",
+            "--no-timestamps",
+            "--vad",
+            "-vm",
+            "${WORKSPACE}\\coucou-source\\windows\\localai-service\\public-voice-uzbek\\ggml-silero-v6.2.0.bin",
+            "-vt",
+            "0.5",
+            "-vp",
+            "200"
+          ]
+        ],
+        "decoder_json_summary": [
+          {
+            "exists": true,
+            "top_level_keys": [
+              "model",
+              "params",
+              "result",
+              "systeminfo",
+              "transcription"
+            ],
+            "transcription_is_list": true,
+            "transcription_segments": 0,
+            "empty_transcription": true
+          }
+        ],
+        "recognized": "",
+        "speech_detected": false,
+        "processing_ms": 422,
+        "execution_performed": false,
+        "non_speech_hallucination": false
+      },
+      {
+        "label": "human-row2-plus-white-noise-snr15db",
+        "sample_rate": 16000,
+        "duration_seconds": 3.12,
+        "peak": 4188.753600317562,
+        "rms": 439.6154079562224,
+        "pcm_sha256": "9bf42f4e7d27100e03c5ff006155c75c7d0c898e8dd3bba9cc84c34f279ed313",
+        "decoder_calls": 1,
+        "decoder_argv": [
+          [
+            "${WORKSPACE}\\coucou-source\\windows\\localai-service\\public-voice-uzbek\\whisper-cli.exe",
+            "-m",
+            "${WORKSPACE}\\coucou-source\\windows\\localai-service\\public-voice-uzbek\\ggml-navai-small-uz-q5_1.bin",
+            "-f",
+            "<synthetic-control.wav>",
+            "-l",
+            "uz",
+            "-t",
+            "4",
+            "-p",
+            "1",
+            "-ng",
+            "-np",
+            "-oj",
+            "-of",
+            "<temporary-result>",
+            "--no-timestamps",
+            "--vad",
+            "-vm",
+            "${WORKSPACE}\\coucou-source\\windows\\localai-service\\public-voice-uzbek\\ggml-silero-v6.2.0.bin",
+            "-vt",
+            "0.5",
+            "-vp",
+            "200"
+          ]
+        ],
+        "decoder_json_summary": [
+          {
+            "exists": true,
+            "top_level_keys": [
+              "model",
+              "params",
+              "result",
+              "systeminfo",
+              "transcription"
+            ],
+            "transcription_is_list": true,
+            "transcription_segments": 1,
+            "empty_transcription": false
+          }
+        ],
+        "recognized": "u paytda eski qoʻngʻiroqning yasagi boʻldi",
+        "speech_detected": true,
+        "processing_ms": 4531,
+        "execution_performed": false,
+        "expected": "U WiFi eshik qo'ng'irog'ini yasadi, dedi u.",
+        "metrics": {
+          "word_edits": 6,
+          "reference_words": 7,
+          "char_edits": 17,
+          "reference_chars": 35,
+          "normalized_expected": "u wifi eshik qo'ng'irog'ini yasadi dedi u",
+          "normalized_actual": "u paytda eski qo'ng'iroqning yasagi bo'ldi"
+        }
+      }
+    ],
+    "temporary_voice_state_removed": true
+  },
+  "paired_results": [
+    {
+      "row_index": 0,
+      "reference_words": 16,
+      "baseline_word_edits": 14,
+      "final_word_edits": 0,
+      "reference_chars": 99,
+      "baseline_char_edits": 35,
+      "final_char_edits": 0
+    },
+    {
+      "row_index": 1,
+      "reference_words": 17,
+      "baseline_word_edits": 17,
+      "final_word_edits": 2,
+      "reference_chars": 91,
+      "baseline_char_edits": 47,
+      "final_char_edits": 3
+    },
+    {
+      "row_index": 2,
+      "reference_words": 7,
+      "baseline_word_edits": 11,
+      "final_word_edits": 2,
+      "reference_chars": 35,
+      "baseline_char_edits": 17,
+      "final_char_edits": 3
+    },
+    {
+      "row_index": 4,
+      "reference_words": 19,
+      "baseline_word_edits": 23,
+      "final_word_edits": 3,
+      "reference_chars": 113,
+      "baseline_char_edits": 46,
+      "final_char_edits": 5
+    },
+    {
+      "row_index": 5,
+      "reference_words": 17,
+      "baseline_word_edits": 28,
+      "final_word_edits": 7,
+      "reference_chars": 129,
+      "baseline_char_edits": 70,
+      "final_char_edits": 19
+    },
+    {
+      "row_index": 6,
+      "reference_words": 11,
+      "baseline_word_edits": 12,
+      "final_word_edits": 3,
+      "reference_chars": 87,
+      "baseline_char_edits": 23,
+      "final_char_edits": 4
+    },
+    {
+      "row_index": 7,
+      "reference_words": 16,
+      "baseline_word_edits": 16,
+      "final_word_edits": 8,
+      "reference_chars": 120,
+      "baseline_char_edits": 68,
+      "final_char_edits": 30
+    },
+    {
+      "row_index": 8,
+      "reference_words": 18,
+      "baseline_word_edits": 19,
+      "final_word_edits": 0,
+      "reference_chars": 127,
+      "baseline_char_edits": 44,
+      "final_char_edits": 0
+    }
+  ],
+  "relative_error_reduction": {
+    "word_edits": 0.8214285714285714,
+    "character_edits": 0.8171428571428572
+  },
+  "all_paired_character_error_counts_improved": true,
+  "limitations": [
+    "Eight deterministic public read-speech validation clips, all metadata gender1, speaker IDs unavailable; not representative population accuracy.",
+    "Training-data provenance is declared by the model author; absence of overlap is not independently audited.",
+    "Baseline and first two turbo tests briefly overlapped; their timings are indicative and do not support a speed-ratio claim. Final candidate was sequential.",
+    "Synthetic non-speech controls and one noisy human stress probe are not real microphone/room/accents testing.",
+    "On one human clip with additive white noise at15dBSNR the final WER remained85.7%, CER48.6%; VAD removes non-speech hallucination in these probes but cannot repair all noisy speech.",
+    "Microphone test explicitly deferred until user returns."
+  ],
+  "microphone_recordings": 0,
+  "actions_executed": 0,
+  "private_chat_data_included": false,
+  "fixture_audio_packaged": false,
+  "human_microphone_test": "Deferred until user returns to the computer."
+}

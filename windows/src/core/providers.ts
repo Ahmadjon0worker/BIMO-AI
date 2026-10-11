@@ -6,7 +6,7 @@ import type { Settings } from "./state";
 import { N_ } from "../i18n/i18n";
 
 export type ProviderId =
-  | "anthropic" | "openai" | "google" | "openrouter"
+  | "auto" | "anthropic" | "openai" | "google" | "groq" | "openrouter"
   | "ollama" | "lmstudio" | "custom";
 
 export interface ProviderDef {
@@ -24,8 +24,10 @@ export interface ProviderDef {
 }
 
 export const PROVIDERS: readonly ProviderDef[] = [
+  { id: "auto", name: N_("Automatic"), accent: "#67E8F9", key: null, urlField: null, defaultModel: "auto", prefer: null },
   { id: "anthropic", name: "Anthropic", accent: "#E07950", key: "anthropic-api-key", urlField: null, defaultModel: "claude-opus-5", prefer: "opus" },
-  { id: "google", name: "Google", accent: "#4285F4", key: "google-api-key", urlField: null, defaultModel: "gemini-2.0-flash", prefer: "flash" },
+  { id: "google", name: "Gemini", accent: "#4285F4", key: "google-api-key", urlField: null, defaultModel: "gemini-3.8-flash", prefer: "flash" },
+  { id: "groq", name: "Groq", accent: "#F55036", key: "groq-api-key", urlField: null, defaultModel: "llama-3.3-70b-versatile", prefer: "llama-3.3-70b" },
   { id: "openai", name: "OpenAI", accent: "#10A37F", key: "openai-api-key", urlField: null, defaultModel: "gpt-4o", prefer: "mini" },
   { id: "openrouter", name: "OpenRouter", accent: "#6467F2", key: "openrouter-api-key", urlField: null, defaultModel: "openrouter/auto", prefer: null },
   { id: "ollama", name: "Ollama", accent: "#FACC15", key: null, urlField: "ollamaUrl", defaultModel: "", prefer: null },
@@ -43,24 +45,26 @@ export function providerDef(id: string): ProviderDef {
 /** The model the chat uses for the active provider. */
 export function activeModel(settings: Settings): string {
   const p = providerDef(settings.chatProvider);
+  if (p.id === "auto") return "auto";
   if (p.id === "anthropic") return settings.model || p.defaultModel;
   return settings.chatModels[p.id] || p.defaultModel;
 }
 
 /** `settings` with `model` picked for `provider`. */
 export function withModel(settings: Settings, provider: ProviderId, model: string): Settings {
+  if (provider === "auto") return settings;
   if (provider === "anthropic") return { ...settings, model };
   return { ...settings, chatModels: { ...settings.chatModels, [provider]: model } };
 }
 
 /**
- * The chips of the picker: every cloud provider (one without a key says so
- * when picked), and a model server once it is connected — or while it is the
- * active one, so the picker never hides where the chat goes.
+ * Automatic, the usual Ollama address, and every cloud provider (one without
+ * a key says so when picked). Other model servers appear once configured, or
+ * while selected, so the picker never hides where the chat goes.
  */
 export function visibleProviders(settings: Settings): ProviderDef[] {
   return PROVIDERS.filter(
-    (p) => !p.urlField || settings[p.urlField] !== "" || settings.chatProvider === p.id,
+    (p) => !p.urlField || p.id === "ollama" || settings[p.urlField] !== "" || settings.chatProvider === p.id,
   );
 }
 

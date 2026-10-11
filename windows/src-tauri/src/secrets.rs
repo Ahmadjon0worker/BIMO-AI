@@ -10,6 +10,7 @@ pub const KNOWN_KEYS: &[&str] = &[
     "anthropic-api-key",
     "openai-api-key",
     "google-api-key",
+    "groq-api-key",
     "openrouter-api-key",
     "openai-compatible-key",
     "n8n-url",
@@ -35,9 +36,14 @@ pub fn get(key: &str) -> Option<String> {
 
 pub fn set(key: &str, value: &str) -> Result<(), String> {
     let entry = entry(key).ok_or_else(|| format!("unknown key {key}"))?;
+    // Pasted provider keys often include a newline. Keep bound custom-server
+    // JSON and other integration values intact.
+    let value = if key.ends_with("-api-key") { value.trim() } else { value };
     if value.is_empty() {
-        let _ = entry.delete_credential();
-        return Ok(());
+        return match entry.delete_credential() {
+            Ok(()) | Err(keyring::Error::NoEntry) => Ok(()),
+            Err(e) => Err(e.to_string()),
+        };
     }
     entry.set_password(value).map_err(|e| e.to_string())
 }

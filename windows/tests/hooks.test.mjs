@@ -24,6 +24,20 @@ const hook = (payload) => emit("hook", payload);
 const task = (id = CLAUDE) => State.tasks.find((t) => t.id === id);
 const seconds = (n) => mock.timers.tick(n * 1000);
 
+for (const event of ["Interrupt", "StopFailure"]) {
+  test(`${event} clears the previous Codex completion message`, () => {
+    State.settings.mainPill = "agent_codex";
+    State.loadIntegrationTasks();
+    hook({hook_event_name: "Stop", coucou_agent: "codex", last_assistant_message: "Old result"});
+    assert.equal(task("agent_codex").finalLine, "Old result");
+    hook({hook_event_name: event, coucou_agent: "codex"});
+    assert.equal(task("agent_codex").finalLine, null);
+    assert.equal(task("agent_codex").state, event === "Interrupt" ? "idle" : "error");
+    seconds(6);
+    assert.equal(task("agent_codex").state, event === "Interrupt" ? "idle" : "error");
+  });
+}
+
 beforeEach(() => {
   mock.timers.enable({ apis: ["setTimeout"] });
   asked = [];

@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="uz">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Coucou — Telegram GUI sinovi</title></head>
+<body>
+<main id="preview-root">
+  <header id="preview-header"><div><h1>Telegram GUI sinovi</h1><p class="hint">Sun’iy ma’lumotlar. Telegramga ulanmaydi va xabar yubormaydi.</p></div></header>
+  <nav class="actions" aria-label="Sinov holatlari">
+    <button type="button" data-step="disconnected">Telefon bosqichi</button>
+    <button type="button" data-step="code_required">Kod bosqichi</button>
+    <button type="button" data-step="password_required">2FA bosqichi</button>
+    <button type="button" data-step="authorized">Kirilgan holat</button>
+    <button type="button" data-step="error">Ulanish xatosi</button>
+  </nav>
+  <div id="preview-account"></div>
+</main>
+<script type="module">
+  import '../../src/tools/tools.css';
+  import { setLanguage } from '../../src/i18n/i18n';
+  import { buildTelegramAccount } from '../../src/tools/telegram-account';
+  setLanguage('uz');
+  let current = 'disconnected';
+  const status = () => ({ available:true, configured:true, api_id:12345, state:current,
+    authorized:current === 'authorized', busy:false, has_saved_session:current === 'authorized',
+    username:null, dialog_count:0, selected_chat_id:null,
+    last_error:current === 'error' ? 'Telegramga ulanib bo‘lmadi; raqam va internetni tekshiring.' : null,
+    stop_complete:true, teardown_pending:false });
+  const transport = {
+    status:async()=>status(), configure:async()=>status(),
+    connect:async()=>{ current='code_required'; return status(); },
+    verify:async(input)=>{ current='password' in input ? 'authorized' : 'password_required'; return status(); },
+    disconnect:async()=>{ current='disconnected'; return status(); },
+    chats:async()=>({limit:30,chats:[]}), messages:async()=>{throw Error('Sinovda xabarlar o‘qilmaydi');},
+    draft:async()=>{throw Error('Sinovda model ishlatilmaydi');}, send:async()=>{throw Error('Sinovda yuborish o‘chiq');}
+  };
+  const view = buildTelegramAccount(transport,()=>document.querySelector('#preview-header').getBoundingClientRect().height);
+  document.querySelector('#preview-account').append(view.el);
+  view.setVisible?.(true);
+  await view.controller.refresh();
+  for(const button of document.querySelectorAll('[data-step]')) button.addEventListener('click',async()=>{
+    current=button.dataset.step;
+    await view.controller.refresh();
+  });
+</script>
+</body>
+</html>

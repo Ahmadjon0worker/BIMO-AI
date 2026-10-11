@@ -14,7 +14,9 @@ mod i18n;
 mod identity;
 mod integrations;
 mod island;
+mod local_ai;
 mod local_chat;
+mod local_service;
 mod log;
 mod net;
 mod openai_compat;
@@ -25,6 +27,7 @@ mod secrets;
 mod session_window;
 mod settings;
 mod shortcuts;
+mod sounds;
 mod tray;
 #[cfg(windows)]
 mod webview_drop;
@@ -48,6 +51,8 @@ pub struct Shared {
     pub settings: Mutex<Settings>,
     pub gate: Arc<PollGate>,
 }
+
+struct StudioChat(Chat);
 
 #[derive(Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -80,6 +85,11 @@ fn boot(app: AppHandle, shared: State<Shared>) -> BootInfo {
 
 #[tauri::command]
 fn save_settings(app: AppHandle, shared: State<Shared>, settings: Settings) {
+    if shared.settings.lock().unwrap().screen != settings.screen {
+        // A screen selection is an explicit reset. A carried panel must not
+        // later persist its old monitor over that selection on pointerup.
+        island::end_drag(&app, true);
+    }
     let (screen_changed, autostart_changed, shortcuts_changed) = {
         let mut current = shared.settings.lock().unwrap();
         let screen_changed = current.screen != settings.screen;
@@ -87,7 +97,7 @@ fn save_settings(app: AppHandle, shared: State<Shared>, settings: Settings) {
         let shortcuts_changed = current.shortcuts != settings.shortcuts;
         // Where Mochi sits on the desktop is desktop.rs's to say, not a webview's.
         let mut settings = settings.clone();
-        settings.desktop_mochi = current.desktop_mochi.clone();
+        settings::preserve_native_preferences(&mut settings, &current);
         *current = settings;
         (screen_changed, autostart_changed, shortcuts_changed)
     };
@@ -144,14 +154,15 @@ fn set_collapsed(app: AppHandle, shared: State<Shared>, collapsed: bool) {
     island::apply_geometry(&app, &pref, collapsed);
     // The wake strip must always take the mouse, and a resize invalidates the flag.
     island::refresh_click_through(&app, &shared.gate);
-    shared.gate.set_active(!collapsed);
-    platform::set_pointer_watch(!collapsed);
+    let watching = !collapsed || shared.gate.is_dragging();
+    shared.gate.set_active(watching);
+    platform::set_pointer_watch(watching);
 }
 
 /// The front end pushes the island shape; Rust decides click-through from it.
 #[tauri::command]
-fn set_island_rect(app: AppHandle, shared: State<Shared>, x: f64, y: f64, width: f64, height: f64) {
-    shared.gate.set_rect(island::IslandRect { x, y, w: width, h: height });
+fn set_island_rect(app: AppHandle, shared: State<Shared>, x: f64, y: f64, width: f64, height: f64, compact: Option<bool>) {
+    shared.gate.set_rect(island::IslandRect { x, y, w: width, h: height },compact);
     // Without the cursor poll the input region is the click-through: it follows the island.
     if !platform::CURSOR_POLL {
         island::refresh_click_through(&app, &shared.gate);
@@ -178,6 +189,31 @@ fn reposition(app: AppHandle, shared: State<Shared>) {
 #[tauri::command]
 fn list_monitors(app: AppHandle) -> Vec<island::MonitorChoice> {
     island::monitor_choices(&app)
+}
+
+#[tauri::command]
+fn begin_island_drag(app: AppHandle, pointer_type: String, client_x: Option<f64>, client_y: Option<f64>) -> bool {
+    island::begin_drag(&app, &pointer_type, client_x, client_y)
+}
+
+#[tauri::command]
+fn update_island_drag(app: AppHandle, delta_x: f64, delta_y: f64) {
+    island::update_pointer_drag(&app, delta_x, delta_y);
+}
+
+#[tauri::command]
+fn end_island_drag(app: AppHandle, cancelled: Option<bool>) {
+    island::end_drag(&app, cancelled.unwrap_or(false));
+}
+
+#[tauri::command]
+fn reset_island_position(app: AppHandle) {
+    island::reset_position(&app);
+}
+
+#[tauri::command]
+fn set_island_dock(app: AppHandle, dock: settings::Dock) {
+    island::set_dock(&app, dock);
 }
 
 #[tauri::command]
@@ -428,13 +464,16 @@ fn approval_decline(app: AppHandle, request_id: String) {
 #[tauri::command]
 async fn chat_send(
     app: AppHandle,
+    window: tauri::WebviewWindow,
     shared: State<'_, Shared>,
     chat: State<'_, Chat>,
+    studio: State<'_, StudioChat>,
     query: String,
     context: Option<ChatContext>,
 ) -> Result<ChatReply, String> {
     let settings = shared.settings.lock().unwrap().clone();
-    chat::send(&app, &chat, &settings, query, context).await
+    let conversation = if window.label() == "studio" { &studio.0 } else { &*chat };
+    chat::send(&app, conversation, &settings, query, context).await
 }
 
 /// The models a provider offers, for the picker in the chat view. Only asked
@@ -443,6 +482,12 @@ async fn chat_send(
 async fn chat_models(shared: State<'_, Shared>, provider: String) -> Result<Vec<ModelInfo>, String> {
     let settings = shared.settings.lock().unwrap().clone();
     chat::models(&settings, &provider).await
+}
+
+#[tauri::command]
+async fn chat_provider_status(shared: State<'_, Shared>, provider: String) -> Result<chat::ProviderStatus, String> {
+    let settings = shared.settings.lock().unwrap().clone();
+    Ok(chat::provider_status(&settings, &provider).await)
 }
 
 /// Settings → Local models → Connect: does the server answer, and with which models?
@@ -459,8 +504,8 @@ fn local_set_key(url: String, key: String) -> Result<(), String> {
 }
 
 #[tauri::command]
-fn chat_reset(chat: State<Chat>) {
-    chat.reset();
+fn chat_reset(window: tauri::WebviewWindow, chat: State<Chat>, studio: State<StudioChat>) {
+    if window.label() == "studio" { studio.0.reset(); } else { chat.reset(); }
 }
 
 /// Copies a dropped file into the inbox and reports its name back.
@@ -616,12 +661,18 @@ fn open_settings_window(app: AppHandle) {
 
 pub fn run() {
     platform::prepare_environment();
+    let first_run = !settings::config_dir().join("settings.json").is_file();
+    let show_studio = first_run || std::env::args().any(|arg| arg == "--studio");
     let loaded = settings::load();
     i18n::set_picked(&loaded.language);
     let gate = Arc::new(PollGate::new());
 
     let mut builder = tauri::Builder::default()
         .plugin(tauri_plugin_single_instance::init(|app, argv, _cwd| {
+            if argv.iter().any(|arg| arg == "--studio") {
+                let _ = local_ai::local_ai_open_studio(app.clone());
+                return;
+            }
             // `coucou --shortcut <action>`: what a desktop's own keyboard
             // settings run where we can't listen for keys ourselves (Wayland).
             match shortcuts::from_args(&argv) {
@@ -644,6 +695,8 @@ pub fn run() {
         })
         .manage(Pending::default())
         .manage(Chat::default())
+        .manage(StudioChat(Chat::for_window("studio")))
+        .manage(local_service::LocalService::default())
         .manage(shortcuts::Registry::default())
         .manage(recap::load())
         .invoke_handler(tauri::generate_handler![
@@ -655,6 +708,11 @@ pub fn run() {
             focus_window,
             reposition,
             list_monitors,
+            begin_island_drag,
+            update_island_drag,
+            end_island_drag,
+            reset_island_position,
+            set_island_dock,
             open_url,
             open_in_vscode,
             open_session,
@@ -678,8 +736,43 @@ pub fn run() {
             log_line,
             chat_send,
             chat_models,
+            chat_provider_status,
             local_connect,
             local_set_key,
+            local_ai::local_ai_health,
+            local_ai::local_ai_mode,
+            local_ai::local_ai_stop,
+            local_ai::local_ai_open_opencode,
+            local_ai::local_ai_open_tools,
+            local_ai::local_ai_open_studio,
+            local_service::local_ai_start_services,
+            local_ai::local_ai_capabilities,
+            local_ai::local_ai_toolbox_status,
+            local_ai::local_ai_toolbox_call,
+            local_ai::local_ai_voice_status,
+            local_ai::local_ai_voice_transcribe,
+            local_ai::local_ai_voice_cancel,
+            local_ai::local_ai_voice_speak,
+            local_ai::local_ai_telegram_status,
+            local_ai::local_ai_telegram_configure,
+            local_ai::local_ai_telegram_start,
+            local_ai::local_ai_telegram_stop,
+            local_ai::local_ai_computer_plan,
+            local_ai::local_ai_computer_approve,
+            local_ai::local_ai_computer_finish,
+            local_ai::local_ai_account_status,
+            local_ai::local_ai_account_configure,
+            local_ai::local_ai_account_connect,
+            local_ai::local_ai_account_verify,
+            local_ai::local_ai_account_disconnect,
+            local_ai::local_ai_account_chats,
+            local_ai::local_ai_account_messages,
+            local_ai::local_ai_account_draft,
+            local_ai::local_ai_account_compose,
+            local_ai::local_ai_account_resolve,
+            local_ai::local_ai_account_send,
+            local_ai::local_ai_account_command,
+            local_ai::local_ai_account_cancel_draft,
             chat_reset,
             ingest_file,
             secret_present,
@@ -692,6 +785,10 @@ pub fn run() {
             set_paused,
             shortcuts_status,
             shortcuts_suspend,
+            sounds::custom_sounds,
+            sounds::custom_sound,
+            sounds::reveal_sounds_folder,
+            sounds::reload_sounds,
             recap::recap_history,
             recap::recap_prefs,
             recap::recap_set_enabled,
@@ -716,6 +813,8 @@ pub fn run() {
             tray::build(&handle)?;
             // Before the island: see create_settings_window.
             create_settings_window(&handle);
+            local_ai::create_tools_window(&handle);
+            local_ai::create_studio_window(&handle);
             // Same rule for Mochi's desktop window.
             desktop::setup(&handle);
 
@@ -747,10 +846,24 @@ pub fn run() {
             pipe::start(handle.clone());
             integrations::start(handle.clone());
             shortcuts::apply(&handle, &loaded.shortcuts);
+            if show_studio {
+                let _ = local_ai::local_ai_open_studio(handle.clone());
+            }
+            let service_app = handle.clone();
+            tauri::async_runtime::spawn(async move {
+                if let Err(error) = local_service::start(&service_app).await {
+                    log::line(format!("LocalAI startup: {error}"));
+                }
+            });
             Ok(())
         })
-        .run(tauri::generate_context!())
-        .expect("error while running Coucou");
+        .build(tauri::generate_context!())
+        .expect("error while building Coucou")
+        .run(|app, event| {
+            if matches!(event, tauri::RunEvent::Exit) {
+                app.state::<local_service::LocalService>().stop();
+            }
+        });
 }
 
 #[cfg(test)]

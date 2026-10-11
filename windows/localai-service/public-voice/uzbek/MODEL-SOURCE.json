@@ -1,0 +1,39 @@
+{
+  "repository": "navai-uz/whisper-small-uzbek",
+  "revision": "4b432caf21c2752bca3384b5df1d41cf0da2801d",
+  "license": "Apache-2.0",
+  "original_weights": {
+    "path": "model.safetensors",
+    "size": 966995080,
+    "sha256": "3662e1baf3a9bc9a3b3df9bb75060c99708f8c461df19e0e3acd80ae6814411e",
+    "source": "https://huggingface.co/navai-uz/whisper-small-uzbek/resolve/4b432caf21c2752bca3384b5df1d41cf0da2801d/model.safetensors?download=true",
+    "declared_lfs_sha256": "3662e1baf3a9bc9a3b3df9bb75060c99708f8c461df19e0e3acd80ae6814411e",
+    "declared_git_blob": "a7bb2b802e580c5bb875474a7d04f4df58939a11"
+  },
+  "conversion": {
+    "input_sha256": "3662e1baf3a9bc9a3b3df9bb75060c99708f8c461df19e0e3acd80ae6814411e",
+    "output": "ggml-navai-small-uz-f16.bin",
+    "bytes": 487601984,
+    "sha256": "adea71a82cfea807d1f5d733fb388e4c416a84218c99594eb0f2bef08052de2a",
+    "sha1": "2eb45c71c4b1f3bf6486ba169a6e4445ecce3f9b",
+    "tensor_count": 479,
+    "converter_reference": "https://github.com/ggml-org/whisper.cpp/blob/v1.9.4/models/convert-h5-to-ggml.py",
+    "official_converter_sha256": "9cc282dfcd9a24da03ffa1b4123b5508ee935e19e369c33520b1a73f89440094",
+    "adaptation": "Safetensors JSON header + numpy memory mapping; no checkpoint code; same tensor names, F16/F32 layout, tokenizer and mel filters.",
+    "mel_reference": "https://github.com/openai/whisper/blob/v20250625/whisper/assets/mel_filters.npz",
+    "mel_sha256": "7450ae70723a5ef9d341e3cee628c7cb0177f36ce42c44b7ed2bf3325f0f6d4c"
+  },
+  "conversion_script_sha256": "7275c541eb3870c8e12b3ff720706ee7482bf8793bb82144356d9eedd3c0e657",
+  "quantization": {
+    "mode": "q5_1",
+    "engine": "whisper.cpp",
+    "version": "1.9.4-b5130",
+    "binary": "https://github.com/ggml-org/whisper.cpp/releases/tag/b5130",
+    "release_archive_sha256": "f9ec6c52a2e949b62ab51fa21d0d497958f9e41c3010c157c4e42932d5316f3c",
+    "quantizer_sha256": "282a6e5e30ea10b0b63624ec32193ffdb6f3cd0f6a2fbc7d9099e1ec4d972466",
+    "model_sha256": "b37c8935d4c2603404bdd7659a9e98c4f1f780712392de43d7a2c96fc5a8196b",
+    "model_sha1": "5a549f1750434650c3bcbc2fb2c85ff91b30cbcc",
+    "model_bytes": 190085504
+  },
+  "notes": "Derived F16 GGML from pinned safetensors data and quantized with native whisper.cpp. Modified format/precision; original licenses and required dataset attributions preserved. No pickle, torch, transformers, or model repository code executed."
+}

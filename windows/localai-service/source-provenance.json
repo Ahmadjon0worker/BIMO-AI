@@ -1,0 +1,27 @@
+[
+  {
+    "name": "router.py",
+    "source": "D:/LocalAI/src/router.py",
+    "sha256": "2723e9a93704f4d8745f8beb252c49e68014ca8a826dc40f92533dd829ffb9cf"
+  },
+  {
+    "name": "capabilities.py",
+    "source": "D:/LocalAI/src/capabilities.py",
+    "sha256": "e83d6052dc51725021e61cb32d6914c5b0c1604c0e1f192dbc3aa0fd839745e8"
+  },
+  {
+    "name": "telegram_account.py",
+    "source": "D:/LocalAI/src/telegram_account.py",
+    "sha256": "1d55d61c4cbda3473672807c7cc1dd593c8e259f720a74c25448ba5e68c264c2"
+  },
+  {
+    "name": "telegram_intent.py",
+    "source": "D:/LocalAI/src/telegram_intent.py",
+    "sha256": "56708714587c2330d832124832db9c4689aae8fb32a1fc1ad2ae26f04273e960"
+  },
+  {
+    "name": "local_tools.py",
+    "source": "D:/LocalAI/src/local_tools.py",
+    "sha256": "8cd315b4dc97d8ec59557bb74cf2c68fe5091e97b641a755524f884e2859df25"
+  }
+]

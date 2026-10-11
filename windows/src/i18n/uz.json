@@ -1,0 +1,2320 @@
+{
+  "strings": {
+    "Open on hover": { "uz": "Sichqoncha yaqinlashganda ochish" },
+    "Hovering the island opens it; it folds again shortly after the pointer leaves. Click inside to keep it open.": { "uz": "Sichqonchani panel ustiga olib boring — panel ochiladi. Uzoqlashganda tezda yig‘iladi. Ochiq saqlash uchun ichkarisini bosing." },
+    "Open sounds folder": { "uz": "Ovozlar papkasini ochish" },
+    "Reload sounds": { "uz": "Ovozlarni qayta yuklash" },
+    "{0} custom": { "uz": "{0} ta shaxsiy ovoz" },
+    "Drop a file named like one of Mochi's sounds (finish.wav, approval.mp3, greet.m4a…) in the sounds folder to replace it, then Reload.": { "uz": "Ovozlar papkasiga finish.wav, approval.mp3 yoki greet.m4a kabi nomli fayl qo‘ying, keyin ovozlarni qayta yuklang." },
+    "Color": { "uz": "Rang" },
+    "Default": { "uz": "Standart" },
+    "Navigate list items": { "uz": "Ro‘yxat elementlarini tanlash" },
+    "Open selected item": { "uz": "Tanlangan elementni ochish" },
+    "Open / close current diff": { "uz": "Joriy o‘zgarishlarni ochish / yopish" },
+    "I checked the result": { "uz": "Natijani tekshirdim" },
+    "Unknown provider": { "uz": "Provayder noma’lum" },
+    "Unknown model": { "uz": "Model noma’lum" },
+    "Manual tools work without AI. AI planning is optional and never runs actions automatically.": { "uz": "Qo‘lda ishlatiladigan vositalar uchun AI shart emas. AI reja taklif qiladi; amallarni o‘zi ishga tushirmaydi." },
+    "CMD, PowerShell and GitHub": { "uz": "CMD, PowerShell va GitHub" },
+    "Desktop": { "uz": "Desktop" },
+    "Exact command or script": { "uz": "Aniq buyruq yoki skript" },
+    "Run this script": { "uz": "Shu skriptni ishga tushirish" },
+    "Fill diagnostic example": { "uz": "Tekshiruv namunasini qo‘yish" },
+    "CMD and PowerShell": { "uz": "CMD va PowerShell" },
+    "Run the exact script below as the current Windows user. AI is optional. Ctrl+Enter runs once.": { "uz": "Quyidagi aniq skript joriy Windows foydalanuvchisi nomidan ishlaydi. AI shart emas. Ctrl+Enter bir marta ishga tushiradi." },
+    "Shell": { "uz": "Buyruq muhiti" },
+    "Workspace subfolder": { "uz": "Ish papkasidagi ichki papka" },
+    "Timeout (seconds)": { "uz": "Kutish chegarasi (soniya)" },
+    "GitHub status": { "uz": "GitHub holati" },
+    "My repositories": { "uz": "Mening repozitoriylarim" },
+    "List issues": { "uz": "Issue’lar ro‘yxati" },
+    "List pull requests": { "uz": "Pull request’lar ro‘yxati" },
+    "Repository details": { "uz": "Repozitoriy ma’lumotlari" },
+    "Create issue": { "uz": "Issue yaratish" },
+    "Create pull request": { "uz": "Pull request yaratish" },
+    "Uses your GitHub CLI login. Choose an operation and run it explicitly. AI is optional.": { "uz": "GitHub CLI orqali kirgan akkauntingizdan foydalanadi. Amalni tanlab, tugma bilan bajaring. AI shart emas." },
+    "If GitHub is not signed in, run gh auth login in your own terminal, then refresh here.": { "uz": "GitHub’ga kirilmagan bo‘lsa, o‘z terminalingizda gh auth login buyrug‘ini bajaring, keyin bu yerni yangilang." },
+    "GitHub operation": { "uz": "GitHub amali" },
+    "Repository (owner/name)": { "uz": "Repozitoriy (egasi/nomi)" },
+    "Issue or pull request title": { "uz": "Issue yoki pull request sarlavhasi" },
+    "Body": { "uz": "Matn" },
+    "Head branch": { "uz": "O‘zgarishlar shoxchasi (head)" },
+    "Base branch": { "uz": "Asosiy shoxcha (base)" },
+    "Open created GitHub item": { "uz": "Yaratilgan GitHub sahifasini ochish" },
+    "Command result": { "uz": "Buyruq natijasi" },
+    "Terminal proposal": { "uz": "Terminal uchun taklif" },
+    "GitHub proposal": { "uz": "GitHub uchun taklif" },
+    "Describe what you want to do": { "uz": "Nima qilish kerakligini yozing" },
+    "Ask AI for an editable proposal": { "uz": "AI’dan tahrirlanadigan taklif olish" },
+    "Optional AI planning": { "uz": "AI bilan rejalash (ixtiyoriy)" },
+    "AI proposals never run automatically. Copy a step into the editor, adjust it, then press its run button.": { "uz": "AI taklifi avtomatik ishlamaydi. Kerakli qadamni muharrirga ko‘chiring, tahrirlang va ishga tushirish tugmasini bosing." },
+    "Proposal type": { "uz": "Taklif turi" },
+    "Choose a desktop window": { "uz": "Kompyuter oynasini tanlang" },
+    "List open windows": { "uz": "Ochiq oynalarni ko‘rsatish" },
+    "Start selected window": { "uz": "Tanlangan oynaga ulanish" },
+    "Refresh window capture": { "uz": "Oyna rasmini yangilash" },
+    "Finish desktop session": { "uz": "Desktop seansini tugatish" },
+    "Selected desktop window capture": { "uz": "Tanlangan kompyuter oynasining rasmi" },
+    "Click the capture to fill coordinates. Press Perform one action to act on that observed window.": { "uz": "Koordinatalarni to‘ldirish uchun rasmga bosing. Kuzatilgan oynada amal bajarish uchun «Bitta amalni bajarish» tugmasini bosing." },
+    "Click": { "uz": "Bosish" },
+    "Type text": { "uz": "Matn yozish" },
+    "Press keys": { "uz": "Tugmalarni bosish" },
+    "Scroll": { "uz": "Sahifani aylantirish" },
+    "Text to type": { "uz": "Yoziladigan matn" },
+    "Key or key combination": { "uz": "Tugma yoki tugmalar birikmasi" },
+    "Scroll amount": { "uz": "Aylantirish miqdori" },
+    "Action": { "uz": "Amal" },
+    "Perform one action": { "uz": "Bitta amalni bajarish" },
+    "Ask AI for desktop steps": { "uz": "AI’dan Desktop qadamlarini olish" },
+    "Desktop control": { "uz": "Kompyuter oynasini boshqarish" },
+    "Choose a window, capture it, then perform one explicit action. This works without AI. Each action stays bound to the captured window.": { "uz": "Oynani tanlang, rasmini oling va bitta amalni bajaring. Bu AI’siz ham ishlaydi. Har bir amal kuzatilgan oynaga bog‘langan." },
+    "Observed window text": { "uz": "Kuzatilgan oyna matni" },
+    "Last desktop result": { "uz": "Oxirgi Desktop natijasi" },
+    "Desktop AI proposes steps only. Fill the action fields yourself and perform each action explicitly.": { "uz": "Desktop AI faqat qadamlarni taklif qiladi. Amal maydonlarini to‘ldiring va har bir amalni alohida bajaring." },
+    "Proposal only; nothing was executed.": { "uz": "Faqat taklif; hech qanday amal bajarilmadi." },
+    "Copy step into editor": { "uz": "Qadamni muharrirga ko‘chirish" },
+    "The action result is uncertain. Check its result before running another action.": { "uz": "Amal natijasi noma’lum. Boshqa amalni bajarishdan oldin natijani tekshiring." },
+    "Running local tool…": { "uz": "Mahalliy vosita ishlamoqda…" },
+    "Manual tools ready. AI planning is optional.": { "uz": "Qo‘lda ishlatiladigan vositalar tayyor. AI bilan rejalash ixtiyoriy." },
+    "Start LocalAI services, then refresh tool status.": { "uz": "LocalAI xizmatlarini ishga tushiring va vositalar holatini yangilang." },
+    "Workspace": { "uz": "Ish papkasi" },
+    "Not signed in": { "uz": "Akkauntga kirilmagan" },
+    "Not installed": { "uz": "O‘rnatilmagan" },
+    "Exit code": { "uz": "Chiqish kodi" },
+    "Timed out": { "uz": "Kutish vaqti tugadi" },
+    "Output shortened": { "uz": "Natija qisqartirildi" },
+    "No command has run yet.": { "uz": "Hali buyruq bajarilmadi." },
+    "Session active. Refresh the capture before an action.": { "uz": "Seans faol. Amal oldidan oyna rasmini yangilang." },
+    "No desktop session is active.": { "uz": "Desktop seansi faol emas." },
+    "Desktop control is unavailable on this computer.": { "uz": "Bu kompyuterda Desktop boshqaruvi mavjud emas." },
+    "Invalid toolbox response.": { "uz": "Vosita javobini tekshirib bo‘lmadi." },
+    "Enter a command to run.": { "uz": "Ishga tushiriladigan buyruqni kiriting." },
+    "Use a folder inside the local workspace.": { "uz": "Mahalliy ish papkasi ichidagi papkani tanlang." },
+    "Enter a GitHub repository as owner/name.": { "uz": "GitHub repozitoriysini egasi/nomi shaklida kiriting." },
+    "Enter a GitHub title of at most 256 characters.": { "uz": "256 belgidan oshmaydigan GitHub sarlavhasini kiriting." },
+    "Enter the head and base branches for the pull request.": { "uz": "Pull request uchun head va base shoxchalarini kiriting." },
+    "Enter a task for the AI proposal.": { "uz": "AI taklifi uchun vazifani kiriting." },
+    "Reconnect Telegram": { "uz": "Telegramga qayta ulanish" },
+    "Account settings": { "uz": "Akkaunt sozlamalari" },
+    "Telegram is offline. Reconnect to continue.": { "uz": "Telegram aloqasi uzilgan. Davom etish uchun qayta ulaning." },
+    "Search chats": { "uz": "Chatlarni qidirish" },
+    "Chat filter": { "uz": "Chat turi" },
+    "All chats": { "uz": "Barcha chatlar" },
+    "Unread": { "uz": "O‘qilmagan" },
+    "People": { "uz": "Odamlar" },
+    "Groups": { "uz": "Guruhlar" },
+    "Channels": { "uz": "Kanallar" },
+    "Open Telegram username": { "uz": "Telegram foydalanuvchi nomini ochish" },
+    "Loaded chats": { "uz": "Yuklangan chatlar" },
+    "Load more chats": { "uz": "Yana chatlarni yuklash" },
+    "Search this chat": { "uz": "Shu chatdan qidirish" },
+    "Read last 50 messages": { "uz": "Oxirgi 50 xabarni o‘qish" },
+    "Clear search": { "uz": "Qidiruvni tozalash" },
+    "Older messages": { "uz": "Oldingi xabarlar" },
+    "Tell AI what to write for this chat": { "uz": "Shu chatga nima yozish kerakligini AI’ga ayting" },
+    "Write a message…": { "uz": "Xabar yozing…" },
+    "Message to the selected chat": { "uz": "Tanlangan chatga xabar" },
+    "Cancel reply": { "uz": "Javob bog‘lanishini bekor qilish" },
+    "I checked Telegram": { "uz": "Telegramni tekshirdim" },
+    "Send message": { "uz": "Xabarni yuborish" },
+    "Write with AI": { "uz": "AI bilan yozish" },
+    "AI reply and send": { "uz": "AI javob yozib yuborsin" },
+    "AI assistant": { "uz": "AI yordamchi" },
+    "AI is writing…": { "uz": "AI yozmoqda…" },
+    "Loading chats…": { "uz": "Chatlar yuklanmoqda…" },
+    "Loading messages…": { "uz": "Xabarlar yuklanmoqda…" },
+    "Short reply": { "uz": "Qisqa javob" },
+    "Translate": { "uz": "Tarjima" },
+    "Summarize": { "uz": "Xulosa" },
+    "Write a short, natural reply to the latest incoming message.": { "uz": "Oxirgi kelgan xabarga qisqa va tabiiy javob yoz." },
+    "Translate the latest incoming message into Uzbek. Return only the translation.": { "uz": "Oxirgi kelgan xabarni o‘zbekchaga tarjima qil. Faqat tarjima matnini qaytar." },
+    "Summarize the last 20 messages of this conversation in Uzbek for me. Do not address the recipient.": { "uz": "Shu suhbatning oxirgi 20 xabarini men uchun o‘zbekcha qisqacha bayon qil. Suhbatdoshga murojaat qilma." },
+    "AI uses the last 20 messages and your selected reply. Write with AI fills the editable message. AI reply and send sends once. Summaries stay in the composer.": { "uz": "AI oxirgi 20 xabar va tanlangan javob nishonidan foydalanadi. «AI bilan yozish» xabar maydonini to‘ldiradi, uni tahrirlash mumkin. «AI javob yozib yuborsin» bir marta yuboradi. Xulosa xabar maydonida qoladi." },
+    "Uncertain send in chat {chat}.": { "uz": "{chat} chatiga yuborilgan xabar natijasi noma’lum." },
+    "Chats": { "uz": "Chatlar" },
+    "Person": { "uz": "Shaxs" },
+    "Group": { "uz": "Guruh" },
+    "Channel": { "uz": "Kanal" },
+    "Reply to message {id}": { "uz": "{id}-xabarga javob" },
+    "Choose a chat to start": { "uz": "Boshlash uchun chat tanlang" },
+    "Read only: messages cannot be sent here.": { "uz": "Faqat o‘qish mumkin: bu yerga xabar yuborib bo‘lmaydi." },
+    "Load chats or open a username. Private history loads when you choose.": { "uz": "Chatlarni yuklang yoki foydalanuvchi nomini oching. Tarixni o‘zingiz tanlab yuklaysiz." },
+    "Select a recipient before writing.": { "uz": "Yozishdan oldin qabul qiluvchini tanlang." },
+    "{count}/4000 · Ctrl+Enter sends · Enter adds a line": { "uz": "{count}/4000 · Ctrl+Enter yuboradi · Enter yangi qator" },
+    "{count} loaded": { "uz": "{count} ta yuklandi" },
+    "No matching loaded chats. Load or search another page.": { "uz": "Yuklangan chatlar orasida topilmadi. Keyingi sahifani yuklang yoki boshqa nom qidiring." },
+    "Long message shortened in this view.": { "uz": "Uzun xabar bu oynada qisqartirildi." },
+    "Reply": { "uz": "Javob" },
+    "Read last 50 messages to show history and enable AI.": { "uz": "Tarixni ko‘rish va AI’ni yoqish uchun oxirgi 50 xabarni o‘qing." },
+    "{count} messages loaded{search}": { "uz": "{count} ta xabar yuklandi{search}" },
+    "Photo": { "uz": "Rasm" },
+    "Video": { "uz": "Video" },
+    "Voice message": { "uz": "Ovozli xabar" },
+    "Audio": { "uz": "Audio" },
+    "Sticker": { "uz": "Stiker" },
+    "Document": { "uz": "Hujjat" },
+    "Contact": { "uz": "Kontakt" },
+    "Location": { "uz": "Joylashuv" },
+    "Poll": { "uz": "So‘rovnoma" },
+    "Attachment": { "uz": "Ilova" },
+    "The Telegram account changed. Reload the chats.": { "uz": "Telegram akkaunti o‘zgardi. Chatlarni qayta yuklang." },
+    "Enter a Telegram search of at most 100 characters.": { "uz": "Qidiruv matni 100 belgidan oshmasin." },
+    "Enter a Telegram username, for example @username.": { "uz": "Telegram nomini kiriting, masalan @username." },
+    "Enter a message of 1–4000 characters.": { "uz": "1–4000 belgili xabar kiriting." },
+    "Retry LocalAI status": { "uz": "LocalAI holatini qayta tekshirish" },
+    "Checking LocalAI services…": { "uz": "LocalAI xizmatlari tekshirilmoqda…" },
+    "LocalAI service is unavailable": { "uz": "LocalAI xizmati bilan bog‘lanib bo‘lmadi" },
+    "LocalAI status could not be loaded. API saving and login stay disabled until the local service responds.": { "uz": "LocalAI holatini olib bo‘lmadi. Mahalliy xizmat javob berguncha API saqlash va akkauntga kirish tugmalari o‘chiq turadi." },
+    "The local service responds, but personal Telegram support is unavailable. Check LocalAI Studio services and retry.": { "uz": "Mahalliy xizmat javob bermoqda, ammo shaxsiy Telegram moduli mavjud emas. LocalAI Studio xizmatlarini tekshiring va qayta urinib ko‘ring." },
+    "Open LocalAI Studio from your desktop and press Start services, then retry here.": { "uz": "Ish stolidagi «LocalAI Studio» yorlig‘ini oching, «AI’ni ishga tushirish» tugmasini bosing, keyin shu yerda holatni qayta tekshiring." },
+    "LocalAI must be running before API settings can be saved.": { "uz": "API sozlamalarini saqlash uchun LocalAI xizmati ishlayotgan bo‘lishi kerak." },
+    "Restore the local service and retry before starting Telegram login.": { "uz": "Telegramga kirishni boshlashdan oldin mahalliy xizmatni ishga tushiring va holatini qayta tekshiring." },
+    "App API settings are saved.": { "uz": "App API sozlamalari saqlangan." },
+    "Edit app API settings": { "uz": "App API sozlamalarini tahrirlash" },
+    "Close app API settings": { "uz": "App API sozlamalarini yopish" },
+    "Save app API settings before requesting a login code.": { "uz": "Kirish kodini so‘rashdan oldin App API sozlamalarini saqlang." },
+    "Send Telegram login code": { "uz": "Telegram kirish kodini yuborish" },
+    "Restore saved Telegram login": { "uz": "Saqlangan Telegram kirishini tiklash" },
+    "1 · Phone": { "uz": "1 · Telefon" },
+    "2 · Login code": { "uz": "2 · Kirish kodi" },
+    "3 · 2FA (if requested)": { "uz": "3 · 2FA (so‘ralsa)" },
+    "Waiting for Telegram. Do not submit the login step again.": { "uz": "Telegram javobi kutilmoqda. Kirish qadamini qayta yubormang." },
+    "Enter your phone number, then press Send Telegram login code.": { "uz": "Telefon raqamingizni kiriting, keyin «Telegram kirish kodini yuborish» tugmasini bosing." },
+    "Enter the code received in Telegram, then verify it.": { "uz": "Telegramdan kelgan kodni kiriting va tasdiqlang." },
+    "Telegram requested 2FA. Enter your password below.": { "uz": "Telegram 2FA parolini so‘radi. Parolingizni quyida kiriting." },
+    "Signed in. Load chats only when you choose.": { "uz": "Hisobga kirildi. Chatlarni kerak bo‘lganda o‘zingiz yuklang." },
+    "Login is complete.": { "uz": "Kirish tugallandi." },
+    "The login code was requested. Continue with the next step.": { "uz": "Kirish kodi so‘raldi. Keyingi qadamga o‘ting." },
+    "Leave the phone blank to restore the saved login, or enter a number to request a code.": { "uz": "Saqlangan kirishni tiklash uchun raqamni bo‘sh qoldiring yoki kod so‘rash uchun raqam kiriting." },
+    "Use a country code, for example +998901234567.": { "uz": "Davlat kodini qo‘shing, masalan +998901234567." },
+    "Login code accepted.": { "uz": "Kirish kodi qabul qilindi." },
+    "Enter the code sent by Telegram. The AI will not enter it.": { "uz": "Telegram yuborgan kodni kiriting. AI uni kiritmaydi." },
+    "First request a login code in step 1. This field will become active.": { "uz": "Avval 1-qadamda kirish kodini so‘rang. Shunda bu maydon faollashadi." },
+    "Enter your own 2FA password to finish signing in.": { "uz": "Kirishni tugatish uchun 2FA parolingizni o‘zingiz kiriting." },
+    "This step is only needed if Telegram asks for a 2FA password.": { "uz": "Bu qadam faqat Telegram 2FA parolini so‘rasa kerak bo‘ladi." },
+    "Bot and Windows": { "uz": "Bot va Windows" },
+    "Personal Telegram": { "uz": "Shaxsiy Telegram" },
+    "Tools sections": { "uz": "Vositalar bo‘limlari" },
+    "Personal Telegram account": { "uz": "Shaxsiy Telegram akkaunti" },
+    "Enter API credentials and sign in yourself. Login codes and 2FA passwords are never entered by the AI.": { "uz": "API ma’lumotlarini kiriting va hisobga o‘zingiz kiring. Kirish kodi va 2FA parolini AI kiritmaydi." },
+    "Telegram API ID": { "uz": "Telegram API ID" },
+    "Telegram API hash": { "uz": "Telegram API hash" },
+    "Leave blank to keep the saved API hash": { "uz": "Saqlangan API hash’ni qoldirish uchun bo‘sh qoldiring" },
+    "Save app API settings": { "uz": "App API sozlamalarini saqlash" },
+    "Phone with country code": { "uz": "Davlat kodi bilan telefon raqami" },
+    "Connect personal account": { "uz": "Shaxsiy akkauntga ulanish" },
+    "Disconnect (keep saved login)": { "uz": "Ulanishni uzish (kirish saqlanadi)" },
+    "Login code from Telegram": { "uz": "Telegramdan kelgan kirish kodi" },
+    "Telegram 2FA password": { "uz": "Telegram 2FA paroli" },
+    "Verify login code": { "uz": "Kirish kodini tasdiqlash" },
+    "Verify 2FA password": { "uz": "2FA parolini tasdiqlash" },
+    "Disconnect closes the connection and keeps encrypted credentials and the saved session. It does not log out of Telegram.": { "uz": "Ajratish ulanishni yopadi; shifrlangan API ma’lumotlari va saqlangan sessiya qoladi. Telegram hisobidan chiqmaydi." },
+    "Messages on demand": { "uz": "Talab bo‘yicha xabarlar" },
+    "Chats and private messages are loaded only when you press a button. There is no automatic reading or replying.": { "uz": "Chatlar va shaxsiy xabarlar faqat tugmani bosganingizda yuklanadi. Avtomatik o‘qish yoki javob berish yo‘q." },
+    "Load 30 chats": { "uz": "30 ta chatni yuklash" },
+    "Selected Telegram chat": { "uz": "Tanlangan Telegram chati" },
+    "Choose a loaded chat": { "uz": "Yuklangan chatni tanlang" },
+    "Read last 20 messages": { "uz": "Oxirgi 20 ta xabarni o‘qish" },
+    "Message draft instruction": { "uz": "Xabar qoralamasi uchun topshiriq" },
+    "Prepare Ollama draft": { "uz": "Ollama qoralamasini tayyorlash" },
+    "Loaded messages": { "uz": "Yuklangan xabarlar" },
+    "Review recipient and message": { "uz": "Qabul qiluvchi va xabarni tekshirish" },
+    "Approve and send this message once": { "uz": "Tasdiqlash va shu xabarni bir marta yuborish" },
+    "Recipient: {recipient} ({chat})": { "uz": "Qabul qiluvchi: {recipient} ({chat})" },
+    "This is a preview. Nothing has been sent. Check the recipient and the entire message before approving.": { "uz": "Bu qoralama. Hali hech narsa yuborilmadi. Tasdiqlashdan oldin qabul qiluvchi va to‘liq matnni tekshiring." },
+    "No reviewed message is waiting to send.": { "uz": "Yuborish uchun tasdiq kutayotgan qoralama yo‘q." },
+    "Telegram confirmed that the message was sent.": { "uz": "Telegram xabar yuborilganini tasdiqladi." },
+    "The send result is unknown. Check Telegram before composing another message.": { "uz": "Yuborish natijasi noma’lum. Yana xabar tuzishdan oldin Telegramdagi natijani tekshiring." },
+    "The message send was cancelled.": { "uz": "Xabar yuborish bekor qilindi." },
+    "Personal Telegram status unavailable": { "uz": "Shaxsiy Telegram holati mavjud emas" },
+    "Personal Telegram support is unavailable": { "uz": "Shaxsiy Telegram moduli mavjud emas" },
+    "Personal account disconnected": { "uz": "Shaxsiy akkaunt ajratilgan" },
+    "Connecting personal account…": { "uz": "Shaxsiy akkauntga ulanmoqda…" },
+    "Enter the login code yourself": { "uz": "Kirish kodini o‘zingiz kiriting" },
+    "Enter the 2FA password yourself": { "uz": "2FA parolini o‘zingiz kiriting" },
+    "Personal account authorized": { "uz": "Shaxsiy akkauntga kirilgan" },
+    "Personal account needs attention": { "uz": "Shaxsiy akkaunt holatini tekshiring" },
+    "Waiting for personal Telegram…": { "uz": "Shaxsiy Telegram javobi kutilmoqda…" },
+    "The Telegram connection is still closing…": { "uz": "Telegram ulanishi hali yopilmoqda…" },
+    "Personal Telegram status updated.": { "uz": "Shaxsiy Telegram holati yangilandi." },
+    "No private messages have been loaded.": { "uz": "Shaxsiy xabarlar yuklanmagan." },
+    "This chat has no loaded messages.": { "uz": "Bu chatda yuklangan xabar yo‘q." },
+    "You": { "uz": "Siz" },
+    "Unknown sender": { "uz": "Noma’lum jo‘natuvchi" },
+    "Invalid personal Telegram status.": { "uz": "Shaxsiy Telegram holati noto‘g‘ri." },
+    "Enter a valid Telegram API ID and 32-character API hash.": { "uz": "To‘g‘ri Telegram API ID va 32 belgili API hash kiriting." },
+    "Enter a phone number with its country code.": { "uz": "Telefon raqamini davlat kodi bilan kiriting." },
+    "Enter the requested login code or 2FA password.": { "uz": "So‘ralgan kirish kodi yoki 2FA parolini kiriting." },
+    "Choose a Telegram chat from the loaded list.": { "uz": "Yuklangan ro‘yxatdan Telegram chatini tanlang." },
+    "Enter an instruction for the message draft.": { "uz": "Xabar qoralamasi uchun topshiriq kiriting." },
+    "The draft expired. Prepare and review a new draft.": { "uz": "Qoralama muddati tugagan. Yangisini tayyorlang va tekshiring." },
+    "Telegram task requests": { "uz": "Telegramdan kelgan vazifalar" },
+    "Remote requests never run Windows actions. Copy a task, choose its document and window, then review it here.": { "uz": "Masofaviy so‘rov Windows amallarini bajarmaydi. Vazifani oling, hujjat va oynani tanlang, keyin shu yerda ko‘rib chiqing." },
+    "Use this task": { "uz": "Shu vazifani olish" },
+    "No remote task requests.": { "uz": "Masofaviy vazifa so‘rovlari yo‘q." },
+    "Finish and verify the task": { "uz": "Vazifani tugatish va natijani tekshirish" },
+    "Telegram and Windows tools": { "uz": "Telegram va Windows vositalari" },
+    "Chat answers text. Open tools to review Telegram settings or approve one Windows action.": { "uz": "Chat matn bilan javob beradi. Telegram sozlamalari yoki Windows amalini tasdiqlash uchun vositalarni oching." },
+    "Local tools use the selected AI profile. Chat does not run actions automatically.": { "uz": "Vositalar tanlangan AI rejimidan foydalanadi. Chat amallarni avtomatik bajarmaydi." },
+    "Telegram bot": { "uz": "Telegram bot" },
+    "This setup is for a bot. A personal Telegram account needs a separate login flow.": { "uz": "Bu sozlama bot uchun. Shaxsiy Telegram akkauntiga alohida kirish kerak." },
+    "Bot token": { "uz": "Bot tokeni" },
+    "Allowed Telegram chat IDs": { "uz": "Ruxsat berilgan Telegram chat ID’lari" },
+    "Leave blank to keep the saved token": { "uz": "Saqlangan tokenni qoldirish uchun bo‘sh qoldiring" },
+    "The token is saved on this computer. It is never shown again. Saving keeps the bot stopped; start it explicitly.": { "uz": "Token shu kompyuterda saqlanadi va qayta ko‘rsatilmaydi. Saqlagandan keyin bot o‘chiq qoladi; uni alohida ishga tushiring." },
+    "Save Telegram settings": { "uz": "Telegram sozlamalarini saqlash" },
+    "Start Telegram bot": { "uz": "Botni ishga tushirish" },
+    "Stop Telegram bot": { "uz": "Botni to‘xtatish" },
+    "Windows task": { "uz": "Windows vazifasi" },
+    "Only a verified Notepad editor and a .txt/.md document in D:\\LocalAI\\workspace are supported. Each action needs your review.": { "uz": "Tekshirilgan Notepad oynasi va D:\\LocalAI\\workspace ichidagi .txt/.md hujjati bilan ishlaydi. Har bir amalni ko‘rib tasdiqlaysiz." },
+    "Task": { "uz": "Vazifa" },
+    "Notepad window title": { "uz": "Notepad oynasining sarlavhasi" },
+    "Document path": { "uz": "Hujjatning yo‘li" },
+    "Exact text to write": { "uz": "Aniq yoziladigan matn" },
+    "Optional. Leave blank for a task that needs model planning.": { "uz": "Ixtiyoriy. Model reja tuzishi kerak bo‘lsa, bo‘sh qoldiring." },
+    "The task requires saving to disk": { "uz": "Vazifada diskka saqlash so‘ralgan" },
+    "Observe and prepare one action": { "uz": "Kuzatish va bitta amalni tayyorlash" },
+    "Approve this one action": { "uz": "Faqat shu amalni tasdiqlash" },
+    "Cancel Windows task": { "uz": "Windows vazifasini bekor qilish" },
+    "Review the next action": { "uz": "Keyingi amalni ko‘rib chiqish" },
+    "Observed editor text": { "uz": "Kuzatilgan muharrir matni" },
+    "Waiting for local tools…": { "uz": "Lokal vositalar javobi kutilmoqda…" },
+    "Local tools connected": { "uz": "Lokal vositalar ulangan" },
+    "Open LocalAI services, then refresh.": { "uz": "LocalAI xizmatlarini ishga tushiring va yangilang." },
+    "Telegram bot is running": { "uz": "Telegram bot ishlayapti" },
+    "Telegram bot is stopped": { "uz": "Telegram bot to‘xtatilgan" },
+    "Telegram token is not configured": { "uz": "Telegram tokeni sozlanmagan" },
+    "Telegram status unavailable": { "uz": "Telegram holati mavjud emas" },
+    "No action is waiting for approval.": { "uz": "Tasdiq kutayotgan amal yo‘q." },
+    "Actions remaining: {count}": { "uz": "Qolgan amallar: {count}" },
+    "Proposed action: {action}": { "uz": "Taklif qilingan amal: {action}" },
+    "The result was verified against the requested text.": { "uz": "Natija so‘ralgan matn bilan solishtirib tekshirildi." },
+    "The task ended. Check the result; success was not verified.": { "uz": "Vazifa tugadi. Natijani tekshiring; muvaffaqiyat tasdiqlanmagan." },
+    "Windows task cancelled.": { "uz": "Windows vazifasi bekor qilindi." },
+    "Automation status updated.": { "uz": "Vositalar holati yangilandi." },
+    "Invalid automation status.": { "uz": "Vositalar holati noto‘g‘ri." },
+    "Enter allowed Telegram chat IDs.": { "uz": "Ruxsat berilgan Telegram chat ID’larini kiriting." },
+    "Telegram chat IDs must be whole numbers.": { "uz": "Telegram chat ID’lari nol bo‘lmagan butun son bo‘lishi kerak." },
+    "Enter a valid Telegram bot token.": { "uz": "To‘g‘ri Telegram bot tokenini kiriting." },
+    "Enter a task, Notepad title and document path.": { "uz": "Vazifa, Notepad sarlavhasi va hujjat yo‘lini kiriting." },
+    "Invalid action approval.": { "uz": "Amal tasdig‘i noto‘g‘ri." },
+    "Local tools request is too large.": { "uz": "Vositalar so‘rovi juda katta." },
+    "Local tools window is unavailable.": { "uz": "Vositalar oynasi mavjud emas." },
+    "Drag to move. Release near an edge to dock. Double-click to reset.": {
+      "uz": "Ko‘chirish uchun sudrang. Chetiga yopishtirish uchun yaqinida qo‘yib yuboring. Qaytarish uchun ikki marta bosing."
+    },
+    "Collapse panel": { "uz": "Panelni ixchamlash" },
+    "Dock position": { "uz": "Panelning joyi" },
+    "Floating": { "uz": "Erkin" },
+    "Top edge": { "uz": "Yuqori chet" },
+    "Bottom edge": { "uz": "Pastki chet" },
+    "Left edge": { "uz": "Chap chet" },
+    "Right edge": { "uz": "O‘ng chet" },
+    "Top-left corner": { "uz": "Yuqori chap burchak" },
+    "Top-right corner": { "uz": "Yuqori o‘ng burchak" },
+    "Bottom-left corner": { "uz": "Pastki chap burchak" },
+    "Bottom-right corner": { "uz": "Pastki o‘ng burchak" },
+    "Release the handle near an edge to dock. Top and bottom use a bar, sides use a vertical strip, and corners use a square.": {
+      "uz": "Tutqichni chetga yaqin joyda qo‘yib yuboring. Yuqori va pastda gorizontal, yonlarda vertikal, burchaklarda kvadrat shakl bo‘ladi."
+    },
+    "Drag to move the panel. Double-click to return to the top.": {
+      "uz": "Panelni ko‘chirish uchun sudrang. Yuqoriga qaytarish uchun ikki marta bosing."
+    },
+    "Move panel": { "uz": "Panelni ko‘chirish" },
+    "Panel position": { "uz": "Panel joylashuvi" },
+    "Return to top center": { "uz": "Yuqori markazga qaytarish" },
+    "Drag the dotted handle to move the panel. Its position is saved automatically.": {
+      "uz": "Nuqtali tutqichdan sudrab panelni ko‘chiring. Joylashuvi avtomatik saqlanadi."
+    },
+    "Settings": {
+      "uz": "Sozlamalar"
+    },
+    "Settings…": {
+      "uz": "Sozlamalar…"
+    },
+    "Settings — Coucou": {
+      "uz": "Sozlamalar — Coucou"
+    },
+    "General": {
+      "uz": "Umumiy"
+    },
+    "Language": {
+      "uz": "Til"
+    },
+    "System": {
+      "uz": "Tizim tili"
+    },
+    "Sound": {
+      "uz": "Ovoz"
+    },
+    "Volume": {
+      "uz": "Ovoz balandligi"
+    },
+    "Enable sounds": {
+      "uz": "Ovozlarni yoqish"
+    },
+    "Auto-close": {
+      "uz": "Avtomatik yopilish"
+    },
+    "seconds after you leave the island": {
+      "uz": "soniya, paneldan chiqqaningizdan keyin"
+    },
+    "Island lives on": {
+      "uz": "Panel joylashuvi"
+    },
+    "Main display": {
+      "uz": "Asosiy ekran"
+    },
+    "Display under the cursor": {
+      "uz": "Kursor turgan ekran"
+    },
+    "Launch at startup": {
+      "uz": "Windows bilan avtomatik ochish"
+    },
+    "Startup": {
+      "uz": "Avtomatik ishga tushish"
+    },
+    "Active pills": {
+      "uz": "Faol agent va xizmatlar"
+    },
+    "Main tool": {
+      "uz": "Asosiy vosita"
+    },
+    "Where you code": {
+      "uz": "Dasturlash muhiti"
+    },
+    "Agents": {
+      "uz": "Agentlar"
+    },
+    "Agent": {
+      "uz": "Agent"
+    },
+    "Chat providers": {
+      "uz": "Chat provayderlari"
+    },
+    "Local models": {
+      "uz": "Mahalliy modellar"
+    },
+    "Integrations": {
+      "uz": "Integratsiyalar"
+    },
+    "Services": {
+      "uz": "Xizmatlar"
+    },
+    "Shortcuts": {
+      "uz": "Klaviatura yorliqlari"
+    },
+    "Shortcut": {
+      "uz": "Klaviatura yorlig‘i"
+    },
+    "From anywhere": {
+      "uz": "Har qanday ilovadan"
+    },
+    "In the open island": {
+      "uz": "Panel ochiq bo‘lganda"
+    },
+    "Open the chat": {
+      "uz": "Chatni ochish"
+    },
+    "Open the terminal": {
+      "uz": "Terminalni ochish"
+    },
+    "Open the wardrobe": {
+      "uz": "Kiyimlarni ochish"
+    },
+    "Open or close the island": {
+      "uz": "Panelni ochish yoki yopish"
+    },
+    "Go to the waiting permission or question": {
+      "uz": "Kutilayotgan ruxsat yoki savolga o‘tish"
+    },
+    "Next pill": {
+      "uz": "Keyingi agent"
+    },
+    "Previous pill": {
+      "uz": "Oldingi agent"
+    },
+    "Next or previous pill": {
+      "uz": "Keyingi yoki oldingi agent"
+    },
+    "Go to pill 1 to 9": {
+      "uz": "1–9 agentga o‘tish"
+    },
+    "Mute or unmute Mochi": {
+      "uz": "Mochi ovozini o‘chirish yoki yoqish"
+    },
+    "Keep the island open": {
+      "uz": "Panelni ochiq saqlash"
+    },
+    "Close the island": {
+      "uz": "Panelni yopish"
+    },
+    "Send the message": {
+      "uz": "Xabarni yuborish"
+    },
+    "Start a new chat": {
+      "uz": "Yangi chat boshlash"
+    },
+    "Press keys…": {
+      "uz": "Tugmalarni bosing…"
+    },
+    "Reset to defaults": {
+      "uz": "Standart sozlamalarga qaytarish"
+    },
+    "In use": {
+      "uz": "Band"
+    },
+    "Used twice": {
+      "uz": "Ikki marta ishlatilgan"
+    },
+    "Not available": {
+      "uz": "Mavjud emas"
+    },
+    "Invalid shortcut": {
+      "uz": "Noto‘g‘ri yorliq"
+    },
+    "Not a valid shortcut": {
+      "uz": "Yorliq noto‘g‘ri"
+    },
+    "In use by another app": {
+      "uz": "Boshqa ilova ishlatyapti"
+    },
+    "Hold Ctrl, Alt or the Windows key with it.": {
+      "uz": "Ctrl, Alt yoki Windows tugmasini ham bosib turing."
+    },
+    "That key can't be used in a shortcut.": {
+      "uz": "Bu tugmani yorliqda ishlatib bo‘lmaydi."
+    },
+    "Work from any app. Click a shortcut to change it, then press the new keys — Esc cancels, Backspace removes it.": {
+      "uz": "Har qanday ilovada ishlaydi. Yorliqni tanlab yangi tugmalarni bosing. Esc bekor qiladi, Backspace o‘chiradi."
+    },
+    "Allow": {
+      "uz": "Ruxsat berish"
+    },
+    "Deny": {
+      "uz": "Rad etish"
+    },
+    "Always": {
+      "uz": "Har doim"
+    },
+    "Approved": {
+      "uz": "Ruxsat berildi"
+    },
+    "Denied": {
+      "uz": "Rad etildi"
+    },
+    "Permissions": {
+      "uz": "Ruxsatlar"
+    },
+    "Questions": {
+      "uz": "Savollar"
+    },
+    "needs permission": {
+      "uz": "ruxsat kutmoqda"
+    },
+    "is asking": {
+      "uz": "javob kutmoqda"
+    },
+    "is asking a question": {
+      "uz": "savol bermoqda"
+    },
+    "is asking ({index} of {total})": {
+      "uz": "savol bermoqda ({index}/{total})"
+    },
+    "Answer in terminal": {
+      "uz": "Terminalda javob berish"
+    },
+    "Answer it in your terminal.": {
+      "uz": "Terminalda javob bering."
+    },
+    "Reply in terminal": {
+      "uz": "Terminalda javob berish"
+    },
+    "Later — keep it waiting": {
+      "uz": "Keyinroq — kutishda qoldirish"
+    },
+    "Your answer…": {
+      "uz": "Javobingiz…"
+    },
+    "Ask": {
+      "uz": "So‘rash"
+    },
+    "Ask a question": {
+      "uz": "Savol berish"
+    },
+    "Ask a question about it": {
+      "uz": "Bu haqda savol berish"
+    },
+    "Ask me anything…": {
+      "uz": "Savolingizni yozing…"
+    },
+    "Ask Claude": {
+      "uz": "Claude’dan so‘rash"
+    },
+    "Chat": {
+      "uz": "Chat"
+    },
+    "Chat with {name}": {
+      "uz": "{name} bilan chat"
+    },
+    "Send": {
+      "uz": "Yuborish"
+    },
+    "Sending…": {
+      "uz": "Yuborilmoqda…"
+    },
+    "New conversation": {
+      "uz": "Yangi suhbat"
+    },
+    "Choose a model": {
+      "uz": "Model tanlash"
+    },
+    "Switch provider or model": {
+      "uz": "Provayder yoki modelni almashtirish"
+    },
+    "Model": {
+      "uz": "Model"
+    },
+    "Loading models…": {
+      "uz": "Modellar yuklanmoqda…"
+    },
+    "Loading…": {
+      "uz": "Yuklanmoqda…"
+    },
+    "Connect": {
+      "uz": "Ulanish"
+    },
+    "Disconnect": {
+      "uz": "Uzish"
+    },
+    "Connected": {
+      "uz": "Ulangan"
+    },
+    "Connecting…": {
+      "uz": "Ulanmoqda…"
+    },
+    "Connected · loading…": {
+      "uz": "Ulandi · yuklanmoqda…"
+    },
+    "Connected · {detail}": {
+      "uz": "Ulangan · {detail}"
+    },
+    "Not connected": {
+      "uz": "Ulanmagan"
+    },
+    "Custom server": {
+      "uz": "Boshqa server"
+    },
+    "OpenAI-compatible server": {
+      "uz": "OpenAI bilan mos server"
+    },
+    "API key": {
+      "uz": "API kaliti"
+    },
+    "API key (optional)": {
+      "uz": "API kaliti (ixtiyoriy)"
+    },
+    "Save key": {
+      "uz": "Kalitni saqlash"
+    },
+    "Key configured": {
+      "uz": "Kalit sozlangan"
+    },
+    "Key not configured": {
+      "uz": "Kalit sozlanmagan"
+    },
+    "Key removed.": {
+      "uz": "Kalit o‘chirildi."
+    },
+    "Key saved in the {store}.": {
+      "uz": "Kalit {store} ichida saqlandi."
+    },
+    "No API key — add it in Settings.": {
+      "uz": "API kaliti yo‘q — Sozlamalarda qo‘shing."
+    },
+    "API key missing. Open settings.": {
+      "uz": "API kaliti yo‘q. Sozlamalarni oching."
+    },
+    "No key yet — the chat needs one.": {
+      "uz": "Kalit yo‘q — chat uchun kalit kerak."
+    },
+    "Save": {
+      "uz": "Saqlash"
+    },
+    "Save…": {
+      "uz": "Saqlash…"
+    },
+    "Saving…": {
+      "uz": "Saqlanmoqda…"
+    },
+    "Cancel": {
+      "uz": "Bekor qilish"
+    },
+    "Canceled": {
+      "uz": "Bekor qilindi"
+    },
+    "Back": {
+      "uz": "Orqaga"
+    },
+    "Close": {
+      "uz": "Yopish"
+    },
+    "Open": {
+      "uz": "Ochish"
+    },
+    "Copy": {
+      "uz": "Nusxa olish"
+    },
+    "Copied": {
+      "uz": "Nusxa olindi"
+    },
+    "Copied — paste it anywhere.": {
+      "uz": "Nusxa olindi — kerakli joyga qo‘ying."
+    },
+    "Remove": {
+      "uz": "O‘chirish"
+    },
+    "Refresh": {
+      "uz": "Yangilash"
+    },
+    "Retry": {
+      "uz": "Qayta urinish"
+    },
+    "Continue…": {
+      "uz": "Davom etish…"
+    },
+    "Next": {
+      "uz": "Keyingi"
+    },
+    "Details": {
+      "uz": "Tafsilotlar"
+    },
+    "Overview": {
+      "uz": "Umumiy ko‘rinish"
+    },
+    "Open Settings": {
+      "uz": "Sozlamalarni ochish"
+    },
+    "Open Settings…": {
+      "uz": "Sozlamalarni ochish…"
+    },
+    "Open settings": {
+      "uz": "Sozlamalarni ochish"
+    },
+    "Open chat": {
+      "uz": "Chatni ochish"
+    },
+    "Open terminal": {
+      "uz": "Terminalni ochish"
+    },
+    "Open in VS Code": {
+      "uz": "VS Code’da ochish"
+    },
+    "Open {name}": {
+      "uz": "{name}ni ochish"
+    },
+    "Open Coucou": {
+      "uz": "Coucou’ni ochish"
+    },
+    "Quit": {
+      "uz": "Chiqish"
+    },
+    "Pause": {
+      "uz": "Pauza"
+    },
+    "Mute": {
+      "uz": "Ovozni o‘chirish"
+    },
+    "Restart Coucou": {
+      "uz": "Coucou’ni qayta ishga tushirish"
+    },
+    "Wardrobe": {
+      "uz": "Kiyimlar"
+    },
+    "Wardrobe…": {
+      "uz": "Kiyimlar…"
+    },
+    "Auto (seasons)": {
+      "uz": "Avtomatik (fasllar)"
+    },
+    "Auto · {outfit}": {
+      "uz": "Avtomatik · {outfit}"
+    },
+    "Auto · follows the seasons (now: {outfit})": {
+      "uz": "Avtomatik · faslga mos (hozir: {outfit})"
+    },
+    "None": {
+      "uz": "Yo‘q"
+    },
+    "Beanie": {
+      "uz": "Qalpoq"
+    },
+    "Bow": {
+      "uz": "Bant"
+    },
+    "Bunny ears": {
+      "uz": "Quyon quloqlari"
+    },
+    "Crown": {
+      "uz": "Toj"
+    },
+    "Party hat": {
+      "uz": "Bayram qalpog‘i"
+    },
+    "Pumpkin": {
+      "uz": "Qovoq"
+    },
+    "Round glasses": {
+      "uz": "Dumaloq ko‘zoynak"
+    },
+    "Santa hat": {
+      "uz": "Qorbobo qalpog‘i"
+    },
+    "Scarf": {
+      "uz": "Sharf"
+    },
+    "Sunglasses": {
+      "uz": "Quyosh ko‘zoynagi"
+    },
+    "Witch hat": {
+      "uz": "Jodugar shlyapasi"
+    },
+    "Install": {
+      "uz": "O‘rnatish"
+    },
+    "Install…": {
+      "uz": "O‘rnatish…"
+    },
+    "Install hooks": {
+      "uz": "Hooklarni o‘rnatish"
+    },
+    "Install hooks…": {
+      "uz": "Hooklarni o‘rnatish…"
+    },
+    "Reinstall…": {
+      "uz": "Qayta o‘rnatish…"
+    },
+    "Reinstall hooks…": {
+      "uz": "Hooklarni qayta o‘rnatish…"
+    },
+    "Uninstall": {
+      "uz": "O‘chirish"
+    },
+    "Uninstall…": {
+      "uz": "O‘chirish…"
+    },
+    "Uninstall hooks…": {
+      "uz": "Hooklarni o‘chirish…"
+    },
+    "Install relay…": {
+      "uz": "Relay’ni o‘rnatish…"
+    },
+    "Uninstall relay…": {
+      "uz": "Relay’ni o‘chirish…"
+    },
+    "Hooks installed": {
+      "uz": "Hooklar o‘rnatilgan"
+    },
+    "Hooks not installed": {
+      "uz": "Hooklar o‘rnatilmagan"
+    },
+    "installed": {
+      "uz": "o‘rnatilgan"
+    },
+    "not installed": {
+      "uz": "o‘rnatilmagan"
+    },
+    "Codex hooks": {
+      "uz": "Codex hooklari"
+    },
+    "Sessions, and Allow / Deny from the island": {
+      "uz": "Sessiyalar va paneldan ruxsat berish yoki rad etish"
+    },
+    "Sessions — approvals stay in the agent": {
+      "uz": "Sessiyalar — ruxsat agentning o‘zida beriladi"
+    },
+    "Codex runs new hooks only once you trust them: start Codex and review them once with /hooks.": {
+      "uz": "Codex yangi hooklarni tasdiqlaganingizdan keyin ishlatadi. Codex’da /hooks orqali bir marta tekshirib tasdiqlang."
+    },
+    "Hooks installed — open Codex and run /hooks or open Hooks in app settings to approve them": {
+      "uz": "Hooklar o‘rnatildi — Codex’da /hooks yoki ilova sozlamalaridagi Hooks orqali tasdiqlang"
+    },
+    "✓ Codex hooks installed — run /hooks in Codex or open Hooks in app settings to approve them.": {
+      "uz": "✓ Codex hooklari o‘rnatildi — /hooks yoki ilova sozlamalaridagi Hooks orqali tasdiqlang."
+    },
+    "Back up and write": {
+      "uz": "Zaxira olib yozish"
+    },
+    "Back up and remove": {
+      "uz": "Zaxira olib o‘chirish"
+    },
+    "Backup → {path}": {
+      "uz": "Zaxira → {path}"
+    },
+    "Done.": {
+      "uz": "Bajarildi."
+    },
+    "Done": {
+      "uz": "Tayyor"
+    },
+    "Done. Previous version saved as {paths}.": {
+      "uz": "Bajarildi. Oldingi nusxa {paths} sifatida saqlandi."
+    },
+    "No existing file — nothing to back up.": {
+      "uz": "Fayl hali yo‘q — zaxira olish shart emas."
+    },
+    "This is exactly what changes for {name}. Nothing else is touched.": {
+      "uz": "{name} uchun quyidagi o‘zgarishlar kiritiladi. Qolgan sozlamalar saqlanadi."
+    },
+    "This removes Coucou's entries only. Everything else stays.": {
+      "uz": "Faqat Coucou yozuvlari o‘chiriladi. Qolganlari saqlanadi."
+    },
+    "Plan usage": {
+      "uz": "Tarif limitlari"
+    },
+    "Codex plan": {
+      "uz": "Codex tarifi"
+    },
+    "Codex plan usage": {
+      "uz": "Codex tarif limitlari"
+    },
+    "Claude plan usage": {
+      "uz": "Claude tarif limitlari"
+    },
+    "Show Codex plan in the notch": {
+      "uz": "Codex limitlarini panelda ko‘rsatish"
+    },
+    "Show in notch": {
+      "uz": "Panelda ko‘rsatish"
+    },
+    "Asking Codex…": {
+      "uz": "Codex’dan olinmoqda…"
+    },
+    "5 hours": {
+      "uz": "5 soat"
+    },
+    "Week": {
+      "uz": "Hafta"
+    },
+    "Resets": {
+      "uz": "Qayta tiklashlar"
+    },
+    "Ready": {
+      "uz": "Tayyor"
+    },
+    "Ready · no setup needed": {
+      "uz": "Tayyor · sozlash shart emas"
+    },
+    "Nothing running right now.": {
+      "uz": "Hozir faol vazifa yo‘q."
+    },
+    "running": {
+      "uz": "ishlamoqda"
+    },
+    "finished": {
+      "uz": "tugadi"
+    },
+    "Session finished": {
+      "uz": "Sessiya tugadi"
+    },
+    "Session stopped on an error.": {
+      "uz": "Sessiya xato sababli to‘xtadi."
+    },
+    "Completed successfully.": {
+      "uz": "Muvaffaqiyatli bajarildi."
+    },
+    "Success": {
+      "uz": "Muvaffaqiyat"
+    },
+    "Failed": {
+      "uz": "Xato"
+    },
+    "Error": {
+      "uz": "Xato"
+    },
+    "Unknown": {
+      "uz": "Noma’lum"
+    },
+    "unknown": {
+      "uz": "noma’lum"
+    },
+    "⚠ failed": {
+      "uz": "⚠ xato yuz berdi"
+    },
+    "+ subagent": {
+      "uz": "+ yordamchi agent"
+    },
+    "• subagent done": {
+      "uz": "• yordamchi agent tugatdi"
+    },
+    "Reads": {
+      "uz": "O‘qish"
+    },
+    "Edits": {
+      "uz": "Tahrirlash"
+    },
+    "Runs": {
+      "uz": "Buyruq bajarish"
+    },
+    "Writes": {
+      "uz": "Yozish"
+    },
+    "Searches": {
+      "uz": "Qidirish"
+    },
+    "Searches the web": {
+      "uz": "Internetda qidirish"
+    },
+    "Tests": {
+      "uz": "Sinovlar"
+    },
+    "Fetches": {
+      "uz": "Olish"
+    },
+    "File": {
+      "uz": "Fayl"
+    },
+    "Drop": {
+      "uz": "Fayl qo‘shish"
+    },
+    "Drop your files here": {
+      "uz": "Fayllarni shu yerga tashlang"
+    },
+    "Uploading {name}": {
+      "uz": "{name} yuklanmoqda"
+    },
+    "What do you want to do with it?": {
+      "uz": "Bu fayl bilan nima qilamiz?"
+    },
+    "Use in chat": {
+      "uz": "Chatda ishlatish"
+    },
+    "Show in folder": {
+      "uz": "Papkada ko‘rsatish"
+    },
+    "Folders can't be dropped yet.": {
+      "uz": "Hozircha papka qo‘shib bo‘lmaydi."
+    },
+    "Weekly recap": {
+      "uz": "Haftalik hisobot"
+    },
+    "Keep a history of my coding sessions": {
+      "uz": "Dasturlash sessiyalari tarixini saqlash"
+    },
+    "Clear history": {
+      "uz": "Tarixni tozalash"
+    },
+    "History cleared.": {
+      "uz": "Tarix tozalandi."
+    },
+    "No activity last week": {
+      "uz": "O‘tgan hafta faollik bo‘lmagan"
+    },
+    "Share your week": {
+      "uz": "Haftangizni ulashish"
+    },
+    "Share image": {
+      "uz": "Rasmni ulashish"
+    },
+    "Save image": {
+      "uz": "Rasmni saqlash"
+    },
+    "Hide project names": {
+      "uz": "Loyiha nomlarini yashirish"
+    },
+    "Saved as {name}": {
+      "uz": "{name} sifatida saqlandi"
+    },
+    "Top agent": {
+      "uz": "Eng faol agent"
+    },
+    "Top project": {
+      "uz": "Eng faol loyiha"
+    },
+    "Busiest day": {
+      "uz": "Eng faol kun"
+    },
+    "Longest session": {
+      "uz": "Eng uzoq sessiya"
+    },
+    "TIME CODING": {
+      "uz": "DASTURLASH VAQTI"
+    },
+    "SESSIONS": {
+      "uz": "SESSIYALAR"
+    },
+    "FILES": {
+      "uz": "FAYLLAR"
+    },
+    "COMMANDS": {
+      "uz": "BUYRUQLAR"
+    },
+    "Monday": {
+      "uz": "Dushanba"
+    },
+    "Tuesday": {
+      "uz": "Seshanba"
+    },
+    "Wednesday": {
+      "uz": "Chorshanba"
+    },
+    "Thursday": {
+      "uz": "Payshanba"
+    },
+    "Friday": {
+      "uz": "Juma"
+    },
+    "Saturday": {
+      "uz": "Shanba"
+    },
+    "Sunday": {
+      "uz": "Yakshanba"
+    },
+    "{h}h {m}m": {
+      "uz": "{h} soat {m} daqiqa"
+    },
+    "{time} ago": {
+      "uz": "{time} oldin"
+    },
+    "in {h} h {m}": {
+      "uz": "{h} soat {m} daqiqadan keyin"
+    },
+    "in {m} min": {
+      "uz": "{m} daqiqadan keyin"
+    },
+    "{n} h ago": {
+      "uz": "{n} soat oldin"
+    },
+    "{n} min ago": {
+      "uz": "{n} daqiqa oldin"
+    },
+    "just now": {
+      "uz": "hozirgina"
+    },
+    "{n}d": {
+      "uz": "{n} kun"
+    },
+    "{n}h": {
+      "uz": "{n} soat"
+    },
+    "{n}m": {
+      "uz": "{n} daqiqa"
+    },
+    "file": {
+      "uz": "fayl"
+    },
+    "files": {
+      "uz": "fayl"
+    },
+    "lines": {
+      "uz": "satr"
+    },
+    "session": {
+      "uz": "sessiya"
+    },
+    "sessions": {
+      "uz": "sessiya"
+    },
+    "commands": {
+      "uz": "buyruq"
+    },
+    "coding": {
+      "uz": "dasturlash"
+    },
+    "{count} models": {
+      "uz": "{count} ta model"
+    },
+    "✓ Connected · {count} models": {
+      "uz": "✓ Ulandi · {count} ta model"
+    },
+    "{count} repos": {
+      "uz": "{count} ta repozitoriy"
+    },
+    "{n} available": {
+      "uz": "{n} ta mavjud"
+    },
+    "{allowed} allowed, {denied} denied": {
+      "uz": "{allowed} ta ruxsat, {denied} ta rad etish"
+    },
+    "{used}/{max} slots in use — the main tool doesn't take one.": {
+      "uz": "{used}/{max} joy band — asosiy vosita joy egallamaydi."
+    },
+    "Pick up to {max} pills to show next to Mochi — {used}/{max} in use. Keys are stored in the {store}, never on disk.": {
+      "uz": "Mochi yonida ko‘rsatish uchun {max} tagacha vosita tanlang — {used}/{max} band. Kalitlar {store} ichida saqlanadi."
+    },
+    "No telemetry. Network requests only go to the services you configure yourself.": {
+      "uz": "Telemetriya yo‘q. Tarmoq so‘rovlari faqat siz sozlagan xizmatlarga yuboriladi."
+    },
+    "Counts and project names only — never commands, files or prompts. Kept on this computer for 12 weeks.": {
+      "uz": "Faqat hisoblar va loyiha nomlari saqlanadi. Buyruqlar, fayllar va so‘rovlar saqlanmaydi. Tarix bu kompyuterda 12 hafta turadi."
+    },
+    "Codex is thinking": {
+      "uz": "Codex o‘ylayapti"
+    },
+    "Codex is working": {
+      "uz": "Codex ishlayapti"
+    },
+    "Codex is searching": {
+      "uz": "Codex qidiryapti"
+    },
+    "Codex needs permission": {
+      "uz": "Codex ruxsat kutmoqda"
+    },
+    "Codex needs your answer": {
+      "uz": "Codex javobingizni kutmoqda"
+    },
+    "Codex finished": {
+      "uz": "Codex vazifani tugatdi"
+    },
+    "Codex encountered an error": {
+      "uz": "Codex’da xato yuz berdi"
+    },
+    "Codex reached a rate limit": {
+      "uz": "Codex limitga yetdi"
+    },
+    "Codex is ready": {
+      "uz": "Codex tayyor"
+    },
+    "Quick setup": {
+      "uz": "Tez sozlash"
+    },
+    "Choose a profile for sound and how long the panel stays open. You can adjust each setting below.": {
+      "uz": "Ovoz va panelning ochiq turish vaqtini tanlang. Quyida har bir sozlamani alohida o‘zgartirishingiz mumkin."
+    },
+    "Quiet": {
+      "uz": "Sokin"
+    },
+    "Balanced": {
+      "uz": "Muvozanatli"
+    },
+    "Keep visible": {
+      "uz": "Uzoqroq ko‘rsatish"
+    },
+    "Profile applied.": {
+      "uz": "Profil qo‘llandi."
+    },
+    "Could not save: {error}": {
+      "uz": "Saqlab bo‘lmadi: {error}"
+    },
+    " is ready.": {
+      "uz": " tayyor."
+    },
+    "API key (AI Studio)": {
+      "uz": "API kaliti (AI Studio)"
+    },
+    "API key (sk-ant-…)": {
+      "uz": "API kaliti (sk-ant-…)"
+    },
+    "API key (sk-…)": {
+      "uz": "API kaliti (sk-…)"
+    },
+    "AUTO": {
+      "uz": "AVTO"
+    },
+    "Activity": {
+      "uz": "Faollik"
+    },
+    "Allow Coucou to control Music": {
+      "uz": "Coucou’ga Music’ni boshqarishga ruxsat berish"
+    },
+    "Amp plugin": {
+      "uz": "Amp plagini"
+    },
+    "An instruction sent from the iPhone uses the model open in chat. The system prompt and conversation history apply. Instructions sent when Coucou is not running are queued and executed on next launch.": {
+      "uz": "iPhone’dan yuborilgan topshiriq chatdagi modelda bajariladi. Tizim ko‘rsatmalari va suhbat tarixi qo‘llanadi. Coucou yopiq bo‘lsa, topshiriq navbatga qo‘yilib keyingi ochilishda bajariladi."
+    },
+    "Anthropic API": {
+      "uz": "Anthropic API"
+    },
+    "Antigravity hooks": {
+      "uz": "Antigravity hooklari"
+    },
+    "Applies on next launch": {
+      "uz": "Keyingi ochilishda qo‘llanadi"
+    },
+    "Approval requests appear in the notch. If Coucou is not running, Hermes falls back to its own prompt.": {
+      "uz": "Ruxsat so‘rovlari panelda ko‘rinadi. Coucou yopiq bo‘lsa, Hermes o‘z oynasida so‘raydi."
+    },
+    "Approval requests are handled by Hermes (terminal or gateway).": {
+      "uz": "Ruxsat so‘rovlarini Hermes terminal yoki shlyuzda boshqaradi."
+    },
+    "Attach front window": {
+      "uz": "Oldingi oynani qo‘shish"
+    },
+    "Auto-close · {seconds}s": {
+      "uz": "Avtomatik yopilish · {seconds} soniya"
+    },
+    "Automation not allowed": {
+      "uz": "Avtomatlashtirishga ruxsat yo‘q"
+    },
+    "Behavior": {
+      "uz": "Xatti-harakat"
+    },
+    "Can't reach {name} at {url}. Is it running?": {
+      "uz": "{url} manzildagi {name} bilan ulanib bo‘lmadi. U ishlayaptimi?"
+    },
+    "Chat — other providers": {
+      "uz": "Chat — boshqa provayderlar"
+    },
+    "Choose the tools you use. Coucou only shows what you declare here.": {
+      "uz": "Ishlatadigan vositalaringizni tanlang. Coucou faqat shu yerda tanlanganlarini ko‘rsatadi."
+    },
+    "Classic token with repo scope, or fine-grained with read access to Pull requests, commit statuses, and Actions.": {
+      "uz": "repo huquqli klassik token yoki Pull requests, commit holatlari va Actions uchun o‘qish huquqli token."
+    },
+    "Claude Code finished": {
+      "uz": "Claude Code tugatdi"
+    },
+    "Claude Code hooks": {
+      "uz": "Claude Code hooklari"
+    },
+    "Claude Code is asking": {
+      "uz": "Claude Code javob kutmoqda"
+    },
+    "Claude is reading {name}…": {
+      "uz": "Claude {name}ni o‘qimoqda…"
+    },
+    "Claude is searching…": {
+      "uz": "Claude qidirmoqda…"
+    },
+    "Claude plan": {
+      "uz": "Claude tarifi"
+    },
+    "Clear": {
+      "uz": "Tozalash"
+    },
+    "Close after": {
+      "uz": "Yopilish vaqti"
+    },
+    "Close notch (if not pinned)": {
+      "uz": "Panelni yopish (mahkamlanmagan bo‘lsa)"
+    },
+    "Coming soon": {
+      "uz": "Tez orada"
+    },
+    "Confirm and write": {
+      "uz": "Tasdiqlash va yozish"
+    },
+    "Connect to a local model server. No API key required.": {
+      "uz": "Mahalliy model serveriga ulaning. API kaliti kerak emas."
+    },
+    "Custom…": {
+      "uz": "Boshqa…"
+    },
+    "Demo": {
+      "uz": "Namoyish"
+    },
+    "Demo mode": {
+      "uz": "Namoyish rejimi"
+    },
+    "Deployments": {
+      "uz": "Joylashtirishlar"
+    },
+    "Diff too large": {
+      "uz": "O‘zgarishlar juda katta"
+    },
+    "Draft": {
+      "uz": "Qoralama"
+    },
+    "Drop a file or window, or ask me anything.": {
+      "uz": "Fayl yoki oynani tashlang yoki savol bering."
+    },
+    "Duplicate": {
+      "uz": "Takrorlangan"
+    },
+    "Emails": {
+      "uz": "Elektron xatlar"
+    },
+    "Explore all features without an API key or Claude Code. Nothing is written to disk.": {
+      "uz": "API kaliti va Claude Code’siz imkoniyatlarni ko‘ring. Diskka hech narsa yozilmaydi."
+    },
+    "Gemini CLI hooks": {
+      "uz": "Gemini CLI hooklari"
+    },
+    "GitHub Copilot CLI hooks": {
+      "uz": "GitHub Copilot CLI hooklari"
+    },
+    "Give me a sec — back to work in three seconds.": {
+      "uz": "Bir oz kuting — uch soniyada ishga qaytaman."
+    },
+    "Global shortcuts — active from any app": {
+      "uz": "Global yorliqlar — har qanday ilovada ishlaydi"
+    },
+    "Gmail node timed out after 30s. Retry or open n8n.": {
+      "uz": "Gmail tuguni 30 soniyada javob bermadi. Qayta urinib ko‘ring yoki n8n’ni oching."
+    },
+    "Go to alert": {
+      "uz": "Ogohlantirishga o‘tish"
+    },
+    "Go to tab by number": {
+      "uz": "Raqam bo‘yicha tabga o‘tish"
+    },
+    "Goes through the Coucou relay to Apple's push service. Only the agent name and state are sent: no project name, command, or path.": {
+      "uz": "Coucou relay orqali Apple bildirishnoma xizmatiga yuboriladi. Faqat agent nomi va holati yuboriladi; loyiha, buyruq va manzil yuborilmaydi."
+    },
+    "Google AI": {
+      "uz": "Google AI"
+    },
+    "Hermes Agent": {
+      "uz": "Hermes Agent"
+    },
+    "Hermes plugin removed": {
+      "uz": "Hermes plagini o‘chirildi"
+    },
+    "Hide after": {
+      "uz": "Yashirish vaqti"
+    },
+    "Hide project names in shared images": {
+      "uz": "Ulashilgan rasmlarda loyiha nomlarini yashirish"
+    },
+    "Hooks installed — restart Antigravity to activate them": {
+      "uz": "Hooklar o‘rnatildi — Antigravity’ni qayta oching"
+    },
+    "Hooks installed — restart Copilot CLI to activate them": {
+      "uz": "Hooklar o‘rnatildi — Copilot CLI’ni qayta oching"
+    },
+    "Hooks installed — restart Gemini CLI to activate them": {
+      "uz": "Hooklar o‘rnatildi — Gemini CLI’ni qayta oching"
+    },
+    "Hooks installed — restart Muse Code to activate them": {
+      "uz": "Hooklar o‘rnatildi — Muse Code’ni qayta oching"
+    },
+    "Hooks outdated — update them to answer Claude's questions from the notch": {
+      "uz": "Hooklar eskirgan — panelda Claude savollariga javob berish uchun yangilang"
+    },
+    "Hotkey": {
+      "uz": "Tezkor tugma"
+    },
+    "Install Coucou hooks in ~/.claude?": {
+      "uz": "Coucou hooklari ~/.claude ichiga o‘rnatilsinmi?"
+    },
+    "Install plugin": {
+      "uz": "Plaginni o‘rnatish"
+    },
+    "Install relay": {
+      "uz": "Relay’ni o‘rnatish"
+    },
+    "Jump to terminal": {
+      "uz": "Terminalga o‘tish"
+    },
+    "Key configured · {model}": {
+      "uz": "Kalit sozlangan · {model}"
+    },
+    "LM Studio disconnected.": {
+      "uz": "LM Studio uzildi."
+    },
+    "Launch at Mac startup": {
+      "uz": "Mac bilan avtomatik ochish"
+    },
+    "Let my iPhone send instructions to Claude Code": {
+      "uz": "iPhone’dan Claude Code’ga topshiriq yuborish"
+    },
+    "Lists": {
+      "uz": "Ro‘yxatlar"
+    },
+    "Mail not available.": {
+      "uz": "Pochta mavjud emas."
+    },
+    "Main": {
+      "uz": "Asosiy"
+    },
+    "Missing recipient.": {
+      "uz": "Qabul qiluvchi yo‘q."
+    },
+    "Mochi to desktop on/off": {
+      "uz": "Mochi’ni ish stoliga chiqarish yoki qaytarish"
+    },
+    "Model ID (e.g. claude-sonnet-4-6)": {
+      "uz": "Model ID (masalan, claude-sonnet-4-6)"
+    },
+    "Move Mochi to my iPhone's Dynamic Island when my Mac is locked": {
+      "uz": "Mac qulflanganda Mochi’ni iPhone Dynamic Island’iga ko‘chirish"
+    },
+    "Muse Code hooks": {
+      "uz": "Muse Code hooklari"
+    },
+    "Mute / unmute sounds": {
+      "uz": "Ovozlarni o‘chirish yoki yoqish"
+    },
+    "My PRs": {
+      "uz": "Mening PR’larim"
+    },
+    "Navigate list items": {
+      "uz": "Ro‘yxat bo‘ylab yurish"
+    },
+    "New email": {
+      "uz": "Yangi xat"
+    },
+    "Next / previous tab": {
+      "uz": "Keyingi yoki oldingi tab"
+    },
+    "Next tab": {
+      "uz": "Keyingi tab"
+    },
+    "No calls scheduled": {
+      "uz": "Uchrashuv rejalashtirilmagan"
+    },
+    "No changes": {
+      "uz": "O‘zgarish yo‘q"
+    },
+    "No contributions": {
+      "uz": "Hissa yo‘q"
+    },
+    "No error details available.": {
+      "uz": "Xato tafsilotlari yo‘q."
+    },
+    "No models yet — download one in {name} first.": {
+      "uz": "Model yo‘q — avval {name} ichida model yuklab oling."
+    },
+    "Not playing": {
+      "uz": "Ijro etilmayapti"
+    },
+    "Notch shortcuts — active when the notch is in front": {
+      "uz": "Panel yorliqlari — panel faol bo‘lganda ishlaydi"
+    },
+    "Notebook": {
+      "uz": "Daftar"
+    },
+    "Nothing here": {
+      "uz": "Bu yerda hech narsa yo‘q"
+    },
+    "OK": {
+      "uz": "OK"
+    },
+    "Ollama disconnected.": {
+      "uz": "Ollama uzildi."
+    },
+    "Only http:// and https:// URLs are accepted.": {
+      "uz": "Faqat http:// va https:// manzillar qabul qilinadi."
+    },
+    "Open / close current diff": {
+      "uz": "Joriy o‘zgarishlarni ochish yoki yopish"
+    },
+    "Open / close notch": {
+      "uz": "Panelni ochish yoki yopish"
+    },
+    "Open / close wardrobe": {
+      "uz": "Kiyimlarni ochish yoki yopish"
+    },
+    "Open Codex": {
+      "uz": "Codex’ni ochish"
+    },
+    "Open Cursor": {
+      "uz": "Cursor’ni ochish"
+    },
+    "Open Music": {
+      "uz": "Music’ni ochish"
+    },
+    "Open Visual Studio Code": {
+      "uz": "Visual Studio Code’ni ochish"
+    },
+    "Open in n8n": {
+      "uz": "n8n’da ochish"
+    },
+    "Open selected item": {
+      "uz": "Tanlangan elementni ochish"
+    },
+    "OpenAI": {
+      "uz": "OpenAI"
+    },
+    "OpenCode plugin": {
+      "uz": "OpenCode plagini"
+    },
+    "Other…": {
+      "uz": "Boshqa…"
+    },
+    "Payments": {
+      "uz": "To‘lovlar"
+    },
+    "Pin / unpin notch": {
+      "uz": "Panelni mahkamlash yoki bo‘shatish"
+    },
+    "Playing · {title}": {
+      "uz": "Ijro etilmoqda · {title}"
+    },
+    "Plugin installed — restart Amp to activate it": {
+      "uz": "Plagin o‘rnatildi — Amp’ni qayta oching"
+    },
+    "Plugin installed — restart OpenCode to activate it": {
+      "uz": "Plagin o‘rnatildi — OpenCode’ni qayta oching"
+    },
+    "Plugin not installed": {
+      "uz": "Plagin o‘rnatilmagan"
+    },
+    "Previous tab": {
+      "uz": "Oldingi tab"
+    },
+    "Projects": {
+      "uz": "Loyihalar"
+    },
+    "Recent": {
+      "uz": "So‘nggi"
+    },
+    "Relay: installed": {
+      "uz": "Relay: o‘rnatilgan"
+    },
+    "Relay: not installed": {
+      "uz": "Relay: o‘rnatilmagan"
+    },
+    "Resend": {
+      "uz": "Resend"
+    },
+    "Reset all to defaults": {
+      "uz": "Barcha sozlamalarni standartga qaytarish"
+    },
+    "Resetting…": {
+      "uz": "Tiklanmoqda…"
+    },
+    "Review the JSON below before confirming.": {
+      "uz": "Tasdiqlashdan oldin quyidagi JSON’ni tekshiring."
+    },
+    "Review the content below before confirming.": {
+      "uz": "Tasdiqlashdan oldin quyidagi tarkibni tekshiring."
+    },
+    "Save integrations": {
+      "uz": "Integratsiyalarni saqlash"
+    },
+    "Schedule": {
+      "uz": "Jadval"
+    },
+    "Send by email": {
+      "uz": "Elektron pochta orqali yuborish"
+    },
+    "Send chat message": {
+      "uz": "Chat xabarini yuborish"
+    },
+    "Sends your sessions to your private iCloud for the Coucou app on iPhone. Project names, commands, and questions are encrypted with your iCloud keys. Disabling removes data from iCloud.": {
+      "uz": "Sessiyalarni iPhone’dagi Coucou uchun shaxsiy iCloud’ga yuboradi. Loyiha nomlari, buyruqlar va savollar iCloud kalitlari bilan shifrlanadi. O‘chirsangiz iCloud’dagi ma’lumotlar ham o‘chiriladi."
+    },
+    "Share…": {
+      "uz": "Ulashish…"
+    },
+    "Show approval requests in the notch": {
+      "uz": "Ruxsat so‘rovlarini panelda ko‘rsatish"
+    },
+    "Show island with shortcut": {
+      "uz": "Panelni yorliq bilan ochish"
+    },
+    "Show my agent sessions on my iPhone": {
+      "uz": "Agent sessiyalarini iPhone’da ko‘rsatish"
+    },
+    "Shows your Claude plan usage (5-hour and weekly limits) in the notch header. Coucou adds a status line relay in ~/.claude/settings.json. If you already have a status line, it keeps working as before. Pro and Max plans only.": {
+      "uz": "Panel sarlavhasida Claude’ning 5 soatlik va haftalik limitlarini ko‘rsatadi. Coucou ~/.claude/settings.json ichiga status qatori relay’ini qo‘shadi. Mavjud status qatori ishlashda davom etadi. Faqat Pro va Max tariflari uchun."
+    },
+    "Stop demo": {
+      "uz": "Namoyishni to‘xtatish"
+    },
+    "Stored locally on your Mac. Nothing leaves your Mac. Retained for 12 weeks.": {
+      "uz": "Mac’da mahalliy saqlanadi. Ma’lumot Mac’dan chiqmaydi. 12 hafta saqlanadi."
+    },
+    "Subject": {
+      "uz": "Mavzu"
+    },
+    "System conflict": {
+      "uz": "Tizim bilan ziddiyat"
+    },
+    "Tasks": {
+      "uz": "Vazifalar"
+    },
+    "To": {
+      "uz": "Kimga"
+    },
+    "To review": {
+      "uz": "Tekshirish kerak"
+    },
+    "To use Google Gemini or OpenAI from the chat. Keys are stored in the Keychain.": {
+      "uz": "Chatda Google Gemini yoki OpenAI’dan foydalanish uchun. Kalitlar Keychain’da saqlanadi."
+    },
+    "Too many hits at once.": {
+      "uz": "Bir vaqtda juda ko‘p bosildi."
+    },
+    "Try demo mode": {
+      "uz": "Namoyish rejimini sinash"
+    },
+    "Uninstall relay": {
+      "uz": "Relay’ni o‘chirish"
+    },
+    "Update hooks": {
+      "uz": "Hooklarni yangilash"
+    },
+    "Used by the chat. The list comes from your Anthropic account.": {
+      "uz": "Chatda ishlatiladi. Ro‘yxat Anthropic hisobingizdan olinadi."
+    },
+    "Waiting for a response from Claude Code": {
+      "uz": "Claude Code javobi kutilmoqda"
+    },
+    "Watching {count} of {total}": {
+      "uz": "{total} tadan {count} tasi kuzatilmoqda"
+    },
+    "Workflow stopped.": {
+      "uz": "Jarayon to‘xtadi."
+    },
+    "Workflows": {
+      "uz": "Jarayonlar"
+    },
+    "Writes:\n• ~/.claude/coucou/nb-hook\n• ~/.claude/settings.json (backup created first)": {
+      "uz": "Yoziladi:\n• ~/.claude/coucou/nb-hook\n• ~/.claude/settings.json (avval zaxira olinadi)"
+    },
+    "min without movement": {
+      "uz": "daqiqa harakatsiz"
+    },
+    "presses this → island opens": {
+      "uz": "bosilsa → panel ochiladi"
+    },
+    "s inactive": {
+      "uz": "soniya faolsiz"
+    },
+    "with": {
+      "uz": "bilan"
+    },
+    "with {name}": {
+      "uz": "{name} bilan"
+    },
+    "{count}/4 slots used": {
+      "uz": "{count}/4 joy band"
+    },
+    "{name} is ready.": {
+      "uz": "{name} tayyor."
+    },
+    "✓ Amp plugin installed in ~/.config/amp/plugins/coucou.ts": {
+      "uz": "✓ Amp plagini ~/.config/amp/plugins/coucou.ts ichiga o‘rnatildi"
+    },
+    "✓ Amp plugin removed.": {
+      "uz": "✓ Amp plagini o‘chirildi."
+    },
+    "✓ Antigravity hooks installed in ~/.gemini/config/hooks.json": {
+      "uz": "✓ Antigravity hooklari ~/.gemini/config/hooks.json ichiga o‘rnatildi"
+    },
+    "✓ Antigravity hooks removed.": {
+      "uz": "✓ Antigravity hooklari o‘chirildi."
+    },
+    "✓ Codex hooks removed.": {
+      "uz": "✓ Codex hooklari o‘chirildi."
+    },
+    "✓ Copilot CLI hooks installed in ~/.copilot/hooks/coucou.json": {
+      "uz": "✓ Copilot CLI hooklari ~/.copilot/hooks/coucou.json ichiga o‘rnatildi"
+    },
+    "✓ Copilot CLI hooks removed.": {
+      "uz": "✓ Copilot CLI hooklari o‘chirildi."
+    },
+    "✓ Gemini CLI hooks installed in ~/.gemini/settings.json": {
+      "uz": "✓ Gemini CLI hooklari ~/.gemini/settings.json ichiga o‘rnatildi"
+    },
+    "✓ Gemini CLI hooks removed.": {
+      "uz": "✓ Gemini CLI hooklari o‘chirildi."
+    },
+    "✓ Google key saved.": {
+      "uz": "✓ Google kaliti saqlandi."
+    },
+    "✓ Hermes plugin installed": {
+      "uz": "✓ Hermes plagini o‘rnatildi"
+    },
+    "✓ Hermes plugin installed in ~/.hermes/plugins/coucou/": {
+      "uz": "✓ Hermes plagini ~/.hermes/plugins/coucou/ ichiga o‘rnatildi"
+    },
+    "✓ Hooks installed in ~/.claude/settings.json": {
+      "uz": "✓ Hooklar ~/.claude/settings.json ichiga o‘rnatildi"
+    },
+    "✓ Hooks installed — restart VS Code to activate them.": {
+      "uz": "✓ Hooklar o‘rnatildi — VS Code’ni qayta oching."
+    },
+    "✓ Hooks removed.": {
+      "uz": "✓ Hooklar o‘chirildi."
+    },
+    "✓ Integration keys saved.": {
+      "uz": "✓ Integratsiya kalitlari saqlandi."
+    },
+    "✓ Key saved.": {
+      "uz": "✓ Kalit saqlandi."
+    },
+    "✓ Muse Code hooks installed in ~/.config/muse/settings.json": {
+      "uz": "✓ Muse Code hooklari ~/.config/muse/settings.json ichiga o‘rnatildi"
+    },
+    "✓ Muse Code hooks removed.": {
+      "uz": "✓ Muse Code hooklari o‘chirildi."
+    },
+    "✓ OpenAI key saved.": {
+      "uz": "✓ OpenAI kaliti saqlandi."
+    },
+    "✓ OpenCode plugin installed in ~/.config/opencode/plugins/coucou.js": {
+      "uz": "✓ OpenCode plagini ~/.config/opencode/plugins/coucou.js ichiga o‘rnatildi"
+    },
+    "✓ OpenCode plugin removed.": {
+      "uz": "✓ OpenCode plagini o‘chirildi."
+    },
+    "✓ Status line installed.": {
+      "uz": "✓ Status qatori o‘rnatildi."
+    },
+    "✓ Status line removed.": {
+      "uz": "✓ Status qatori o‘chirildi."
+    },
+    "❌ Select the .claude folder (hidden, in your Home directory).": {
+      "uz": "❌ Uy papkangizdagi yashirin .claude papkasini tanlang."
+    },
+    " · until {date}": {
+      "uz": " · {date}gacha"
+    },
+    "(stored)": {
+      "uz": "(saqlangan)"
+    },
+    "A hook group named \"coucou\" that Coucou did not write is already there — Coucou has not touched it.": {
+      "uz": "Coucou yaratmagan coucou nomli hook guruhi mavjud — u o‘zgartirilmadi."
+    },
+    "AI for the chat": {
+      "uz": "Chat uchun AI"
+    },
+    "API error {code}": {
+      "uz": "API xatosi {code}"
+    },
+    "Attach the front window to the chat": {
+      "uz": "Oldingi oynani chatga qo‘shish"
+    },
+    "Backup of {path} failed, nothing was written: {error}": {
+      "uz": "{path} zaxirasini olib bo‘lmadi, hech narsa yozilmadi: {error}"
+    },
+    "Bad API response: {error}": {
+      "uz": "Noto‘g‘ri API javobi: {error}"
+    },
+    "Can't read {path}: {error}": {
+      "uz": "{path}ni o‘qib bo‘lmadi: {error}"
+    },
+    "Cannot copy: {error}": {
+      "uz": "Nusxa olib bo‘lmadi: {error}"
+    },
+    "Cannot reach {url}. Is the server running?": {
+      "uz": "{url} bilan ulanib bo‘lmadi. Server ishlayaptimi?"
+    },
+    "Cannot read {path}: {error}": {
+      "uz": "{path}ni o‘qib bo‘lmadi: {error}"
+    },
+    "Chat with Google AI, OpenAI or OpenRouter instead of Claude: add a key here, then click the model name above the chat box to switch provider and model. Keys stay in the system keychain. These providers get no web search and no tools: they can answer, never act on this computer.": {
+      "uz": "Google AI, OpenAI yoki OpenRouter bilan chat uchun kalit qo‘shing, so‘ng chat tepasidagi model nomidan provayder va modelni tanlang. Kalitlar tizimning kalit omborida saqlanadi. Bu provayderlar faqat javob beradi; internet qidiruvi va kompyuter vositalari ularga berilmaydi."
+    },
+    "Chat with a model you run yourself: Ollama or LM Studio (leave the address empty for the usual one on this computer), or any server that speaks the OpenAI API, such as vLLM or llama.cpp. Once connected, pick it above the chat box.": {
+      "uz": "Ollama, LM Studio yoki OpenAI API bilan mos vLLM, llama.cpp kabi serverdagi model bilan suhbatlashing. Bu kompyuterdagi standart manzil uchun maydonni bo‘sh qoldiring. Ulangach, chat tepasida modelni tanlang."
+    },
+    "Classic token with the repo scope, or fine-grained with read access to Pull requests, Commit statuses and Actions.": {
+      "uz": "repo huquqli klassik token yoki Pull requests, Commit statuses va Actions uchun o‘qish huquqli token."
+    },
+    "Claude declined this one.": {
+      "uz": "Claude bu so‘rovni rad etdi."
+    },
+    "Claude needs an answer.": {
+      "uz": "Claude javob kutmoqda."
+    },
+    "Code": {
+      "uz": "Kod"
+    },
+    "Connect {name} in Settings → Local models first.": {
+      "uz": "Avval Sozlamalar → Mahalliy modellar bo‘limida {name}ni ulang."
+    },
+    "Copying images isn't available here — use Save image.": {
+      "uz": "Bu yerda rasmdan nusxa olib bo‘lmaydi — Rasmni saqlash tugmasini ishlating."
+    },
+    "Coucou could not list the agents.": {
+      "uz": "Agentlar ro‘yxatini olib bo‘lmadi."
+    },
+    "Coucou counts your agent sessions as they happen — check back next Monday.": {
+      "uz": "Coucou agent sessiyalarini hisoblaydi — keyingi dushanba hisobotni ko‘ring."
+    },
+    "Coucou is hooked into your Claude Code sessions. Tool calls, questions and permission requests show up in the island, and you can answer them there.": {
+      "uz": "Coucou Claude Code sessiyalariga ulangan. Vosita chaqiruvlari, savollar va ruxsat so‘rovlari panelda ko‘rinadi, ularga shu yerda javob berishingiz mumkin."
+    },
+    "Could not remove {path}: {error}": {
+      "uz": "{path}ni o‘chirib bo‘lmadi: {error}"
+    },
+    "Could not remove: {error}": {
+      "uz": "O‘chirib bo‘lmadi: {error}"
+    },
+    "Could not save the image: {error}": {
+      "uz": "Rasmni saqlab bo‘lmadi: {error}"
+    },
+    "Could not save your current status line next to the relay; nothing was changed.": {
+      "uz": "Joriy status qatorini relay yonida saqlab bo‘lmadi; hech narsa o‘zgarmadi."
+    },
+    "Could not write: {error}": {
+      "uz": "Yozib bo‘lmadi: {error}"
+    },
+    "Default branch CI": {
+      "uz": "Asosiy branch CI holati"
+    },
+    "Deployment": {
+      "uz": "Joylashtirish"
+    },
+    "Docs": {
+      "uz": "Hujjatlar"
+    },
+    "Done. Open a new Claude Code session to pick the hooks up.": {
+      "uz": "Bajarildi. Hooklar ishlashi uchun yangi Claude Code sessiyasini oching."
+    },
+    "Done. Previous settings saved as {backup}. Open a new Claude Code session to pick the hooks up.": {
+      "uz": "Bajarildi. Oldingi sozlamalar {backup} sifatida saqlandi. Yangi Claude Code sessiyasini oching."
+    },
+    "Done. Previous settings saved as {backup}. The numbers appear after the next reply of a Claude Code session.": {
+      "uz": "Bajarildi. Oldingi sozlamalar {backup} sifatida saqlandi. Raqamlar Claude Code’ning keyingi javobidan so‘ng chiqadi."
+    },
+    "Done. The numbers appear after the next reply of a Claude Code session.": {
+      "uz": "Bajarildi. Raqamlar Claude Code’ning keyingi javobidan so‘ng chiqadi."
+    },
+    "Enter the server address first.": {
+      "uz": "Avval server manzilini kiriting."
+    },
+    "Images": {
+      "uz": "Rasmlar"
+    },
+    "Install the hooks to see your Claude Code sessions in the island and approve permissions without leaving what you are doing.": {
+      "uz": "Claude Code sessiyalarini panelda ko‘rish va ruxsatlarni shu yerda berish uchun hooklarni o‘rnating."
+    },
+    "Instance URL": {
+      "uz": "Server manzili"
+    },
+    "Integration": {
+      "uz": "Integratsiya"
+    },
+    "Integration lacks access": {
+      "uz": "Integratsiyada kirish huquqi yo‘q"
+    },
+    "Integration token": {
+      "uz": "Integratsiya tokeni"
+    },
+    "Invalid API key (401)": {
+      "uz": "Noto‘g‘ri API kaliti (401)"
+    },
+    "Key from {site}": {
+      "uz": "Kalit: {site}"
+    },
+    "Key lacks access": {
+      "uz": "Kalitda kirish huquqi yo‘q"
+    },
+    "Leave the user name and password out of the address.": {
+      "uz": "Manzilga foydalanuvchi nomi va parolni kiritmang."
+    },
+    "Meeting": {
+      "uz": "Uchrashuv"
+    },
+    "Network error: {error}": {
+      "uz": "Tarmoq xatosi: {error}"
+    },
+    "No Pictures or Downloads folder to save into.": {
+      "uz": "Saqlash uchun Pictures yoki Downloads papkasi topilmadi."
+    },
+    "No change.": {
+      "uz": "O‘zgarish yo‘q."
+    },
+    "No connection: {error}": {
+      "uz": "Ulanish yo‘q: {error}"
+    },
+    "No detail available.": {
+      "uz": "Tafsilotlar yo‘q."
+    },
+    "No display server was found, so global shortcuts are off.": {
+      "uz": "Ekran serveri topilmadi, global yorliqlar o‘chirilgan."
+    },
+    "No models yet. Download one in {name} first.": {
+      "uz": "Model yo‘q. Avval {name} ichida model yuklab oling."
+    },
+    "No response text.": {
+      "uz": "Javob matni yo‘q."
+    },
+    "No settings.json yet — nothing to back up.": {
+      "uz": "settings.json hali yo‘q — zaxira olish shart emas."
+    },
+    "Not a valid address: {address}": {
+      "uz": "Noto‘g‘ri manzil: {address}"
+    },
+    "Not a valid http:// or https:// address.": {
+      "uz": "http:// yoki https:// manzili noto‘g‘ri."
+    },
+    "Nothing leaves your PC: the server runs on this computer.": {
+      "uz": "Ma’lumot kompyuteringizdan chiqmaydi: server shu kompyuterda ishlaydi."
+    },
+    "Only files dropped on the island can be added.": {
+      "uz": "Faqat panelga tashlangan fayllarni qo‘shish mumkin."
+    },
+    "Open Claude": {
+      "uz": "Claude’ni ochish"
+    },
+    "OpenAI-compatible": {
+      "uz": "OpenAI bilan mos"
+    },
+    "PDF": {
+      "uz": "PDF"
+    },
+    "Payment": {
+      "uz": "To‘lov"
+    },
+    "Pick a model above the chat box first.": {
+      "uz": "Avval chat tepasida model tanlang."
+    },
+    "Pick a {name} model above the chat box.": {
+      "uz": "Chat tepasida {name} modelini tanlang."
+    },
+    "Relay": {
+      "uz": "Relay"
+    },
+    "Repositories": {
+      "uz": "Repozitoriylar"
+    },
+    "Restart Amp to load the plugin.": {
+      "uz": "Plagin yuklanishi uchun Amp’ni qayta oching."
+    },
+    "Restart Cursor to pick the hooks up.": {
+      "uz": "Hooklar ishlashi uchun Cursor’ni qayta oching."
+    },
+    "Restart OpenCode to load the plugin.": {
+      "uz": "Plagin yuklanishi uchun OpenCode’ni qayta oching."
+    },
+    "Result": {
+      "uz": "Natija"
+    },
+    "Saved. It never touches disk.": {
+      "uz": "Saqlandi. Diskka yozilmaydi."
+    },
+    "Secret key": {
+      "uz": "Maxfiy kalit"
+    },
+    "Send Mochi to the desktop": {
+      "uz": "Mochi’ni ish stoliga chiqarish"
+    },
+    "Sending by email isn't in this version.": {
+      "uz": "Bu versiyada elektron pochta orqali yuborish yo‘q."
+    },
+    "Show other coding agents in the island. Coucou adds its entries to each agent's own config: you see the exact change and where the backup goes before anything is written, and uninstalling removes only what Coucou added.": {
+      "uz": "Boshqa dasturlash agentlarini panelda ko‘rsating. Coucou agentning sozlamalariga o‘z yozuvlarini qo‘shadi. Yozishdan oldin o‘zgarish va zaxira manzilini ko‘rasiz. O‘chirish faqat Coucou yozuvlarini olib tashlaydi."
+    },
+    "Shows your Claude plan usage (5-hour and weekly limits) in the island's header. Coucou adds a status line relay in ~/.claude/settings.json. If you already have a status line, it keeps working as before. Pro and Max plans only.": {
+      "uz": "Panel sarlavhasida Claude’ning 5 soatlik va haftalik limitlarini ko‘rsatadi. Coucou ~/.claude/settings.json ichiga status qatori relay’ini qo‘shadi. Mavjud status qatori ishlashda davom etadi. Faqat Pro va Max tariflari uchun."
+    },
+    "Shows your Codex plan usage (weekly limit and free resets left) in the island's header. Coucou asks the Codex CLI (codex app-server) when the pill shows; nothing is installed. Codex must be signed in with ChatGPT.": {
+      "uz": "Panel sarlavhasida Codex’ning haftalik limiti va qolgan bepul tiklashlarini ko‘rsatadi. Coucou Codex CLI’dan ma’lumot oladi. Codex’ga ChatGPT orqali kirilgan bo‘lishi kerak."
+    },
+    "Start a new Antigravity conversation to pick the hooks up.": {
+      "uz": "Hooklar ishlashi uchun yangi Antigravity suhbatini boshlang."
+    },
+    "Start a new Copilot CLI session to pick the hooks up.": {
+      "uz": "Hooklar ishlashi uchun yangi Copilot CLI sessiyasini boshlang."
+    },
+    "Start a new Gemini CLI session to pick the hooks up.": {
+      "uz": "Hooklar ishlashi uchun yangi Gemini CLI sessiyasini boshlang."
+    },
+    "Start a new Muse Code session to pick the hooks up.": {
+      "uz": "Hooklar ishlashi uchun yangi Muse Code sessiyasini boshlang."
+    },
+    "The address must start with http:// or https://.": {
+      "uz": "Manzil http:// yoki https:// bilan boshlanishi kerak."
+    },
+    "The file is removed.": {
+      "uz": "Fayl o‘chirildi."
+    },
+    "The image could not be read.": {
+      "uz": "Rasmni o‘qib bo‘lmadi."
+    },
+    "The image is too large.": {
+      "uz": "Rasm juda katta."
+    },
+    "The preview is out of date. Nothing was written — review the new diff.": {
+      "uz": "Ko‘rib chiqish eskirgan. Hech narsa yozilmadi — yangi o‘zgarishni tekshiring."
+    },
+    "The relay isn't installed yet.": {
+      "uz": "Relay hali o‘rnatilmagan."
+    },
+    "The relay isn't installed yet. Restart Coucou.": {
+      "uz": "Relay hali o‘rnatilmagan. Coucou’ni qayta oching."
+    },
+    "The server refused the key. Check it, then connect again.": {
+      "uz": "Server kalitni rad etdi. Kalitni tekshirib qayta ulaning."
+    },
+    "The server's answer is too large.": {
+      "uz": "Server javobi juda katta."
+    },
+    "This address is another machine, over plain http: what you ask travels unencrypted.": {
+      "uz": "Bu boshqa kompyuterning http manzili: so‘rovlaringiz shifrlanmay yuboriladi."
+    },
+    "This address is another machine: what you ask is sent to it.": {
+      "uz": "Bu boshqa kompyuter manzili: so‘rovlaringiz unga yuboriladi."
+    },
+    "This agent takes a plugin, not hook entries.": {
+      "uz": "Bu agent hook o‘rniga plagin ishlatadi."
+    },
+    "This is exactly what will change in your settings.json. Your own hooks are left untouched.": {
+      "uz": "settings.json ichida quyidagi o‘zgarish kiritiladi. Shaxsiy hooklaringiz saqlanadi."
+    },
+    "This is exactly what will change: only the status line. If you already have one it keeps working, Coucou's relay runs it for you.": {
+      "uz": "Faqat status qatori o‘zgaradi. Mavjud status qatori ishlashda davom etadi — Coucou relay uni ishga tushiradi."
+    },
+    "This puts your previous status line back, or removes the entry if there was none.": {
+      "uz": "Oldingi status qatorini tiklaydi yoki oldin bo‘lmagan bo‘lsa yozuvni o‘chiradi."
+    },
+    "This removes Coucou's entries only. Your own hooks are left untouched.": {
+      "uz": "Faqat Coucou yozuvlari o‘chiriladi. Shaxsiy hooklaringiz saqlanadi."
+    },
+    "Token": {
+      "uz": "Token"
+    },
+    "Token lacks access": {
+      "uz": "Tokenda kirish huquqi yo‘q"
+    },
+    "Token lacks the needed scope": {
+      "uz": "Tokenda kerakli huquqlar yo‘q"
+    },
+    "Total stars": {
+      "uz": "Jami yulduzlar"
+    },
+    "Turn it on once with `hermes plugins enable coucou`, then start a new Hermes session.": {
+      "uz": "Bir marta `hermes plugins enable coucou` bilan yoqing, so‘ng yangi Hermes sessiyasini oching."
+    },
+    "Types “{char}”": {
+      "uz": "“{char}” belgisini yozadi"
+    },
+    "Unexpected API response.": {
+      "uz": "Kutilmagan API javobi."
+    },
+    "Unknown agent \"{id}\".": {
+      "uz": "Noma’lum agent: {id}."
+    },
+    "Untitled": {
+      "uz": "Nomsiz"
+    },
+    "Use a secret key (sk_live_… not pk_live_…)": {
+      "uz": "Maxfiy kalit ishlating (sk_live_…, pk_live_… emas)"
+    },
+    "Warning: the key would be sent unencrypted (http://) to another machine. Use https://, or a server on this computer.": {
+      "uz": "Kalit boshqa kompyuterga http:// orqali shifrlanmay yuboriladi. https:// yoki shu kompyuterdagi serverni ishlating."
+    },
+    "Workflow": {
+      "uz": "Jarayon"
+    },
+    "Write to {path} failed: {error}": {
+      "uz": "{path}ga yozib bo‘lmadi: {error}"
+    },
+    "Your Wayland desktop doesn't let apps listen for keys outside their own windows. Add the shortcuts in your system's keyboard settings instead, with these commands:": {
+      "uz": "Wayland ilovalarga boshqa oynalardagi tugmalarni kuzatishga ruxsat bermaydi. Quyidagi buyruqlarni tizim klaviatura sozlamalariga yorliq sifatida qo‘shing:"
+    },
+    "all green": {
+      "uz": "hammasi muvaffaqiyatli"
+    },
+    "coucou-hook.exe is not in place yet. Restart Coucou; if it still fails, build it with `cargo build -p coucou-hook`.": {
+      "uz": "coucou-hook.exe topilmadi. Coucou’ni qayta oching; ishlamasa `cargo build -p coucou-hook` bilan yig‘ing."
+    },
+    "failing": {
+      "uz": "xato"
+    },
+    "no repos": {
+      "uz": "repozitoriy yo‘q"
+    },
+    "passing": {
+      "uz": "muvaffaqiyatli"
+    },
+    "settings.json: {what} has an unexpected type — Coucou has not touched it.": {
+      "uz": "settings.json: {what} turi noto‘g‘ri — Coucou uni o‘zgartirmadi."
+    },
+    "{count} contributions": {
+      "uz": "{count} ta hissa"
+    },
+    "{file} isn't UTF-8 text — Coucou won't touch it.": {
+      "uz": "{file} UTF-8 matn emas — Coucou uni o‘zgartirmaydi."
+    },
+    "{file} isn't a JSON object — Coucou won't touch it.": {
+      "uz": "{file} JSON obyekt emas — Coucou uni o‘zgartirmaydi."
+    },
+    "{file} isn't valid JSON ({error}). Fix or move it, then try again — Coucou won't overwrite it.": {
+      "uz": "{file} JSON’i noto‘g‘ri ({error}). Tuzating yoki ko‘chiring, so‘ng qayta urinib ko‘ring — Coucou uni bosib yozmaydi."
+    },
+    "{keys} types “{char}” on your keyboard, so it can't be a shortcut. Pick another key.": {
+      "uz": "Klaviaturangizda {keys} “{char}” yozadi. Yorliq uchun boshqa tugmani tanlang."
+    },
+    "{model} isn't installed. Pick another model above the chat box.": {
+      "uz": "{model} o‘rnatilmagan. Chat tepasida boshqa model tanlang."
+    },
+    "{name} API key missing. Add it in Settings.": {
+      "uz": "{name} API kaliti yo‘q. Sozlamalarda qo‘shing."
+    },
+    "{name} rate limit reached (429): {detail}": {
+      "uz": "{name} so‘rov limitiga yetdi (429): {detail}"
+    },
+    "{name} rejected the API key ({status}). Check it in Settings.": {
+      "uz": "{name} API kalitini rad etdi ({status}). Sozlamalarda tekshiring."
+    },
+    "{name} wasn't written by Coucou — Coucou has not touched it.": {
+      "uz": "{name} Coucou tomonidan yaratilmagan — o‘zgartirilmadi."
+    },
+    "{name} — {width}×{height} at {x},{y}": {
+      "uz": "{name} — {width}×{height}, joyi {x},{y}"
+    },
+    "{name}: model not found (404). Pick another one above the chat box. {detail}": {
+      "uz": "{name}: model topilmadi (404). Chat tepasida boshqa model tanlang. {detail}"
+    },
+    "{name}: not enough credits (402). {detail}": {
+      "uz": "{name}: kredit yetarli emas (402). {detail}"
+    },
+    "{path} changed since the preview. Nothing was written — review the new diff.": {
+      "uz": "Ko‘rib chiqishdan keyin {path} o‘zgargan. Hech narsa yozilmadi — yangi o‘zgarishni tekshiring."
+    },
+    "{total} past year": {
+      "uz": "o‘tgan yil: {total}"
+    },
+    "{what} has an unexpected type — Coucou has not touched it.": {
+      "uz": "{what} turi noto‘g‘ri — Coucou uni o‘zgartirmadi."
+    },
+    "A key is only sent over https, or to a server on this computer.": {
+      "uz": "Kalit faqat https orqali yoki shu kompyuterdagi serverga yuboriladi."
+    },
+    "Only a file dropped on the island can be sent with a question.": {
+      "uz": "Savol bilan faqat panelga tashlangan faylni yuborish mumkin."
+    },
+    "Local AI": {
+      "uz": "Lokal AI"
+    },
+    "Local AI mode": {
+      "uz": "Lokal AI rejimi"
+    },
+    "Local AI connected": {
+      "uz": "Ulangan"
+    },
+    "Connecting to Local AI…": {
+      "uz": "Ulanmoqda…"
+    },
+    "Local AI disconnected": {
+      "uz": "Ulanmagan"
+    },
+    "No model loaded": {
+      "uz": "Model yuklanmagan"
+    },
+    "Computer Use is active": {
+      "uz": "Kompyuter boshqaruvi faol"
+    },
+    "Local AI is working": {
+      "uz": "Lokal AI ishlayapti"
+    },
+    "Local AI is ready": {
+      "uz": "Lokal AI tayyor"
+    },
+    "RAM free: {free} / {total} GiB": {
+      "uz": "Bo‘sh RAM: {free} / {total} GiB"
+    },
+    "RAM: unavailable": {
+      "uz": "RAM: ma’lumot yo‘q"
+    },
+    "Speed: {speed} tokens/s": {
+      "uz": "Tezlik: {speed} token/sek"
+    },
+    "Speed: not measured": {
+      "uz": "Tezlik: hali o‘lchanmagan"
+    },
+    "Stop Local AI": {
+      "uz": "AI’ni to‘xtatish"
+    },
+    "Stopping Local AI…": {
+      "uz": "AI to‘xtatilmoqda…"
+    },
+    "Open OpenCode": {
+      "uz": "OpenCode’ni ochish"
+    },
+    "In OpenCode, give /VL an image and a task; give /PCuse a window and a task.": {
+      "uz": "OpenCode’da /VL uchun rasm va vazifa, /PCuse uchun oyna va vazifa bering."
+    },
+    "Changing Local AI mode…": {
+      "uz": "Lokal AI rejimi o‘zgartirilmoqda…"
+    },
+    "Stop requested. Check that the task has ended.": {
+      "uz": "To‘xtatish so‘raldi. Vazifa tugaganini holatdan tekshiring."
+    },
+    "OpenCode launch requested.": {
+      "uz": "OpenCode’ni ochish so‘raldi."
+    },
+    "Local AI mode updated.": {
+      "uz": "Lokal AI rejimi yangilandi."
+    },
+    "Invalid Local AI control.": {
+      "uz": "Lokal AI buyrug‘i noto‘g‘ri."
+    },
+    "Invalid Local AI mode.": {
+      "uz": "Lokal AI rejimi noto‘g‘ri."
+    },
+    "Local AI controls only work on this computer.": {
+      "uz": "Lokal AI boshqaruvi faqat shu kompyuterda ishlaydi."
+    },
+    "Local AI is disconnected. Start LocalAI and retry.": {
+      "uz": "Lokal AI ulanmagan. LocalAI’ni ishga tushirib, qayta urinib ko‘ring."
+    },
+    "Local AI control failed ({status}).": {
+      "uz": "Lokal AI buyrug‘i bajarilmadi ({status})."
+    },
+    "Invalid Local AI status": {
+      "uz": "Lokal AI holati noto‘g‘ri formatda"
+    },
+    "Local AI is stopped": {
+      "uz": "Lokal AI to‘xtatilgan"
+    },
+    "Select a mode to resume Local AI.": {
+      "uz": "Lokal AI’ni davom ettirish uchun rejimni tanlang."
+    },
+    "Telegram recipient: {recipient}": {
+      "uz": "Telegram oluvchisi: {recipient}"
+    },
+    "Saved Messages": {
+      "uz": "Saqlangan xabarlar"
+    },
+    "Sending this Telegram message once…": {
+      "uz": "Telegram xabari bir marta yuborilmoqda…"
+    },
+    "Telegram message prepared. Review the recipient and text below.": {
+      "uz": "Telegram xabari tayyor. Quyida oluvchi va matnni tekshiring."
+    },
+    "To prepare a Telegram message, name its recipient and the exact text, then review it before sending.": {
+      "uz": "Telegram xabari uchun oluvchi va aniq matnni yozing, keyin yuborishdan oldin tekshiring."
+    },
+    "The Telegram action could not be prepared. Nothing was sent. Check the local service and Telegram login, then try a new request.": {
+      "uz": "Telegram xabarini tayyorlab bo‘lmadi. Hech narsa yuborilmadi. Lokal xizmat va Telegram kirishini tekshirib, yangi so‘rov yozing."
+    },
+    "The Telegram action could not be verified. Nothing was sent.": {
+      "uz": "Telegram amalini tekshirib bo‘lmadi. Hech narsa yuborilmadi."
+    },
+    "The chat reply could not be verified.": {
+      "uz": "Chat javobini tekshirib bo‘lmadi."
+    },
+    "Enter a Telegram message command.": {
+      "uz": "Telegram xabari uchun topshiriq yozing."
+    },
+    "Enter the message text to send.": {
+      "uz": "Yuboriladigan xabar matnini yozing."
+    },
+    "To send a Telegram message, write @username ga \"Salom\" yubor in chat, then review the recipient and text.": {
+      "uz": "Telegram xabari uchun chatga @username ga \"Salom\" yubor deb yozing, keyin oluvchi va matnni tekshiring."
+    },
+    "Telegram message commands send immediately. Ask for a draft to review first.": {
+      "uz": "Telegram xabar buyruqlari darhol yuboradi. Avval ko‘rish uchun qoralama so‘rang."
+    },
+    "Write @username ga \"Salom\" yubor or unga javob ber in chat to send immediately. Ask for a draft to review first.": {
+      "uz": "Chatga @username ga \"Salom\" yubor yoki unga javob ber deb yozsangiz, darhol yuboriladi. Avval ko‘rish uchun qoralama so‘rang."
+    },
+    "Automatic": { "uz": "Avtomatik" },
+    "AI provider": { "uz": "AI provayderi" },
+    "Automatic tries Ollama first, then your configured Gemini or Groq. Ollama is optional. Cloud providers receive your chat messages.": { "uz": "Avtomatik rejim avval Ollama, keyin sozlangan Gemini va Groq orqali ishlaydi. Ollama majburiy emas. Bulut provayderlariga suhbat xabarlari yuboriladi." },
+    "Optional: add a Claude key only when using Anthropic.": { "uz": "Ixtiyoriy: Claude API kaliti faqat Anthropic orqali ishlaganda kerak." },
+    "Add a Gemini or Groq key for Automatic fallback, or select a cloud provider directly. Save and test checks the connection without generating a reply. Keys stay in the system credential store.": { "uz": "Avtomatik almashish uchun Gemini yoki Groq kalitini kiriting yoki provayderni bevosita tanlang. «Saqlash va tekshirish» ulanishni javob yaratmasdan tekshiradi. Kalitlar tizimning maxfiy ma’lumotlar omborida saqlanadi." },
+    "Check connection": { "uz": "Ulanishni tekshirish" },
+    "Checking provider…": { "uz": "Provayder tekshirilmoqda…" },
+    "Refresh models": { "uz": "Modellarni yangilash" },
+    "Model ID": { "uz": "Model nomi (ID)" },
+    "Save model": { "uz": "Modelni saqlash" },
+    "Use model": { "uz": "Modelni tanlash" },
+    "Ready: {provider} · {model}": { "uz": "Tayyor: {provider} · {model}" },
+    "Provider unavailable. Check the connection or API key.": { "uz": "Provayder bilan bog‘lanib bo‘lmadi. Ulanish yoki API kalitini tekshiring." },
+    "No models available. Download an Ollama model or check your provider account.": { "uz": "Mavjud model topilmadi. Ollama modelini yuklang yoki provayder akkauntini tekshiring." },
+    "Models refreshed. You can also enter a model ID manually.": { "uz": "Modellar yangilandi. Model nomini qo‘lda kiritishingiz ham mumkin." },
+    "Enter a model ID.": { "uz": "Model nomini kiriting." },
+    "Model saved. Check the connection to verify its availability.": { "uz": "Model saqlandi. Ishlashini tekshirish uchun ulanishni tekshiring." },
+    "Save and test": { "uz": "Saqlash va tekshirish" },
+    "Enter an API key.": { "uz": "API kalitini kiriting." },
+    "Address saved. Check the connection to confirm availability.": { "uz": "Manzil saqlandi. Xizmat ishlayotganini aniqlash uchun ulanishni tekshiring." },
+    "Ollama did not start answering in time.": { "uz": "Ollama belgilangan vaqtda javob berishni boshlamadi." },
+    "No chat models available from {name}. Check the account and API key in Settings.": { "uz": "{name} orqali mavjud suhbat modeli topilmadi. Sozlamalarda akkaunt va API kalitini tekshiring." },
+    "No AI provider is available. Start Ollama with a chat model, or add a Gemini/Groq API key in Settings. {errors}": { "uz": "Hech bir AI provayderi bilan bog‘lanib bo‘lmadi. Ollama suhbat modelini ishga tushiring yoki sozlamalarda Gemini/Groq API kalitini kiriting. {errors}" },
+    "Start Ollama with a chat model, or add a Gemini/Groq API key in Settings. {errors}": { "uz": "Ollama suhbat modelini ishga tushiring yoki sozlamalarda Gemini/Groq API kalitini kiriting. {errors}" },
+    "{provider}: no chat models available.": { "uz": "{provider}: mavjud suhbat modeli topilmadi." },
+    "The selected model {model} is unavailable. Pick another model.": { "uz": "Tanlangan {model} modeli mavjud emas. Boshqa modelni tanlang." },
+    "Only a verified Notepad editor and a .txt/.md document in {workspace} are supported. Each action needs your review.": { "uz": "Faqat tekshirilgan Notepad muharriri va {workspace} ichidagi .txt/.md hujjatlari qo‘llab-quvvatlanadi. Har bir amalni tasdiqlashingiz kerak." },
+    "Only a verified Notepad editor and a .txt/.md document in the local workspace are supported. Each action needs your review.": { "uz": "Faqat tekshirilgan Notepad muharriri va mahalliy ish papkasidagi .txt/.md hujjatlari qo‘llab-quvvatlanadi. Har bir amalni tasdiqlashingiz kerak." }
+  }
+}

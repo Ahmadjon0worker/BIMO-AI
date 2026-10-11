@@ -22,7 +22,8 @@ const here = dirname(fileURLToPath(import.meta.url));
 const WINDOWS = join(here, "..");
 const MAC = JSON.parse(readFileSync(join(WINDOWS, "src/i18n/strings.json"), "utf8"));
 const EXTRA = JSON.parse(readFileSync(join(WINDOWS, "src/i18n/extra.json"), "utf8"));
-const OTHERS = LANGUAGE_CODES.filter((l) => l !== "en");
+const UZ = JSON.parse(readFileSync(join(WINDOWS, "src/i18n/uz.json"), "utf8"));
+const OTHERS = LANGUAGE_CODES.filter((l) => l !== "en" && l !== "uz");
 
 /** Runs `fn` in `lang`, then puts English back for the other tests. */
 function inLanguage(lang, fn) {
@@ -117,7 +118,7 @@ test("System follows the system's language when Coucou has it, else English", ()
 });
 
 test("the picker offers the Mac's ten languages, Arabic reads right to left", () => {
-  assert.deepEqual(LANGUAGES.map((l) => l.code), ["en", "zh-Hans", "hi", "es", "ar", "fr", "bn", "pt-BR", "ru", "id"]);
+  assert.deepEqual(LANGUAGES.map((l) => l.code), ["en", "zh-Hans", "hi", "es", "ar", "fr", "bn", "pt-BR", "ru", "id", "uz"]);
   assert.equal(isRtl("ar"), true);
   assert.equal(OTHERS.some((l) => l !== "ar" && isRtl(l)), false);
 });
@@ -231,11 +232,29 @@ function usedKeys() {
 test("every string the code shows is translated in every language", () => {
   const keys = usedKeys();
   assert.ok(keys.size > 300, `only ${keys.size} keys found — has the scan broken?`);
-  const missing = [...keys].filter(([key]) => !isComplete(key)).map(([key, path]) => `${path}: ${JSON.stringify(key)}`);
+  const missing = [...keys].filter(([key]) =>
+    key in MAC.strings || key in EXTRA.strings ? !isComplete(key) : !UZ.strings[key]?.uz,
+  ).map(([key, path]) => `${path}: ${JSON.stringify(key)}`);
   assert.deepEqual(missing, []);
   // And the hand-written table carries nothing the code no longer uses.
   const unused = Object.keys(EXTRA.strings).filter((key) => !keys.has(key));
   assert.deepEqual(unused, []);
+});
+
+test("Uzbek covers the complete catalog and preserves interpolation variables", () => {
+  for (const key of new Set([...Object.keys(MAC.strings), ...Object.keys(EXTRA.strings), ...usedKeys().keys()])) {
+    assert.equal(typeof UZ.strings[key]?.uz, "string", `Missing Uzbek: ${key}`);
+  }
+  for (const [key, entry] of Object.entries(UZ.strings)) {
+    assert.deepEqual(placeholders(entry.uz), placeholders(key), key);
+  }
+  assert.equal(resolveLanguage("", ["uz-Latn-UZ"]), "uz");
+  inLanguage("uz", () => {
+    assert.equal(t("Allow"), "Ruxsat berish");
+    assert.equal(t("Uploading {name}", {name: "test.txt"}), "test.txt yuklanmoqda");
+    assert.equal(tn("{count} repo", "{count} repos", 5), "5 ta repozitoriy");
+    assert.equal(isRtl(), false);
+  });
 });
 
 test("lookup() answers from the merged tables", () => {

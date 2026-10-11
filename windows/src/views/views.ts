@@ -6,11 +6,14 @@ import { h, svg, clear, dot } from "./dom";
 import { ICONS } from "./icons";
 import { Ticker } from "./ticker";
 import { State, type AgentTask } from "../core/state";
+import { codexStatus } from "../core/agent-status";
 import { washRGBA, type IslandViewName, type Wash } from "../core/layout";
 import { createMiniBot, pruneMiniBots } from "../mochi/minibots";
 import { buildPrompt } from "./chat";
 import { buildChoose, buildUpload, buildUploading } from "./upload";
 import { renderIntegrationCard, type IntegrationCardHooks } from "./integrations";
+import { highlightRow, listRows, openRow } from "./github";
+import type { ViewCommand } from "../island/shortcuts";
 import { pillDefinition, sessionSubtitle } from "../core/pills";
 import {
   PlanCard, buildPlanPill, claudePillVisible, codexPillVisible, planCardOpen, refreshCodexPlanUsage,
@@ -22,6 +25,7 @@ import { buildRecap } from "./recap";
 import { buildWardrobe } from "./wardrobe";
 import type { Outfit, OutfitSelection } from "../mochi/wardrobe";
 import { language, t, tl, type Msg } from "../i18n/i18n";
+import { buildLocalAI } from "./local-ai";
 
 export interface ViewActions {
   setView(v: IslandViewName): void;
@@ -54,10 +58,13 @@ export interface ViewActions {
 export interface ViewHost {
   el: HTMLElement;
   sync(): void;
+  /** Stops recurring work when collapsed, paused, or on another tab. */
+  setVisible?(visible: boolean): void;
   /** Called when the view becomes active, for views with a text field. */
   focus?(): void;
   /** Called every frame while the view is on screen. True = needs another frame. */
   tick?(nowMs: number): boolean | void;
+  command?(command: ViewCommand): void;
 }
 
 // ── Shared pieces ─────────────────────────────────────────────────────────────
@@ -104,6 +111,10 @@ export function buildHeader(actions: ViewActions): ViewHost {
   const tabHome = h("button", { class: "tab", title: tl("Overview"), onclick: () => go("overview") }, svg(ICONS.house, 13));
   const tabChat = h("button", { class: "tab", title: tl("Ask"), onclick: () => go("prompt") }, svg(ICONS.bubble, 13));
   const tabDrop = h("button", { class: "tab", title: tl("Drop"), onclick: () => go("upload") }, svg(ICONS.plus, 13));
+  const tabLocalAI = h("button", {
+    class: "tab local-ai-tab", title: tl("Local AI"), "aria-label": tl("Local AI"),
+    onclick: () => go("localai"), text: "AI",
+  });
 
   const gearBtn = h("button", { title: tl("Settings"), onclick: () => go("settings") }, svg(ICONS.gear, 14));
   const soundBtn = h("button", { title: tl("Mute"), onclick: () => actions.toggleSound() }, svg(ICONS.speakerOn, 14));
@@ -121,7 +132,7 @@ export function buildHeader(actions: ViewActions): ViewHost {
   const el = h(
     "div",
     { id: "header" },
-    h("div", { class: "tabs" }, tabHome, tabChat, tabDrop),
+    h("div", { class: "tabs" }, tabHome, tabChat, tabDrop, tabLocalAI),
     h("div", { class: "header-actions" }, planPills, gearBtn, soundBtn),
   );
   const headerActions = el.lastElementChild as HTMLElement;
@@ -133,6 +144,7 @@ export function buildHeader(actions: ViewActions): ViewHost {
       tabHome.classList.toggle("on", v === "overview" || v === "empty");
       tabChat.classList.toggle("on", v === "prompt");
       tabDrop.classList.toggle("on", v === "upload");
+      tabLocalAI.classList.toggle("on", v === "localai");
       gearBtn.classList.toggle("on", v === "settings");
       clear(gearBtn);
       gearBtn.append(svg(v === "settings" ? ICONS.gearFill : ICONS.gear, 14));
@@ -200,6 +212,7 @@ function buildOverview(actions: ViewActions): ViewHost {
   let lastFocus: string | null = null;
   let mode: "ticker" | "card" | "plan" | "diff" | null = null;
   let cardKey = "";
+  let shownSelection: number | null = null;
 
   // Leaving the overview or folding the island closes the diff, as on macOS.
   State.subscribe(() => {
@@ -256,10 +269,25 @@ function buildOverview(actions: ViewActions): ViewHost {
       ticker.tick(nowMs);
       return ticker.animating;
     },
+    command(command) {
+      if (command === "openSelection") {
+        if (mode !== "card" || State.cardSelection == null) return;
+        openRow(listRows(leftBody)[State.cardSelection]);
+        return;
+      }
+      if (activeDiffId != null) { closeDiff(); return; }
+      const task = State.focusTask;
+      const diffs = task ? State.sessionDiffs.get(task.id) : undefined;
+      const last = diffs?.[diffs.length - 1];
+      if (last?.id == null) return;
+      activeDiffId = last.id;
+      State.notify();
+    },
     sync() {
       const task = State.focusTask;
       if (task?.id !== lastFocus) {
         lastFocus = task?.id ?? null;
+        State.cardSelection = null;
         detailOpen = false;
         activeDiffId = null;
         cardKey = "";
@@ -315,7 +343,7 @@ function buildOverview(actions: ViewActions): ViewHost {
         who.append(
           dot(task.color, 7),
           h("span", { class: "name", text: task.name }),
-          h("span", { class: "tool", text: t(sessionSubtitle(task.id)) }),
+          h("span", { class: "tool", text: task.id === "agent_codex" ? codexStatus(task) : t(sessionSubtitle(task.id)), title: task.id === "agent_codex" ? codexStatus(task) : t(sessionSubtitle(task.id)) }),
         );
         if (task.steps.length > 1) {
           who.append(h("span", {
@@ -327,7 +355,7 @@ function buildOverview(actions: ViewActions): ViewHost {
       } else if (task) {
         const info = State.integrations[task.id];
         const key = [
-          language(), task.id, detailOpen, task.state, task.steps.join("|"),
+          language(), task.id, task.color, detailOpen, task.state, task.steps.join("|"),
           info?.loaded, info?.error, info?.configured,
           JSON.stringify(info?.data ?? {}),
         ].join("~");
@@ -341,8 +369,14 @@ function buildOverview(actions: ViewActions): ViewHost {
 
       jump.style.display = detailOpen || mode === "plan" || mode === "diff" ? "none" : "";
 
+      const rows = mode === "card" ? listRows(leftBody) : [];
+      State.cardItemCount = rows.length;
+      if (State.cardSelection != null && State.cardSelection >= rows.length) State.cardSelection = null;
+      highlightRow(rows, State.cardSelection, State.cardSelection !== shownSelection);
+      shownSelection = State.cardSelection;
+
       const others = State.otherTasks.slice(0, 4);
-      const pillKey = others.map((t) => `${t.id}:${t.pillBadge ?? ""}`).join("|");
+      const pillKey = others.map((t) => `${t.id}:${t.color}:${t.pillBadge ?? ""}`).join("|");
       if (pillKey !== pillIds) {
         pillIds = pillKey;
         clear(pills);
@@ -699,6 +733,10 @@ function buildSettings(actions: ViewActions): ViewHost {
       apiBadge,
       h("div", { class: "grow" }),
       h("button", {
+        class: "link-btn", text: tl("Return to top center"),
+        onclick: () => void Bridge.resetIslandPosition(),
+      }),
+      h("button", {
         class: "link-btn",
         style: "color:#8e939c;font-size:11.5px",
         text: tl("Settings…"),
@@ -764,6 +802,7 @@ export function buildViews(
   map.set("choose", buildChoose(actions));
   map.set("recap", buildRecap(actions));
   map.set("wardrobe", buildWardrobe(actions));
+  map.set("localai", buildLocalAI());
   // Not in the Windows v1: sending a file by email, window attach + web result.
   map.set("mail", buildPlaceholder(tl("Sending by email isn't in this version."), ""));
   map.set("searching", buildPlaceholder(tl("Claude is searching…"), ""));

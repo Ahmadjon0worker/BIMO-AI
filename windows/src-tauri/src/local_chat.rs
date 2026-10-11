@@ -18,7 +18,6 @@ use serde_json::{json, Value};
 use tauri::{AppHandle, Emitter};
 
 use crate::chat::{self, Chat, ChatContext, ChatReply, ModelInfo};
-use crate::island::WINDOW_LABEL;
 use crate::settings::Settings;
 use crate::i18n::{t, tf};
 use crate::{net, secrets};
@@ -115,6 +114,16 @@ fn usual_address(id: &str) -> Option<String> {
         "lmstudio" => Some("http://127.0.0.1:1234".into()),
         _ => None,
     }
+}
+
+/// Auto mode can discover an already running Ollama without persisting or
+/// replacing the user's explicit server preference.
+pub fn auto_ollama_server(settings: &Settings) -> Server {
+    let mut server = server(settings, "ollama").expect("Ollama is a known local provider");
+    if server.url.trim().is_empty() {
+        server.url = usual_address("ollama").unwrap_or_else(|| "http://127.0.0.1:11434".into());
+    }
+    server
 }
 
 fn bearer(key: Option<&str>) -> String {
@@ -262,24 +271,57 @@ pub async fn send(
     query: String,
     context: Option<ChatContext>,
 ) -> Result<ChatReply, String> {
-    let base = base_url(server)?;
+    send_attempt(app, chat, server, model, query, context, None).await.map_err(|e| e.message)
+}
+
+pub struct GenerationFailure {
+    pub message: String,
+    /// Once the user has seen generated text, another provider must not replace
+    /// it silently. The failed turn is still absent from the chat history.
+    pub visible_started: bool,
+}
+
+pub async fn send_auto(
+    app: &AppHandle,
+    chat: &Chat,
+    server: &Server,
+    model: &str,
+    query: String,
+    context: Option<ChatContext>,
+) -> Result<ChatReply, GenerationFailure> {
+    send_attempt(app, chat, server, model, query, context, Some(Duration::from_secs(45))).await
+}
+
+async fn send_attempt(
+    app: &AppHandle,
+    chat: &Chat,
+    server: &Server,
+    model: &str,
+    query: String,
+    context: Option<ChatContext>,
+    start_timeout: Option<Duration>,
+) -> Result<ChatReply, GenerationFailure> {
+    let before_text = |message| GenerationFailure { message, visible_started: false };
+    let base = base_url(server).map_err(before_text)?;
     if model.is_empty() {
-        return Err(t("Pick a model above the chat box first."));
+        return Err(before_text(t("Pick a model above the chat box first.")));
     }
     let turn = chat.begin(server.id);
     let user = json!({ "role": "user", "content": user_text(turn.first, context.as_ref(), &query) });
     let body = request_body(model, &chat::system_prompt(false), &turn.history, &user);
 
-    let answer = stream(&base, server.key.as_deref(), model, &body, |visible| {
-        let _ = app.emit_to(WINDOW_LABEL, "chat-delta", visible);
+    let mut visible_started = false;
+    let answer = stream_with_start_timeout(&base, server.key.as_deref(), model, &body, start_timeout, |visible| {
+        visible_started |= !visible.is_empty();
+        let _ = app.emit_to(chat.window_label(), "chat-delta", visible);
     })
-    .await?;
+    .await.map_err(|message| GenerationFailure { message, visible_started })?;
     if answer.is_empty() {
-        return Err(t("No response text."));
+        return Err(GenerationFailure { message: t("No response text."), visible_started });
     }
     let plain = chat::plain_question(turn.first, context.as_ref(), &query);
     chat.commit(&turn, user, json!({ "role": "assistant", "content": answer }), &plain, &answer);
-    Ok(ChatReply { text: answer })
+    Ok(ChatReply::new(answer, server.id, model))
 }
 
 // ── Streaming ─────────────────────────────────────────────────────────────────
@@ -325,20 +367,36 @@ fn progressive_filter(text: &str) -> String {
 /// Posts the request and reads the event stream. `on_delta` gets the visible
 /// text at most 15 times a second, and once more at the end; the result is the
 /// whole answer without its thinking.
+#[cfg(test)]
 async fn stream(
     base: &Url,
     key: Option<&str>,
     model: &str,
     body: &Value,
+    on_delta: impl FnMut(String),
+) -> Result<String, String> {
+    stream_with_start_timeout(base, key, model, body, None, on_delta).await
+}
+
+async fn stream_with_start_timeout(
+    base: &Url,
+    key: Option<&str>,
+    model: &str,
+    body: &Value,
+    start_timeout: Option<Duration>,
     mut on_delta: impl FnMut(String),
 ) -> Result<String, String> {
-    let mut reply = net::client(base, Duration::from_secs(300))?
+    let start_deadline = start_timeout.map(|wait| tokio::time::Instant::now() + wait);
+    let request = net::client(base, Duration::from_secs(300))?
         .post(net::join(base, "v1/chat/completions"))
         .header("Authorization", bearer(key))
         .json(body)
-        .send()
-        .await
-        .map_err(|_| unreachable(base))?;
+        .send();
+    let mut reply = match start_deadline {
+        Some(deadline) => tokio::time::timeout_at(deadline, request).await
+            .map_err(|_| t("Ollama did not start answering in time."))?,
+        None => request.await,
+    }.map_err(|_| unreachable(base))?;
 
     let status = reply.status();
     if status.as_u16() == 404 {
@@ -353,7 +411,13 @@ async fn stream(
     let mut accumulated = String::new();
     let mut pending = Vec::<u8>::new();
     let mut last = Instant::now().checked_sub(DELTA_INTERVAL).unwrap_or_else(Instant::now);
-    while let Some(chunk) = reply.chunk().await.map_err(|_| unreachable(base))? {
+    loop {
+        let next = match start_deadline.filter(|_| accumulated.is_empty()) {
+            Some(deadline) => tokio::time::timeout_at(deadline, reply.chunk()).await
+                .map_err(|_| t("Ollama did not start answering in time."))?,
+            None => reply.chunk().await,
+        }.map_err(|_| unreachable(base))?;
+        let Some(chunk) = next else { break };
         pending.extend_from_slice(&chunk);
         // Whole lines only: a chunk may end in the middle of one, or of a character.
         while let Some(end) = pending.iter().position(|b| *b == b'\n') {
@@ -374,8 +438,13 @@ async fn stream(
         }
     }
     // A last line without its newline.
-    if let Some(Ok(delta)) = parse_sse_line(String::from_utf8_lossy(&pending).trim_end()) {
-        accumulated.push_str(&delta);
+    match parse_sse_line(String::from_utf8_lossy(&pending).trim_end()) {
+        Some(Ok(delta)) => accumulated.push_str(&delta),
+        Some(Err(message)) => return Err(message),
+        None => {}
+    }
+    if accumulated.len() > MAX_ANSWER {
+        return Err(t("The server's answer is too large."));
     }
     // The last state always goes out, whatever the throttle skipped.
     on_delta(progressive_filter(&accumulated));
@@ -510,6 +579,34 @@ mod tests {
         assert_eq!(block_on(stream(&url(&u), None, "m", &json!({}), |_| {})).unwrap_err(), "context too long");
         let u = serve_once("200 OK", "", b"data: {\"error\":{\"message\":\"crashed\"}}\n".to_vec());
         assert_eq!(block_on(stream(&url(&u), None, "m", &json!({}), |_| {})).unwrap_err(), "crashed");
+        let u = serve_once("200 OK", "", b"data: {\"error\":{\"message\":\"last line crashed\"}}".to_vec());
+        assert_eq!(block_on(stream(&url(&u), None, "m", &json!({}), |_| {})).unwrap_err(), "last line crashed");
+    }
+
+    #[test]
+    fn auto_mode_limits_wait_for_the_first_generated_token() {
+        use std::io::{Read, Write};
+        let listener = std::net::TcpListener::bind("127.0.0.1:0").unwrap();
+        let endpoint = format!("http://{}", listener.local_addr().unwrap());
+        let server = std::thread::spawn(move || {
+            let (mut socket, _) = listener.accept().unwrap();
+            let mut request = [0u8; 4096];
+            let _ = socket.read(&mut request);
+            let _ = socket.write_all(b"HTTP/1.1 200 OK\r\nContent-Type: text/event-stream\r\nConnection: close\r\n\r\n");
+            let _ = socket.flush();
+            std::thread::sleep(Duration::from_millis(120));
+        });
+        let error = block_on(stream_with_start_timeout(&url(&endpoint), None, "m", &json!({}), Some(Duration::from_millis(30)), |_| {})).unwrap_err();
+        assert_eq!(error, "Ollama did not start answering in time.");
+        server.join().unwrap();
+    }
+
+    #[test]
+    fn auto_ollama_discovery_keeps_an_explicit_server_address() {
+        let mut settings = Settings::default();
+        settings.ollama_url = "http://127.0.0.1:14567".into();
+        assert_eq!(auto_ollama_server(&settings).url, settings.ollama_url);
+        assert_eq!(settings.chat_provider, chat::AUTO);
     }
 
     #[test]

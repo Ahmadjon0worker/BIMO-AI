@@ -1,0 +1,14 @@
+{
+  "model": "silero-v6.2.0",
+  "repository": "ggml-org/whisper-vad",
+  "revision": "c5c26827b67dfd053856f92e824e14fdcc123daf",
+  "source": "https://huggingface.co/ggml-org/whisper-vad/resolve/c5c26827b67dfd053856f92e824e14fdcc123daf/ggml-silero-v6.2.0.bin",
+  "model_file": "ggml-silero-v6.2.0.bin",
+  "bytes": 885098,
+  "sha256": "2aa269b785eeb53a82983a20501ddf7c1d9c48e33ab63a41391ac6c9f7fb6987",
+  "license": "MIT",
+  "license_source": "https://raw.githubusercontent.com/snakers4/silero-vad/be95df9152c0d7618fa1edfeb296fc3dae32376f/LICENSE",
+  "license_revision": "be95df9152c0d7618fa1edfeb296fc3dae32376f",
+  "license_sha256": "2e63e9a38b6e8fc0c7bc37ce174caca1862870856c6daf5697cfb785e925520b",
+  "purpose": "Offline native speech activity detection before Uzbek decoding; no automatic downloading."
+}

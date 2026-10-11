@@ -1,0 +1,1582 @@
+{
+  "ok": true,
+  "native_files_checked": 112,
+  "missing_private_dependencies": [],
+  "rows": [
+    {
+      "path": "runtime/concrt140.dll",
+      "imports": [
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-math-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-stdio-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "kernel32.dll",
+        "msvcp140.dll",
+        "vcruntime140.dll",
+        "vcruntime140_1.dll"
+      ]
+    },
+    {
+      "path": "runtime/DLLs/_asyncio.pyd",
+      "imports": [
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "kernel32.dll",
+        "python312.dll",
+        "vcruntime140.dll"
+      ]
+    },
+    {
+      "path": "runtime/DLLs/_bz2.pyd",
+      "imports": [
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-stdio-l1-1-0.dll",
+        "kernel32.dll",
+        "python312.dll",
+        "vcruntime140.dll"
+      ]
+    },
+    {
+      "path": "runtime/DLLs/_ctypes.pyd",
+      "imports": [
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-stdio-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "kernel32.dll",
+        "libffi-8.dll",
+        "ole32.dll",
+        "oleaut32.dll",
+        "python312.dll",
+        "vcruntime140.dll"
+      ]
+    },
+    {
+      "path": "runtime/DLLs/_decimal.pyd",
+      "imports": [
+        "api-ms-win-crt-convert-l1-1-0.dll",
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-locale-l1-1-0.dll",
+        "api-ms-win-crt-math-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-stdio-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "kernel32.dll",
+        "python312.dll",
+        "vcruntime140.dll"
+      ]
+    },
+    {
+      "path": "runtime/DLLs/_elementtree.pyd",
+      "imports": [
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "kernel32.dll",
+        "python312.dll",
+        "vcruntime140.dll"
+      ]
+    },
+    {
+      "path": "runtime/DLLs/_hashlib.pyd",
+      "imports": [
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "kernel32.dll",
+        "libcrypto-3-x64.dll",
+        "python312.dll",
+        "vcruntime140.dll"
+      ]
+    },
+    {
+      "path": "runtime/DLLs/_lzma.pyd",
+      "imports": [
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "kernel32.dll",
+        "python312.dll",
+        "vcruntime140.dll"
+      ]
+    },
+    {
+      "path": "runtime/DLLs/_msi.pyd",
+      "imports": [
+        "api-ms-win-crt-filesystem-l1-1-0.dll",
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-stdio-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "cabinet.dll",
+        "kernel32.dll",
+        "msi.dll",
+        "python312.dll",
+        "rpcrt4.dll",
+        "vcruntime140.dll"
+      ]
+    },
+    {
+      "path": "runtime/DLLs/_multiprocessing.pyd",
+      "imports": [
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "kernel32.dll",
+        "python312.dll",
+        "vcruntime140.dll",
+        "ws2_32.dll"
+      ]
+    },
+    {
+      "path": "runtime/DLLs/_overlapped.pyd",
+      "imports": [
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "kernel32.dll",
+        "python312.dll",
+        "vcruntime140.dll",
+        "ws2_32.dll"
+      ]
+    },
+    {
+      "path": "runtime/DLLs/_queue.pyd",
+      "imports": [
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "kernel32.dll",
+        "python312.dll",
+        "vcruntime140.dll"
+      ]
+    },
+    {
+      "path": "runtime/DLLs/_socket.pyd",
+      "imports": [
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-stdio-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "iphlpapi.dll",
+        "kernel32.dll",
+        "python312.dll",
+        "rpcrt4.dll",
+        "vcruntime140.dll",
+        "ws2_32.dll"
+      ]
+    },
+    {
+      "path": "runtime/DLLs/_sqlite3.pyd",
+      "imports": [
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "kernel32.dll",
+        "python312.dll",
+        "sqlite3.dll",
+        "vcruntime140.dll"
+      ]
+    },
+    {
+      "path": "runtime/DLLs/_ssl.pyd",
+      "imports": [
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-stdio-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "crypt32.dll",
+        "kernel32.dll",
+        "libcrypto-3-x64.dll",
+        "libssl-3-x64.dll",
+        "python312.dll",
+        "vcruntime140.dll",
+        "ws2_32.dll"
+      ]
+    },
+    {
+      "path": "runtime/DLLs/_uuid.pyd",
+      "imports": [
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "kernel32.dll",
+        "python312.dll",
+        "rpcrt4.dll",
+        "vcruntime140.dll"
+      ]
+    },
+    {
+      "path": "runtime/DLLs/_wmi.pyd",
+      "imports": [
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "kernel32.dll",
+        "ole32.dll",
+        "oleaut32.dll",
+        "propsys.dll",
+        "python312.dll",
+        "vcruntime140.dll",
+        "vcruntime140_1.dll"
+      ]
+    },
+    {
+      "path": "runtime/DLLs/_zoneinfo.pyd",
+      "imports": [
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "kernel32.dll",
+        "python312.dll",
+        "vcruntime140.dll"
+      ]
+    },
+    {
+      "path": "runtime/DLLs/libcrypto-3-x64.dll",
+      "imports": [
+        "advapi32.dll",
+        "api-ms-win-crt-convert-l1-1-0.dll",
+        "api-ms-win-crt-environment-l1-1-0.dll",
+        "api-ms-win-crt-filesystem-l1-1-0.dll",
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-stdio-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "api-ms-win-crt-time-l1-1-0.dll",
+        "api-ms-win-crt-utility-l1-1-0.dll",
+        "crypt32.dll",
+        "kernel32.dll",
+        "user32.dll",
+        "vcruntime140.dll",
+        "ws2_32.dll"
+      ]
+    },
+    {
+      "path": "runtime/DLLs/libffi-8.dll",
+      "imports": [
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "kernel32.dll",
+        "vcruntime140.dll"
+      ]
+    },
+    {
+      "path": "runtime/DLLs/libssl-3-x64.dll",
+      "imports": [
+        "api-ms-win-crt-convert-l1-1-0.dll",
+        "api-ms-win-crt-environment-l1-1-0.dll",
+        "api-ms-win-crt-filesystem-l1-1-0.dll",
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "api-ms-win-crt-time-l1-1-0.dll",
+        "api-ms-win-crt-utility-l1-1-0.dll",
+        "kernel32.dll",
+        "libcrypto-3-x64.dll",
+        "vcruntime140.dll",
+        "ws2_32.dll"
+      ]
+    },
+    {
+      "path": "runtime/DLLs/pyexpat.pyd",
+      "imports": [
+        "api-ms-win-crt-convert-l1-1-0.dll",
+        "api-ms-win-crt-environment-l1-1-0.dll",
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-stdio-l1-1-0.dll",
+        "kernel32.dll",
+        "python312.dll",
+        "vcruntime140.dll"
+      ]
+    },
+    {
+      "path": "runtime/DLLs/select.pyd",
+      "imports": [
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "kernel32.dll",
+        "python312.dll",
+        "vcruntime140.dll",
+        "ws2_32.dll"
+      ]
+    },
+    {
+      "path": "runtime/DLLs/sqlite3.dll",
+      "imports": [
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-math-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "api-ms-win-crt-time-l1-1-0.dll",
+        "api-ms-win-crt-utility-l1-1-0.dll",
+        "kernel32.dll",
+        "vcruntime140.dll"
+      ]
+    },
+    {
+      "path": "runtime/DLLs/unicodedata.pyd",
+      "imports": [
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-stdio-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "kernel32.dll",
+        "python312.dll",
+        "vcruntime140.dll"
+      ]
+    },
+    {
+      "path": "runtime/DLLs/winsound.pyd",
+      "imports": [
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "kernel32.dll",
+        "python312.dll",
+        "user32.dll",
+        "vcruntime140.dll",
+        "winmm.dll"
+      ]
+    },
+    {
+      "path": "runtime/mfc140enu.dll",
+      "imports": []
+    },
+    {
+      "path": "runtime/mfc140u.dll",
+      "imports": [
+        "advapi32.dll",
+        "api-ms-win-crt-convert-l1-1-0.dll",
+        "api-ms-win-crt-filesystem-l1-1-0.dll",
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-math-l1-1-0.dll",
+        "api-ms-win-crt-multibyte-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-stdio-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "api-ms-win-crt-time-l1-1-0.dll",
+        "api-ms-win-crt-utility-l1-1-0.dll",
+        "crypt32.dll",
+        "gdi32.dll",
+        "gdiplus.dll",
+        "imm32.dll",
+        "kernel32.dll",
+        "msimg32.dll",
+        "odbc32.dll",
+        "ole32.dll",
+        "oleacc.dll",
+        "oleaut32.dll",
+        "oledlg.dll",
+        "shell32.dll",
+        "shlwapi.dll",
+        "urlmon.dll",
+        "user32.dll",
+        "uxtheme.dll",
+        "vcruntime140.dll",
+        "vcruntime140_1.dll",
+        "wininet.dll",
+        "winmm.dll",
+        "winspool.drv",
+        "ws2_32.dll"
+      ]
+    },
+    {
+      "path": "runtime/msvcp140.dll",
+      "imports": [
+        "api-ms-win-crt-convert-l1-1-0.dll",
+        "api-ms-win-crt-environment-l1-1-0.dll",
+        "api-ms-win-crt-filesystem-l1-1-0.dll",
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-locale-l1-1-0.dll",
+        "api-ms-win-crt-math-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-stdio-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "api-ms-win-crt-time-l1-1-0.dll",
+        "api-ms-win-crt-utility-l1-1-0.dll",
+        "kernel32.dll",
+        "vcruntime140.dll",
+        "vcruntime140_1.dll"
+      ]
+    },
+    {
+      "path": "runtime/msvcp140_1.dll",
+      "imports": [
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "kernel32.dll",
+        "msvcp140.dll",
+        "vcruntime140.dll"
+      ]
+    },
+    {
+      "path": "runtime/msvcp140_2.dll",
+      "imports": [
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-locale-l1-1-0.dll",
+        "api-ms-win-crt-math-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-stdio-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "kernel32.dll",
+        "msvcp140.dll",
+        "vcruntime140.dll",
+        "vcruntime140_1.dll"
+      ]
+    },
+    {
+      "path": "runtime/msvcp140_atomic_wait.dll",
+      "imports": [
+        "advapi32.dll",
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-locale-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "kernel32.dll",
+        "msvcp140.dll",
+        "vcruntime140.dll",
+        "vcruntime140_1.dll"
+      ]
+    },
+    {
+      "path": "runtime/msvcp140_codecvt_ids.dll",
+      "imports": [
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "kernel32.dll",
+        "vcruntime140.dll"
+      ]
+    },
+    {
+      "path": "runtime/python.exe",
+      "imports": [
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-locale-l1-1-0.dll",
+        "api-ms-win-crt-math-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-stdio-l1-1-0.dll",
+        "kernel32.dll",
+        "python312.dll",
+        "vcruntime140.dll"
+      ]
+    },
+    {
+      "path": "runtime/python3.dll",
+      "imports": []
+    },
+    {
+      "path": "runtime/python312.dll",
+      "imports": [
+        "advapi32.dll",
+        "api-ms-win-core-path-l1-1-0.dll",
+        "api-ms-win-crt-conio-l1-1-0.dll",
+        "api-ms-win-crt-convert-l1-1-0.dll",
+        "api-ms-win-crt-environment-l1-1-0.dll",
+        "api-ms-win-crt-filesystem-l1-1-0.dll",
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-locale-l1-1-0.dll",
+        "api-ms-win-crt-math-l1-1-0.dll",
+        "api-ms-win-crt-process-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-stdio-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "api-ms-win-crt-time-l1-1-0.dll",
+        "bcrypt.dll",
+        "kernel32.dll",
+        "vcruntime140.dll",
+        "version.dll",
+        "ws2_32.dll"
+      ]
+    },
+    {
+      "path": "runtime/pythonw.exe",
+      "imports": [
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-locale-l1-1-0.dll",
+        "api-ms-win-crt-math-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-stdio-l1-1-0.dll",
+        "kernel32.dll",
+        "python312.dll",
+        "vcruntime140.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/charset_normalizer/cd.cp312-win_amd64.pyd",
+      "imports": [
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "kernel32.dll",
+        "python312.dll",
+        "vcruntime140.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/charset_normalizer/md.cp312-win_amd64.pyd",
+      "imports": [
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "kernel32.dll",
+        "python312.dll",
+        "vcruntime140.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/lxml/_elementpath.cp312-win_amd64.pyd",
+      "imports": [
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "kernel32.dll",
+        "python312.dll",
+        "vcruntime140.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/lxml/builder.cp312-win_amd64.pyd",
+      "imports": [
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "kernel32.dll",
+        "python312.dll",
+        "vcruntime140.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/lxml/etree.cp312-win_amd64.pyd",
+      "imports": [
+        "advapi32.dll",
+        "api-ms-win-crt-convert-l1-1-0.dll",
+        "api-ms-win-crt-environment-l1-1-0.dll",
+        "api-ms-win-crt-filesystem-l1-1-0.dll",
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-locale-l1-1-0.dll",
+        "api-ms-win-crt-math-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-stdio-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "api-ms-win-crt-time-l1-1-0.dll",
+        "api-ms-win-crt-utility-l1-1-0.dll",
+        "kernel32.dll",
+        "python312.dll",
+        "vcruntime140.dll",
+        "ws2_32.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/lxml/html/_difflib.cp312-win_amd64.pyd",
+      "imports": [
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "kernel32.dll",
+        "python312.dll",
+        "vcruntime140.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/lxml/html/diff.cp312-win_amd64.pyd",
+      "imports": [
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "kernel32.dll",
+        "python312.dll",
+        "vcruntime140.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/lxml/objectify.cp312-win_amd64.pyd",
+      "imports": [
+        "api-ms-win-crt-convert-l1-1-0.dll",
+        "api-ms-win-crt-environment-l1-1-0.dll",
+        "api-ms-win-crt-filesystem-l1-1-0.dll",
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-locale-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-stdio-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "api-ms-win-crt-time-l1-1-0.dll",
+        "api-ms-win-crt-utility-l1-1-0.dll",
+        "kernel32.dll",
+        "python312.dll",
+        "vcruntime140.dll",
+        "ws2_32.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/lxml/sax.cp312-win_amd64.pyd",
+      "imports": [
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "kernel32.dll",
+        "python312.dll",
+        "vcruntime140.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/PIL/_avif.cp312-win_amd64.pyd",
+      "imports": [
+        "api-ms-win-crt-convert-l1-1-0.dll",
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-math-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-stdio-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "api-ms-win-crt-time-l1-1-0.dll",
+        "api-ms-win-crt-utility-l1-1-0.dll",
+        "kernel32.dll",
+        "python312.dll",
+        "vcruntime140.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/PIL/_imaging.cp312-win_amd64.pyd",
+      "imports": [
+        "api-ms-win-crt-convert-l1-1-0.dll",
+        "api-ms-win-crt-environment-l1-1-0.dll",
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-math-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-stdio-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "api-ms-win-crt-time-l1-1-0.dll",
+        "api-ms-win-crt-utility-l1-1-0.dll",
+        "gdi32.dll",
+        "kernel32.dll",
+        "python312.dll",
+        "user32.dll",
+        "vcruntime140.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/PIL/_imagingcms.cp312-win_amd64.pyd",
+      "imports": [
+        "api-ms-win-crt-filesystem-l1-1-0.dll",
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-math-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-stdio-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "api-ms-win-crt-time-l1-1-0.dll",
+        "gdi32.dll",
+        "kernel32.dll",
+        "python312.dll",
+        "user32.dll",
+        "vcruntime140.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/PIL/_imagingft.cp312-win_amd64.pyd",
+      "imports": [
+        "api-ms-win-crt-convert-l1-1-0.dll",
+        "api-ms-win-crt-environment-l1-1-0.dll",
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-math-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-stdio-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "api-ms-win-crt-utility-l1-1-0.dll",
+        "kernel32.dll",
+        "python312.dll",
+        "vcruntime140.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/PIL/_imagingmath.cp312-win_amd64.pyd",
+      "imports": [
+        "api-ms-win-crt-math-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "kernel32.dll",
+        "python312.dll",
+        "vcruntime140.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/PIL/_imagingmorph.cp312-win_amd64.pyd",
+      "imports": [
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "kernel32.dll",
+        "python312.dll",
+        "vcruntime140.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/PIL/_imagingtk.cp312-win_amd64.pyd",
+      "imports": [
+        "api-ms-win-crt-convert-l1-1-0.dll",
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-stdio-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "kernel32.dll",
+        "psapi.dll",
+        "python312.dll",
+        "vcruntime140.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/PIL/_webp.cp312-win_amd64.pyd",
+      "imports": [
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-math-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-stdio-l1-1-0.dll",
+        "api-ms-win-crt-utility-l1-1-0.dll",
+        "kernel32.dll",
+        "python312.dll",
+        "vcruntime140.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/psutil/_psutil_windows.pyd",
+      "imports": [
+        "advapi32.dll",
+        "api-ms-win-crt-environment-l1-1-0.dll",
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-stdio-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "iphlpapi.dll",
+        "kernel32.dll",
+        "pdh.dll",
+        "powrprof.dll",
+        "psapi.dll",
+        "python3.dll",
+        "shell32.dll",
+        "vcruntime140.dll",
+        "ws2_32.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/pythonwin/dde.pyd",
+      "imports": [
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "kernel32.dll",
+        "mfc140u.dll",
+        "oleaut32.dll",
+        "python312.dll",
+        "pywintypes312.dll",
+        "user32.dll",
+        "vcruntime140.dll",
+        "vcruntime140_1.dll",
+        "win32ui.pyd"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/pythonwin/scintilla.dll",
+      "imports": [
+        "gdi32.dll",
+        "imm32.dll",
+        "kernel32.dll",
+        "msimg32.dll",
+        "ole32.dll",
+        "oleaut32.dll",
+        "user32.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/pythonwin/win32ui.pyd",
+      "imports": [
+        "api-ms-win-crt-convert-l1-1-0.dll",
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-stdio-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "comctl32.dll",
+        "gdi32.dll",
+        "kernel32.dll",
+        "mfc140u.dll",
+        "oleaut32.dll",
+        "python312.dll",
+        "pywintypes312.dll",
+        "shell32.dll",
+        "user32.dll",
+        "vcruntime140.dll",
+        "vcruntime140_1.dll",
+        "winspool.drv"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/pythonwin/win32uiole.pyd",
+      "imports": [
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "kernel32.dll",
+        "mfc140u.dll",
+        "oleaut32.dll",
+        "python312.dll",
+        "pythoncom312.dll",
+        "pywintypes312.dll",
+        "user32.dll",
+        "vcruntime140.dll",
+        "vcruntime140_1.dll",
+        "win32ui.pyd"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/pywin32_system32/pythoncom312.dll",
+      "imports": [
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-stdio-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "api-ms-win-crt-utility-l1-1-0.dll",
+        "kernel32.dll",
+        "ole32.dll",
+        "oleacc.dll",
+        "oleaut32.dll",
+        "python312.dll",
+        "pywintypes312.dll",
+        "urlmon.dll",
+        "user32.dll",
+        "vcruntime140.dll",
+        "vcruntime140_1.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/pywin32_system32/pywintypes312.dll",
+      "imports": [
+        "advapi32.dll",
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-math-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-stdio-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "api-ms-win-crt-time-l1-1-0.dll",
+        "kernel32.dll",
+        "ole32.dll",
+        "oleaut32.dll",
+        "python312.dll",
+        "user32.dll",
+        "vcruntime140.dll",
+        "vcruntime140_1.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/win32/_win32sysloader.pyd",
+      "imports": [
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "kernel32.dll",
+        "python312.dll",
+        "vcruntime140.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/win32/_winxptheme.pyd",
+      "imports": [
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "kernel32.dll",
+        "python312.dll",
+        "pywintypes312.dll",
+        "uxtheme.dll",
+        "vcruntime140.dll",
+        "vcruntime140_1.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/win32/mmapfile.pyd",
+      "imports": [
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "kernel32.dll",
+        "python312.dll",
+        "pywintypes312.dll",
+        "vcruntime140.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/win32/odbc.pyd",
+      "imports": [
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-math-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "api-ms-win-crt-utility-l1-1-0.dll",
+        "kernel32.dll",
+        "odbc32.dll",
+        "python312.dll",
+        "pywintypes312.dll",
+        "vcruntime140.dll",
+        "vcruntime140_1.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/win32/perfmon.pyd",
+      "imports": [
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "kernel32.dll",
+        "loadperf.dll",
+        "python312.dll",
+        "pywintypes312.dll",
+        "vcruntime140.dll",
+        "vcruntime140_1.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/win32/perfmondata.dll",
+      "imports": [
+        "advapi32.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "kernel32.dll",
+        "vcruntime140.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/win32/pythonservice.exe",
+      "imports": [
+        "advapi32.dll",
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-locale-l1-1-0.dll",
+        "api-ms-win-crt-math-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-stdio-l1-1-0.dll",
+        "kernel32.dll",
+        "python312.dll",
+        "pywintypes312.dll",
+        "shell32.dll",
+        "vcruntime140.dll",
+        "vcruntime140_1.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/win32/servicemanager.pyd",
+      "imports": [
+        "advapi32.dll",
+        "api-ms-win-crt-filesystem-l1-1-0.dll",
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-stdio-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "kernel32.dll",
+        "ole32.dll",
+        "python312.dll",
+        "pywintypes312.dll",
+        "shell32.dll",
+        "user32.dll",
+        "vcruntime140.dll",
+        "vcruntime140_1.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/win32/timer.pyd",
+      "imports": [
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "kernel32.dll",
+        "python312.dll",
+        "pywintypes312.dll",
+        "user32.dll",
+        "vcruntime140.dll",
+        "vcruntime140_1.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/win32/win32api.pyd",
+      "imports": [
+        "advapi32.dll",
+        "api-ms-win-crt-convert-l1-1-0.dll",
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-stdio-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "kernel32.dll",
+        "powrprof.dll",
+        "python312.dll",
+        "pywintypes312.dll",
+        "secur32.dll",
+        "shell32.dll",
+        "user32.dll",
+        "vcruntime140.dll",
+        "vcruntime140_1.dll",
+        "version.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/win32/win32clipboard.pyd",
+      "imports": [
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "gdi32.dll",
+        "kernel32.dll",
+        "python312.dll",
+        "pywintypes312.dll",
+        "shell32.dll",
+        "user32.dll",
+        "vcruntime140.dll",
+        "vcruntime140_1.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/win32/win32console.pyd",
+      "imports": [
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-stdio-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "kernel32.dll",
+        "python312.dll",
+        "pywintypes312.dll",
+        "vcruntime140.dll",
+        "vcruntime140_1.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/win32/win32cred.pyd",
+      "imports": [
+        "advapi32.dll",
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "credui.dll",
+        "kernel32.dll",
+        "python312.dll",
+        "pywintypes312.dll",
+        "vcruntime140.dll",
+        "vcruntime140_1.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/win32/win32crypt.pyd",
+      "imports": [
+        "advapi32.dll",
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "crypt32.dll",
+        "kernel32.dll",
+        "python312.dll",
+        "pywintypes312.dll",
+        "vcruntime140.dll",
+        "vcruntime140_1.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/win32/win32event.pyd",
+      "imports": [
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "kernel32.dll",
+        "python312.dll",
+        "pywintypes312.dll",
+        "user32.dll",
+        "vcruntime140.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/win32/win32evtlog.pyd",
+      "imports": [
+        "advapi32.dll",
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "kernel32.dll",
+        "python312.dll",
+        "pywintypes312.dll",
+        "vcruntime140.dll",
+        "vcruntime140_1.dll",
+        "wevtapi.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/win32/win32file.pyd",
+      "imports": [
+        "advapi32.dll",
+        "api-ms-win-crt-convert-l1-1-0.dll",
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-stdio-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "kernel32.dll",
+        "mswsock.dll",
+        "python312.dll",
+        "pywintypes312.dll",
+        "sfc.dll",
+        "vcruntime140.dll",
+        "vcruntime140_1.dll",
+        "ws2_32.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/win32/win32gui.pyd",
+      "imports": [
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "comctl32.dll",
+        "comdlg32.dll",
+        "gdi32.dll",
+        "kernel32.dll",
+        "msimg32.dll",
+        "python312.dll",
+        "pywintypes312.dll",
+        "shell32.dll",
+        "user32.dll",
+        "vcruntime140.dll",
+        "vcruntime140_1.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/win32/win32help.pyd",
+      "imports": [
+        "advapi32.dll",
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "kernel32.dll",
+        "python312.dll",
+        "pywintypes312.dll",
+        "user32.dll",
+        "vcruntime140.dll",
+        "vcruntime140_1.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/win32/win32inet.pyd",
+      "imports": [
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "kernel32.dll",
+        "python312.dll",
+        "pywintypes312.dll",
+        "vcruntime140.dll",
+        "vcruntime140_1.dll",
+        "winhttp.dll",
+        "wininet.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/win32/win32job.pyd",
+      "imports": [
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "kernel32.dll",
+        "python312.dll",
+        "pywintypes312.dll",
+        "user32.dll",
+        "vcruntime140.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/win32/win32lz.pyd",
+      "imports": [
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "kernel32.dll",
+        "lz32.dll",
+        "python312.dll",
+        "pywintypes312.dll",
+        "vcruntime140.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/win32/win32net.pyd",
+      "imports": [
+        "advapi32.dll",
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "kernel32.dll",
+        "netapi32.dll",
+        "python312.dll",
+        "pywintypes312.dll",
+        "vcruntime140.dll",
+        "vcruntime140_1.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/win32/win32pdh.pyd",
+      "imports": [
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "kernel32.dll",
+        "pdh.dll",
+        "python312.dll",
+        "pywintypes312.dll",
+        "vcruntime140.dll",
+        "vcruntime140_1.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/win32/win32pipe.pyd",
+      "imports": [
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-stdio-l1-1-0.dll",
+        "kernel32.dll",
+        "python312.dll",
+        "pywintypes312.dll",
+        "vcruntime140.dll",
+        "vcruntime140_1.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/win32/win32print.pyd",
+      "imports": [
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "gdi32.dll",
+        "kernel32.dll",
+        "python312.dll",
+        "pywintypes312.dll",
+        "user32.dll",
+        "vcruntime140.dll",
+        "vcruntime140_1.dll",
+        "winspool.drv"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/win32/win32process.pyd",
+      "imports": [
+        "advapi32.dll",
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-stdio-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "kernel32.dll",
+        "python312.dll",
+        "pywintypes312.dll",
+        "user32.dll",
+        "vcruntime140.dll",
+        "vcruntime140_1.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/win32/win32profile.pyd",
+      "imports": [
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "kernel32.dll",
+        "python312.dll",
+        "pywintypes312.dll",
+        "userenv.dll",
+        "vcruntime140.dll",
+        "vcruntime140_1.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/win32/win32ras.pyd",
+      "imports": [
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "kernel32.dll",
+        "python312.dll",
+        "pywintypes312.dll",
+        "rasapi32.dll",
+        "user32.dll",
+        "vcruntime140.dll",
+        "vcruntime140_1.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/win32/win32security.pyd",
+      "imports": [
+        "advapi32.dll",
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-stdio-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "kernel32.dll",
+        "netapi32.dll",
+        "ntdsapi.dll",
+        "python312.dll",
+        "pywintypes312.dll",
+        "secur32.dll",
+        "user32.dll",
+        "vcruntime140.dll",
+        "vcruntime140_1.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/win32/win32service.pyd",
+      "imports": [
+        "advapi32.dll",
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "kernel32.dll",
+        "python312.dll",
+        "pywintypes312.dll",
+        "user32.dll",
+        "vcruntime140.dll",
+        "vcruntime140_1.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/win32/win32trace.pyd",
+      "imports": [
+        "advapi32.dll",
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "kernel32.dll",
+        "python312.dll",
+        "pywintypes312.dll",
+        "vcruntime140.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/win32/win32transaction.pyd",
+      "imports": [
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "kernel32.dll",
+        "ktmw32.dll",
+        "python312.dll",
+        "pywintypes312.dll",
+        "vcruntime140.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/win32/win32ts.pyd",
+      "imports": [
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "kernel32.dll",
+        "python312.dll",
+        "pywintypes312.dll",
+        "vcruntime140.dll",
+        "vcruntime140_1.dll",
+        "wtsapi32.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/win32/win32wnet.pyd",
+      "imports": [
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "kernel32.dll",
+        "mpr.dll",
+        "netapi32.dll",
+        "python312.dll",
+        "pywintypes312.dll",
+        "vcruntime140.dll",
+        "vcruntime140_1.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/win32comext/adsi/adsi.pyd",
+      "imports": [
+        "activeds.dll",
+        "advapi32.dll",
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-stdio-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "kernel32.dll",
+        "oleaut32.dll",
+        "python312.dll",
+        "pythoncom312.dll",
+        "pywintypes312.dll",
+        "vcruntime140.dll",
+        "vcruntime140_1.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/win32comext/authorization/authorization.pyd",
+      "imports": [
+        "aclui.dll",
+        "advapi32.dll",
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "kernel32.dll",
+        "python312.dll",
+        "pythoncom312.dll",
+        "pywintypes312.dll",
+        "vcruntime140.dll",
+        "vcruntime140_1.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/win32comext/axcontrol/axcontrol.pyd",
+      "imports": [
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "kernel32.dll",
+        "ole32.dll",
+        "oleaut32.dll",
+        "python312.dll",
+        "pythoncom312.dll",
+        "pywintypes312.dll",
+        "vcruntime140.dll",
+        "vcruntime140_1.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/win32comext/axdebug/axdebug.pyd",
+      "imports": [
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "axscript.pyd",
+        "kernel32.dll",
+        "oleaut32.dll",
+        "python312.dll",
+        "pythoncom312.dll",
+        "pywintypes312.dll",
+        "vcruntime140.dll",
+        "vcruntime140_1.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/win32comext/axscript/axscript.pyd",
+      "imports": [
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "kernel32.dll",
+        "oleaut32.dll",
+        "python312.dll",
+        "pythoncom312.dll",
+        "pywintypes312.dll",
+        "vcruntime140.dll",
+        "vcruntime140_1.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/win32comext/bits/bits.pyd",
+      "imports": [
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "kernel32.dll",
+        "ole32.dll",
+        "oleaut32.dll",
+        "python312.dll",
+        "pythoncom312.dll",
+        "pywintypes312.dll",
+        "vcruntime140.dll",
+        "vcruntime140_1.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/win32comext/directsound/directsound.pyd",
+      "imports": [
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "dsound.dll",
+        "kernel32.dll",
+        "python312.dll",
+        "pythoncom312.dll",
+        "pywintypes312.dll",
+        "user32.dll",
+        "vcruntime140.dll",
+        "vcruntime140_1.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/win32comext/ifilter/ifilter.pyd",
+      "imports": [
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "kernel32.dll",
+        "ole32.dll",
+        "python312.dll",
+        "pythoncom312.dll",
+        "pywintypes312.dll",
+        "query.dll",
+        "vcruntime140.dll",
+        "vcruntime140_1.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/win32comext/internet/internet.pyd",
+      "imports": [
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "kernel32.dll",
+        "ole32.dll",
+        "oleaut32.dll",
+        "python312.dll",
+        "pythoncom312.dll",
+        "pywintypes312.dll",
+        "urlmon.dll",
+        "vcruntime140.dll",
+        "vcruntime140_1.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/win32comext/mapi/exchange.pyd",
+      "imports": [
+        "advapi32.dll",
+        "api-ms-win-crt-filesystem-l1-1-0.dll",
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-stdio-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "kernel32.dll",
+        "msvcp140.dll",
+        "oleaut32.dll",
+        "python312.dll",
+        "pythoncom312.dll",
+        "pywintypes312.dll",
+        "vcruntime140.dll",
+        "vcruntime140_1.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/win32comext/mapi/mapi.pyd",
+      "imports": [
+        "advapi32.dll",
+        "api-ms-win-crt-filesystem-l1-1-0.dll",
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-stdio-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "kernel32.dll",
+        "msvcp140.dll",
+        "oleaut32.dll",
+        "python312.dll",
+        "pythoncom312.dll",
+        "pywintypes312.dll",
+        "vcruntime140.dll",
+        "vcruntime140_1.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/win32comext/propsys/propsys.pyd",
+      "imports": [
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "kernel32.dll",
+        "ole32.dll",
+        "propsys.dll",
+        "python312.dll",
+        "pythoncom312.dll",
+        "pywintypes312.dll",
+        "shell32.dll",
+        "vcruntime140.dll",
+        "vcruntime140_1.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/win32comext/shell/shell.pyd",
+      "imports": [
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "kernel32.dll",
+        "ole32.dll",
+        "oleaut32.dll",
+        "python312.dll",
+        "pythoncom312.dll",
+        "pywintypes312.dll",
+        "shell32.dll",
+        "shlwapi.dll",
+        "vcruntime140.dll",
+        "vcruntime140_1.dll"
+      ]
+    },
+    {
+      "path": "runtime/site-packages/win32comext/taskscheduler/taskscheduler.pyd",
+      "imports": [
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "kernel32.dll",
+        "ole32.dll",
+        "python312.dll",
+        "pythoncom312.dll",
+        "pywintypes312.dll",
+        "vcruntime140.dll",
+        "vcruntime140_1.dll"
+      ]
+    },
+    {
+      "path": "runtime/vcruntime140.dll",
+      "imports": [
+        "api-ms-win-crt-convert-l1-1-0.dll",
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-stdio-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "kernel32.dll"
+      ]
+    },
+    {
+      "path": "runtime/vcruntime140_1.dll",
+      "imports": [
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "kernel32.dll",
+        "vcruntime140.dll"
+      ]
+    }
+  ]
+}

@@ -41,7 +41,7 @@ export class DesktopLink {
   constructor(host: DesktopHost) {
     this.host = host;
     this.controller = new DesktopMochiController({
-      flyOut: async () => (await Bridge.desktopFlyOut()) ?? false,
+      flyOut: async (anywhere) => (await Bridge.desktopFlyOut(anywhere)) ?? false,
       flyHome: async (forget) => (await Bridge.desktopFlyHome(forget)) ?? true,
       setAway: (away) => {
         State.mochiOnDesktop = away;
@@ -88,6 +88,11 @@ export class DesktopLink {
   /** The launch greeting is over: back to his spot if that is where he lives. */
   launch() {
     if (this.supported) void this.controller.launchFlyIfNeeded();
+  }
+
+  flyOutOrHome() {
+    if (!this.supported || this.carrying) return;
+    void this.controller.flyOutOrHome();
   }
 
   // ── Drag out of the island ──────────────────────────────────────────────────

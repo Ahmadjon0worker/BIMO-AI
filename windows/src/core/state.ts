@@ -11,6 +11,7 @@ import type { ProviderId } from "./providers";
 import type { FileDiff } from "./diff";
 import type { Bindings } from "./shortcuts";
 import { DEFAULT_OUTFIT, type Outfit } from "../mochi/wardrobe";
+import { pillColor } from "./pill-colors";
 
 export type AgentSource = "claudeCode" | "n8n" | "agent";
 export type PillBadge = "approval" | "finished" | "error";
@@ -80,9 +81,9 @@ export interface SearchResult {
 }
 
 /** A fresh, idle task for a catalog pill. */
-function taskFor(def: PillDefinition, name = def.name): AgentTask {
+function taskFor(def: PillDefinition, colors: unknown, name = def.name): AgentTask {
   return {
-    id: def.id, name, color: def.color, state: "idle", stepIndex: 0, steps: [],
+    id: def.id, name, color: pillColor(def.id, def.color, colors), state: "idle", stepIndex: 0, steps: [],
     source: def.source, isIntegration: true,
   };
 }
@@ -99,6 +100,8 @@ export interface Settings {
   soundEnabled: boolean;
   soundVolume: number;
   autoCloseInterval: number;
+  /** Hover opens the whole panel; off keeps the compact peek. */
+  openOnHover: boolean;
   absenceInterval: number;
   /** Declared pills next to the main one (at most 4), in the order they were added. */
   activeIntegrations: string[];
@@ -106,6 +109,8 @@ export interface Settings {
   mainPill: string;
   /** "primary", "cursor", or `at:<x>,<y>` for one display (logical origin). */
   screen: string;
+  /** Native-owned placement, normalized to the monitor's usable panel travel. */
+  islandPosition?: { monitor: string; x: number; y: number; dock?: string } | null;
   autostart: boolean;
   hooksInstalled: boolean;
   /** Claude model used by the chat. */
@@ -131,6 +136,8 @@ export interface Settings {
    * Same raw values as the Mac's "mochiOutfit"; read it through parseOutfit.
    */
   mochiOutfit: string;
+  /** User colours by catalog pill ID; an empty map keeps the catalog defaults. */
+  pillColors: Record<string, string>;
   /**
    * Interface language: "" follows the system (when Coucou has its language,
    * else English), or one of src/i18n's ten codes ("fr", "pt-BR", "zh-Hans"…).
@@ -147,6 +154,7 @@ export const DEFAULT_SETTINGS: Settings = {
   soundEnabled: true,
   soundVolume: 0.12,
   autoCloseInterval: 15,
+  openOnHover: false,
   absenceInterval: 180,
   activeIntegrations: [
     "integration_resend", "integration_n8n", "integration_vercel", "integration_github",
@@ -159,14 +167,15 @@ export const DEFAULT_SETTINGS: Settings = {
   showPlanInNotch: false,
   planRelayInstalled: false,
   showCodexPlanInNotch: false,
-  chatProvider: "anthropic",
+  chatProvider: "auto",
   chatModels: {},
   ollamaUrl: "",
   lmstudioUrl: "",
   customUrl: "",
   shortcuts: {},
   mochiOutfit: DEFAULT_OUTFIT,
-  language: "",
+  pillColors: {},
+  language: "uz",
 };
 
 type Listener = () => void;
@@ -221,6 +230,9 @@ class AppState {
   private sessionDiffTimers = new Map<string, number>();
   /** Never reset, so an id can never point at a newer diff than the one tapped. */
   private nextDiffId = 0;
+  /** Keyboard highlight in the visible GitHub card list, never Telegram. */
+  cardSelection: number | null = null;
+  cardItemCount = 0;
   /**
    * Mochi is out of the island — on the desktop, flying, or being dragged
    * there — so the island's own Mochi is hidden (AppState.mochiOnDesktop).
@@ -379,9 +391,13 @@ class AppState {
     for (const def of availablePills(this.os)) {
       const shouldLoad = def.id === d.mainPill || d.activeIntegrations.includes(def.id);
       const idx = this.tasks.findIndex((t) => t.id === def.id);
-      if (shouldLoad && idx < 0) this.tasks.push(taskFor(def));
+      if (shouldLoad && idx < 0) this.tasks.push(taskFor(def, this.settings.pillColors));
       const busy = idx >= 0 && (this.tasks[idx].state !== "idle" || this.tasks[idx].steps.length > 0);
       if (!shouldLoad && idx >= 0 && !busy) this.tasks.splice(idx, 1);
+    }
+    for (const task of this.tasks) {
+      const def = pillDefinition(task.id);
+      if (def) task.color = pillColor(def.id, def.color, this.settings.pillColors);
     }
     this.tasks = orderPills(this.tasks, d.mainPill);
     if (!this.focusId || !this.tasks.some((t) => t.id === this.focusId)) this.focusId = d.mainPill;
@@ -424,7 +440,7 @@ class AppState {
     if (this.tasks.some((t) => t.id === id)) return;
     const def = pillDefinition(id);
     this.insertAfterMain({
-      id, name, color: def?.color ?? color,
+      id, name, color: def ? pillColor(def.id, def.color, this.settings.pillColors) : color,
       state: "idle", stepIndex: 0, steps: [],
       source: "agent", isIntegration: false,
     });
@@ -440,7 +456,7 @@ class AppState {
     if (!t) {
       const def = pillDefinition(id);
       if (!def) return null;
-      t = taskFor(def, name);
+      t = taskFor(def, this.settings.pillColors, name);
       this.insertAfterMain(t);
     }
     t.name = name;

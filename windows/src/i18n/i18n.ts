@@ -17,8 +17,9 @@
 
 import MAC from "./strings.json";
 import EXTRA from "./extra.json";
+import UZ from "./uz.json";
 
-export const LANGUAGE_CODES = ["en", "zh-Hans", "hi", "es", "ar", "fr", "bn", "pt-BR", "ru", "id"] as const;
+export const LANGUAGE_CODES = ["en", "zh-Hans", "hi", "es", "ar", "fr", "bn", "pt-BR", "ru", "id", "uz"] as const;
 export type Language = (typeof LANGUAGE_CODES)[number];
 
 /** The picker's entries, each in its own language, in the Mac's order. */
@@ -33,6 +34,7 @@ export const LANGUAGES: readonly { code: Language; name: string }[] = [
   { code: "pt-BR", name: "Português (Brasil)" },
   { code: "ru", name: "Русский" },
   { code: "id", name: "Bahasa Indonesia" },
+  { code: "uz", name: "O‘zbekcha" },
 ];
 
 export type Vars = Record<string, string | number>;
@@ -45,6 +47,11 @@ const TABLE: Table = {
   ...((MAC as { strings: Table }).strings),
   ...((EXTRA as { strings: Table }).strings),
 };
+// Merge by language so a separately maintained translation preserves every
+// existing language, including entries shared with the generated Mac catalog.
+for (const [key, entry] of Object.entries(UZ.strings)) {
+  TABLE[key] = { ...TABLE[key], ...entry };
+}
 
 let current: Language = "en";
 const listeners = new Set<(lang: Language) => void>();

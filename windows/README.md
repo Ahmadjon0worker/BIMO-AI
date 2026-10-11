@@ -21,22 +21,18 @@ Approve Claude Code permissions, watch your session work, drop a file, chat with
 
 ## Install
 
-Download **[Coucou-Windows.msi](https://github.com/Louis-CFM/coucou/releases/download/windows-latest/Coucou-Windows.msi)**
-(Windows Installer) or **[Coucou-Windows-setup.exe](https://github.com/Louis-CFM/coucou/releases/download/windows-latest/Coucou-Windows-setup.exe)**,
-always the newest version, and run it. The .exe installs for the current user only, with no admin prompt; the .msi may ask for admin rights.
+This customized release is **Coucou + LocalAI Studio 0.6.2**. Use
+**[Coucou-Windows-0.6.2-setup.exe](https://github.com/Ahmadjon0worker/CouCou-Uzbek-edition-/releases/download/v0.6.2/Coucou-Windows-0.6.2-setup.exe)**
+or **[Coucou-Windows-0.6.2.msi](https://github.com/Ahmadjon0worker/CouCou-Uzbek-edition-/releases/download/v0.6.2/Coucou-Windows-0.6.2.msi)** from [the versioned GitHub release](https://github.com/Ahmadjon0worker/CouCou-Uzbek-edition-/releases/tag/v0.6.2).
+It includes the flexible panel, Telegram messenger, Windows tools and offline voice components.
+The .exe installs for the current user. See the **[Uzbek installation guide](INSTALL-UZ.md)**
+and **[voice guide](localai-service/VOICE-UZ.md)** for setup and current limitations.
 
-**Windows will show a warning the first time — that's expected.** The installer isn't code-signed yet, so SmartScreen doesn't know the publisher:
+The upstream GitHub downloads are the original application and do not contain these custom additions.
 
-1. A **"Windows protected your PC"** screen appears, with *Publisher: Unknown publisher*.
-2. Click **More info** (*Informations complémentaires* in French). This reveals a **Run anyway** button.
-3. Click **Run anyway** (*Exécuter quand même*). The installer starts normally.
-
-This is only because the app isn't signed with a paid certificate yet. Coucou is open source, and Microsoft Defender scans the installer as clean.
-
-Microsoft Defender once flagged the installer by mistake (`Trojan:Win32/Wacatac.H!ml`,
-a machine-learning false positive); Microsoft reviewed it and removed the detection.
-If Defender still blocks it on your PC, update its definitions (`Update-MpSignature`
-in PowerShell) and try again.
+The [repository README](../README.md) documents this edition's complete setup,
+Telegram, providers, offline Uzbek voice, verified runtime bootstrap and limitations.
+Follow its build instructions; the remaining upstream guide below describes the original Windows UI.
 
 You can also [build it yourself](#build-it-yourself).
 

@@ -23,6 +23,9 @@ async function main() {
   void Sound.preload();
 
   const island = new Island(root);
+  await onEvent<{ expanded: boolean }>("voice-panel", ({ expanded }) => {
+    if (expanded === true) island.alert(State.defaultView()); else if (expanded === false) island.collapse();
+  });
 
   const boot = await Bridge.boot();
   if (boot) {
@@ -42,6 +45,7 @@ async function main() {
 
   await onEvent<{ x: number; y: number }>("cursor", ({ x, y }) => island.onCursor(x, y));
   await onEvent<boolean>("pointer-inside", (inside) => island.setPointerInside(inside));
+  await onEvent<{ moved: boolean; cancelled: boolean }>("island-drag-ended", () => island.panelDragEnded());
 
   /** Pause has to reach Rust too, or the pollers keep calling out. */
   const setPaused = (on: boolean) => {
@@ -77,6 +81,7 @@ async function main() {
   });
 
   await onEvent<null>("screen-changed", () => void Bridge.reposition());
+  await onEvent<null>("sounds-changed", () => { void Sound.reload().then(() => Sound.play("pop")); });
 
   // The settings window writes preferences; apply them here without a restart.
   await onEvent<Settings>("settings-changed", (s) => {

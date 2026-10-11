@@ -1,7 +1,7 @@
 {
   "name": "coucou-windows",
   "private": true,
-  "version": "0.2.0",
+  "version": "0.6.2",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -10,9 +10,9 @@
     "test": "node --import ./tests/setup.mjs --test \"tests/**/*.test.mjs\"",
     "icons": "node scripts/gen-icons.mjs",
     "tauri": "tauri",
-    "predev": "cargo build --release -p coucou-hook",
-    "prebuild": "cargo build --release -p coucou-hook",
-    "pack": "tauri build && node scripts/pack.mjs"
+    "predev": "node scripts/build-hook.mjs",
+    "prebuild": "node scripts/prebuild.mjs",
+    "pack": "tauri build --no-binary-patching && node scripts/pack.mjs"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^2",

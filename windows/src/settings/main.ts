@@ -10,12 +10,16 @@ import {
   recordPress, type Binding,
 } from "../core/shortcuts";
 import { DEFAULT_SETTINGS, type Settings } from "../core/state";
+import { SOUND_NAMES } from "../core/sound";
 import {
   MAX_DECLARED, PILL_CATEGORIES, availablePills, chooseMainPill, isComingSoon, mainPillChoices,
   sanitizeDeclared, toggleDeclared, type PillDefinition,
 } from "../core/pills";
 import { h, clear } from "../views/dom";
+import { panelDock, type PanelDock } from "../island/panel-layout";
 import { agentsSection } from "./agents";
+import { colorDot } from "./colors";
+import { buildProviderSetup, providerStatusText } from "./providers";
 import { renderDiff, statusDot } from "./parts";
 import {
   LANGUAGES, N_, isRtl, onLanguageChange, resolveLanguage, setLanguage, systemLanguages, t, tn,
@@ -33,6 +37,11 @@ const root = document.getElementById("settings-root")!;
 
 async function save() {
   await Bridge.saveSettings(settings);
+}
+
+function pickColor(next: Record<string, string>) {
+  settings.pillColors = next;
+  void save();
 }
 
 // ── Reusable bits ─────────────────────────────────────────────────────────────
@@ -318,7 +327,7 @@ const MODELS: [string, string][] = [
 
 function apiSection(hasKey: boolean): HTMLElement {
   const dot = statusDot(hasKey);
-  const state = h("span", { class: "hint", text: hasKey ? t("Key saved in the {store}.", { store: KEY_STORE }) : t("No key yet — the chat needs one.") });
+  const state = h("span", { class: "hint", text: hasKey ? t("Key saved in the {store}.", { store: KEY_STORE }) : t("Optional: add a Claude key only when using Anthropic.") });
 
   const field = h("input", {
     type: "password",
@@ -337,7 +346,7 @@ function apiSection(hasKey: boolean): HTMLElement {
     dot.style.background = present ? "#22c55e" : "#f4505e";
     state.textContent = present
       ? t("Key saved in the {store}.", { store: KEY_STORE })
-      : t("No key yet — the chat needs one.");
+      : t("Optional: add a Claude key only when using Anthropic.");
     field.placeholder = present ? `••••••••••••  ${t("(stored)")}` : "sk-ant-...";
     clearBtn.style.display = present ? "" : "none";
   }
@@ -425,7 +434,7 @@ function activePillsSection(connected: Record<string, boolean>): HTMLElement {
     const on = settings.activeIntegrations.includes(def.id);
     const full = !isMain && !on && settings.activeIntegrations.length >= MAX_ACTIVE;
     const el = h("div", { class: full ? "pill-row full" : "pill-row" },
-      h("i", { class: "dot", style: `background:${def.color};width:10px;height:10px` }),
+      colorDot(def, "width:10px;height:10px", () => settings.pillColors, pickColor),
       h("span", { class: "name", text: def.name }),
     );
     if (isMain) {
@@ -477,7 +486,7 @@ function activePillsSection(connected: Record<string, boolean>): HTMLElement {
 
 const CHAT_STRINGS = {
   get providersTitle() { return t("Chat providers"); },
-  get providersHint() { return t("Chat with Google AI, OpenAI or OpenRouter instead of Claude: add a key here, then click the model name above the chat box to switch provider and model. Keys stay in the system keychain. These providers get no web search and no tools: they can answer, never act on this computer."); },
+  get providersHint() { return t("Add a Gemini or Groq key for Automatic fallback, or select a cloud provider directly. Save and test checks the connection without generating a reply. Keys stay in the system credential store."); },
   get stored() { return `••••••••  ${t("(stored)")}`; },
   get save() { return t("Save"); },
   get remove() { return t("Remove"); },
@@ -499,14 +508,15 @@ const CHAT_STRINGS = {
 };
 
 interface CloudDef {
-  id: "google" | "openai" | "openrouter";
+  id: "google" | "groq" | "openai" | "openrouter";
   name: string;
   placeholder: string;
   where: string;
 }
 
 const CLOUD: CloudDef[] = [
-  { id: "google", name: "Google AI", placeholder: "AIza…", where: "aistudio.google.com" },
+  { id: "google", name: "Gemini", placeholder: "AIza…", where: "aistudio.google.com" },
+  { id: "groq", name: "Groq", placeholder: "gsk_…", where: "console.groq.com/keys" },
   { id: "openai", name: "OpenAI", placeholder: "sk-…", where: "platform.openai.com" },
   { id: "openrouter", name: "OpenRouter", placeholder: "sk-or-…", where: "openrouter.ai/keys" },
 ];
@@ -527,37 +537,92 @@ function chatProvidersSection(
       style: "flex:1 1 auto;min-width:0",
     }) as HTMLInputElement;
     const dotEl = statusDot(present[key] ?? false);
-    const saveBtn = h("button", { text: CHAT_STRINGS.save });
+    const saveBtn = h("button", { text: t("Save and test") });
     const removeBtn = h("button", { class: "danger", text: CHAT_STRINGS.remove });
+    const testBtn = h("button", { text: t("Check connection") });
+    const useBtn = h("button", { text: CHAT_STRINGS.useInChat });
+    const feedback = h("div", { class: "hint", role: "status", "aria-live": "polite" });
+    let busy = false;
+    const pending = (on: boolean) => {
+      busy = on;
+      input.disabled = on;
+      saveBtn.disabled = removeBtn.disabled = on;
+      testBtn.disabled = useBtn.disabled = on || !present[key];
+    };
     const refresh = () => {
       input.placeholder = present[key] ? CHAT_STRINGS.stored : def.placeholder;
-      dotEl.style.background = present[key] ? "#22c55e" : "#f4505e";
+      // A saved key says configured; a green check means a real successful probe.
+      dotEl.style.background = present[key] ? "#a9adb5" : "#f4505e";
       removeBtn.style.display = present[key] ? "" : "none";
+      pending(busy);
     };
+    async function testConnection() {
+      pending(true);
+      feedback.className = "hint";
+      feedback.textContent = t("Checking provider…");
+      try {
+        const status = await Bridge.chatProviderStatus(def.id);
+        feedback.className = status.available ? "notice ok" : "notice err";
+        feedback.textContent = providerStatusText(status);
+        dotEl.style.background = status.available ? "#22c55e" : "#f5a524";
+      } catch (error) {
+        feedback.className = "notice err";
+        feedback.textContent = String(error).replace(/^Error:\s*/, "");
+        dotEl.style.background = "#f5a524";
+      } finally { pending(false); }
+    }
     saveBtn.addEventListener("click", async () => {
+      if (busy) return;
       const value = input.value.trim();
-      if (!value) return;
+      if (!value) { feedback.textContent = t("Enter an API key."); return; }
+      pending(true);
       try {
         await Bridge.secretSet(key, value);
         present[key] = true;
         input.value = "";
         keyChanged(key, true);
-      } catch {
+      } catch (error) {
         dotEl.style.background = "#f5a524";
+        feedback.className = "notice err";
+        feedback.textContent = t("Could not save: {error}", { error: String(error).replace(/^Error:\s*/, "") });
+        pending(false);
         return;
       }
       refresh();
+      await testConnection();
     });
     removeBtn.addEventListener("click", async () => {
+      if (busy) return;
+      pending(true);
       try {
         await Bridge.secretClear(key);
         present[key] = false;
         keyChanged(key, false);
-      } catch {
+        feedback.className = "notice ok";
+        feedback.textContent = t("Key removed.");
+      } catch (error) {
         dotEl.style.background = "#f5a524";
+        feedback.className = "notice err";
+        feedback.textContent = t("Could not remove: {error}", { error: String(error).replace(/^Error:\s*/, "") });
+        pending(false);
         return;
       }
+      pending(false);
       refresh();
+    });
+    testBtn.addEventListener("click", () => { if (!busy && present[key]) void testConnection(); });
+    useBtn.addEventListener("click", async () => {
+      if (busy || !present[key]) return;
+      pending(true);
+      try {
+        const next = { ...settings, chatProvider: def.id };
+        await Bridge.saveSettingsOrThrow(next);
+        settings = next;
+        await rerender();
+      } catch (error) {
+        feedback.className = "notice err";
+        feedback.textContent = t("Could not save: {error}", { error: String(error).replace(/^Error:\s*/, "") });
+      } finally { pending(false); }
     });
     refresh();
     list.append(
@@ -568,7 +633,9 @@ function chatProvidersSection(
         ),
         input, saveBtn, removeBtn, dotEl,
       ),
-      h("div", { class: "hint", style: "margin:-4px 0 0 144px", text: t("Key from {site}", { site: def.where }) }),
+      h("div", { class: "row" }, h("label", {}), testBtn, useBtn),
+      h("div", { class: "hint", text: t("Key from {site}", { site: def.where }) }),
+      feedback,
     );
   }
   return h(
@@ -586,6 +653,7 @@ type LocalId = "ollama" | "lmstudio" | "custom";
 
 /** Redraws the local models section after a change made elsewhere (the island). */
 let localRedraw: (() => void) | null = null;
+let providerRedraw: (() => void) | null = null;
 
 const LOCAL: Record<LocalId, { name: string; usual: string }> = {
   ollama: { name: "Ollama", usual: "http://127.0.0.1:11434" },
@@ -641,23 +709,53 @@ function localSection(customKey: boolean): HTMLElement {
       const inUse = settings.chatProvider === id;
       const use = h("button", { class: inUse ? "" : "primary", text: inUse ? CHAT_STRINGS.inUse : CHAT_STRINGS.useInChat });
       use.disabled = inUse;
-      use.addEventListener("click", () => {
-        settings.chatProvider = id;
-        void save().then(redraw);
+      use.addEventListener("click", async () => {
+        use.disabled = true;
+        try {
+          const next = { ...settings, chatProvider: id };
+          await Bridge.saveSettingsOrThrow(next);
+          settings = next;
+          await rerender();
+        } catch (error) {
+          status.replaceChildren(h("div", { class: "notice err", text: t("Could not save: {error}", { error: String(error) }) }));
+          use.disabled = false;
+        }
+      });
+      const dot = statusDot(false);
+      dot.style.background = "#a9adb5";
+      status.append(h("div", { class: "hint", text: t("Address saved. Check the connection to confirm availability.") }));
+      const check = h("button", { text: t("Check connection") });
+      check.addEventListener("click", async () => {
+        check.disabled = true;
+        status.replaceChildren(h("div", { class: "hint", text: t("Checking provider…") }));
+        try {
+          const report = await Bridge.chatProviderStatus(id);
+          dot.style.background = report.available ? "#22c55e" : "#f5a524";
+          status.replaceChildren(h("div", { class: report.available ? "notice ok" : "notice err", text: providerStatusText(report) }));
+        } catch (error) {
+          dot.style.background = "#f5a524";
+          status.replaceChildren(h("div", { class: "notice err", text: String(error).replace(/^Error:\s*/, "") }));
+        } finally { check.disabled = false; }
       });
       const disconnect = h("button", { class: "danger", text: CHAT_STRINGS.disconnect });
       disconnect.addEventListener("click", async () => {
-        settings[field] = "";
-        if (settings.chatProvider === id) settings.chatProvider = "anthropic";
-        if (id === "custom") {
-          await Bridge.secretClear(CUSTOM_SERVER_KEY).catch(() => {});
-          customKey = false;
+        disconnect.disabled = true;
+        try {
+          const next = { ...settings, [field]: "", chatProvider: settings.chatProvider === id ? "auto" as const : settings.chatProvider };
+          await Bridge.saveSettingsOrThrow(next);
+          settings = next;
+          if (id === "custom") {
+            await Bridge.secretClear(CUSTOM_SERVER_KEY);
+            customKey = false;
+          }
+          await rerender();
+        } catch (error) {
+          status.replaceChildren(h("div", { class: "notice err", text: t("Could not save: {error}", { error: String(error) }) }));
+          disconnect.disabled = false;
         }
-        await save();
-        redraw();
       });
       block.append(
-        h("div", { class: "row" }, label, h("span", { class: "path", text: settings[field] }), statusDot(true), use, disconnect),
+        h("div", { class: "row" }, label, h("span", { class: "path", text: settings[field] }), dot, check, use, disconnect),
         status,
       );
       exposure.append(exposureNotice(settings[field], id === "custom" && customKey) ?? "");
@@ -707,11 +805,10 @@ function localSection(customKey: boolean): HTMLElement {
           clear(status);
           status.append(h("div", { class: "notice err", text: CHAT_STRINGS.noModels(t(def.name)) }));
         } else {
-          settings[field] = server.url;
-          if (!server.models.includes(settings.chatModels[id] ?? "")) {
-            settings.chatModels = { ...settings.chatModels, [id]: server.models[0] };
-          }
-          await save();
+          const chosen = server.models.includes(settings.chatModels[id] ?? "") ? settings.chatModels[id] : server.models[0];
+          const next = { ...settings, [field]: server.url, chatModels: { ...settings.chatModels, [id]: chosen } };
+          await Bridge.saveSettingsOrThrow(next);
+          settings = next;
           redraw();
           return;
         }
@@ -839,7 +936,7 @@ function integrationsSection(present: Record<string, boolean>): HTMLElement {
       h("div", { style: "display:flex;gap:12px;align-items:flex-start" },
         h("div", { style: "display:flex;align-items:center;gap:8px;min-width:132px;padding-top:4px" },
           sw,
-          h("i", { class: "dot", style: `background:${def.color}` }),
+          colorDot(def, "", () => settings.pillColors, pickColor),
           h("span", { style: "font-size:12.5px", text: def.name }),
         ),
         rows,
@@ -854,6 +951,27 @@ function integrationsSection(present: Record<string, boolean>): HTMLElement {
 // ── General section ───────────────────────────────────────────────────────────
 
 function generalSection(): HTMLElement {
+  const customCount = h("span", { class: "hint", "aria-live": "polite" });
+  const countCustom = () => void Bridge.customSounds(SOUND_NAMES).then((own) => {
+    const count = own?.length ?? 0;
+    customCount.textContent = count > 0 ? t("{0} custom", { 0: count }) : "";
+  });
+  countCustom();
+  const soundsFolder = h("button", { text: t("Open sounds folder"), onclick: () => void Bridge.revealSoundsFolder() });
+  const reloadSounds = h("button", {
+    text: t("Reload sounds"),
+    onclick: () => void Bridge.reloadSounds().then(() => countCustom()),
+  });
+  const docking = h("select", { id: "panel-dock-select", "aria-label": t("Dock position") });
+  const placements: [PanelDock, string][] = [
+    ["free", "Floating"], ["top", "Top edge"], ["bottom", "Bottom edge"],
+    ["left", "Left edge"], ["right", "Right edge"],
+    ["top-left", "Top-left corner"], ["top-right", "Top-right corner"],
+    ["bottom-left", "Bottom-left corner"], ["bottom-right", "Bottom-right corner"],
+  ];
+  for (const [value, label] of placements) docking.append(h("option", { value, text: t(label) }));
+  docking.value = panelDock(settings.islandPosition);
+  docking.addEventListener("change", () => void Bridge.setIslandDock(docking.value));
   const volume = h("input", {
     type: "range", min: "0", max: "0.2", step: "0.005",
     value: String(settings.soundVolume),
@@ -909,6 +1027,13 @@ function generalSection(): HTMLElement {
       toggle(settings.soundEnabled, (v) => { settings.soundEnabled = v; void save(); }),
       volume,
     ),
+    h("div", { class: "row" }, soundsFolder, reloadSounds, customCount),
+    h("div", { class: "hint", text: t("Drop a file named like one of Mochi's sounds (finish.wav, approval.mp3, greet.m4a…) in the sounds folder to replace it, then Reload.") }),
+    h("div", { class: "row" },
+      h("label", { text: t("Open on hover") }),
+      toggle(settings.openOnHover, (v) => { settings.openOnHover = v; void save(); }),
+    ),
+    h("div", { class: "hint", text: t("Hovering the island opens it; it folds again shortly after the pointer leaves. Click inside to keep it open.") }),
     h("div", { class: "row" },
       h("label", { text: t("Auto-close") }),
       autoClose,
@@ -919,11 +1044,55 @@ function generalSection(): HTMLElement {
       screen,
     ),
     h("div", { class: "row" },
+      h("label", { text: t("Panel position") }),
+      h("button", { text: t("Return to top center"), onclick: () => void Bridge.resetIslandPosition() }),
+    ),
+    h("div", { class: "row" }, h("label", { text: t("Dock position") }), docking),
+    h("div", { class: "hint", text: t("Release the handle near an edge to dock. Top and bottom use a bar, sides use a vertical strip, and corners use a square.") }),
+    h("div", { class: "row" },
       h("label", { text: t("Launch at startup") }),
       toggle(settings.autostart, (v) => { settings.autostart = v; void save(); }),
     ),
     ...recapRows(),
     languageRow(),
+  );
+}
+
+/** Small reversible presets; hook configuration and API keys stay separate. */
+function quickSetupSection(): HTMLElement {
+  const notice = h("div", { class: "hint", role: "status", "aria-live": "polite" });
+  const profiles = [
+    { label: N_("Quiet"), soundEnabled: false, soundVolume: 0.05, autoCloseInterval: 10 },
+    { label: N_("Balanced"), soundEnabled: true, soundVolume: 0.08, autoCloseInterval: 20 },
+    { label: N_("Keep visible"), soundEnabled: true, soundVolume: 0.08, autoCloseInterval: 60 },
+  ];
+  const row = h("div", { class: "row" });
+  for (const profile of profiles) {
+    const button = h("button", { text: t(profile.label) });
+    button.addEventListener("click", async () => {
+      button.disabled = true;
+      const before = { ...settings };
+      Object.assign(settings, {
+        soundEnabled: profile.soundEnabled,
+        soundVolume: profile.soundVolume,
+        autoCloseInterval: profile.autoCloseInterval,
+      });
+      try {
+        await save();
+        await render();
+      } catch (error) {
+        settings = before;
+        notice.textContent = t("Could not save: {error}", { error: String(error) });
+      } finally {
+        button.disabled = false;
+      }
+    });
+    row.append(button);
+  }
+  return h("section", {},
+    h("h2", { text: t("Quick setup") }),
+    h("div", { class: "hint", text: t("Choose a profile for sound and how long the panel stays open. You can adjust each setting below.") }),
+    row, notice,
   );
 }
 
@@ -1235,12 +1404,12 @@ async function main() {
 
   void onEvent<ShortcutsReport>("shortcuts-status", (fresh) => shortcutsListener?.report(fresh));
   void onEvent<Settings>("settings-changed", (s) => {
-    const before = `${settings.chatProvider}|${settings.ollamaUrl}|${settings.lmstudioUrl}|${settings.customUrl}`;
+    const before = `${settings.chatProvider}|${settings.ollamaUrl}|${settings.lmstudioUrl}|${settings.customUrl}|${JSON.stringify(settings.chatModels)}`;
     settings = { ...settings, ...s };
     shortcutsListener?.settingsChanged();
     for (const redraw of declaredViews) redraw();
-    const after = `${settings.chatProvider}|${settings.ollamaUrl}|${settings.lmstudioUrl}|${settings.customUrl}`;
-    if (before !== after) localRedraw?.();
+    const after = `${settings.chatProvider}|${settings.ollamaUrl}|${settings.lmstudioUrl}|${settings.customUrl}|${JSON.stringify(settings.chatModels)}`;
+    if (before !== after) { localRedraw?.(); providerRedraw?.(); }
     applyLanguage();
   });
 }
@@ -1286,10 +1455,21 @@ async function render() {
 
   declaredViews.length = 0;
   localRedraw = null;
+  providerRedraw = null;
   shortcutsListener = null;
   clear(root);
   root.append(
     h("h1", {}, h("span", { text: "Coucou" }), h("span", { class: "version", text: version })),
+    quickSetupSection(),
+    buildProviderSetup({
+      settings: () => settings,
+      registerRefresh: (draw) => { providerRedraw = draw; },
+      save: async (next) => {
+        await Bridge.saveSettingsOrThrow(next);
+        settings = next;
+        localRedraw?.();
+      },
+    }),
     claudeSection(status),
     agentsSection(agents),
     planSection(status),

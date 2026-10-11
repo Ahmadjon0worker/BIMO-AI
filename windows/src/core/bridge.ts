@@ -7,6 +7,9 @@ import { emitTo, listen } from "@tauri-apps/api/event";
 import { getCurrentWebview } from "@tauri-apps/api/webview";
 import type { Settings } from "./state";
 import type { RecapHistory, RecapPrefs } from "../recap/summary";
+import type { LocalAIMode } from "./local-ai";
+import type { ComputerPlan, TelegramConfig } from "./capabilities";
+import type { AccountConfig, AccountVerify, AccountChatQuery, AccountMessageQuery } from "./telegram-account";
 
 export const IS_TAURI =
   typeof window !== "undefined" && "__TAURI_INTERNALS__" in window;
@@ -32,11 +35,50 @@ export interface BootInfo {
 }
 
 export const Bridge = {
+  // A fixed native loopback connection; these commands cannot choose a URL.
+  localAIHealth: () => callOrThrow<unknown>("local_ai_health"),
+  localAIMode: (mode: LocalAIMode) => callOrThrow<unknown>("local_ai_mode", { mode }),
+  localAIStop: () => callOrThrow<unknown>("local_ai_stop"),
+  localAIOpenOpenCode: () => callOrThrow<unknown>("local_ai_open_opencode"),
+  localAIOpenTools: () => callOrThrow<void>("local_ai_open_tools"),
+  localAIOpenVoice: async () => { await callOrThrow<void>("local_ai_open_tools"); await emitTo("tools", "tools-voice", null); },
+  localAIOpenStudio: () => callOrThrow<void>("local_ai_open_studio"),
+  localAIStartServices: () => callOrThrow<unknown>("local_ai_start_services"),
+  localAICapabilities: () => callOrThrow<unknown>("local_ai_capabilities"),
+  localAIToolboxStatus: () => callOrThrow<unknown>("local_ai_toolbox_status"),
+  localAIVoiceStatus: () => callOrThrow<unknown>("local_ai_voice_status"),
+  voicePanel: (expanded: boolean) => IS_TAURI ? emitTo("main", "voice-panel", { expanded }) : Promise.reject(new Error("Panel faqat Coucou ilovasida boshqariladi")),
+  localAIVoiceTranscribe: (args: Record<string, unknown>) => callOrThrow<unknown>("local_ai_voice_transcribe", { arguments: args }),
+  localAIVoiceCancel: () => callOrThrow<unknown>("local_ai_voice_cancel"),
+  localAIVoiceSpeak: (args: Record<string, unknown>) => callOrThrow<unknown>("local_ai_voice_speak", { arguments: args }),
+  localAIToolboxCall: (name: string, args: Record<string, unknown>) => callOrThrow<unknown>("local_ai_toolbox_call", { name, arguments: args }),
+  localAITelegramStatus: () => callOrThrow<unknown>("local_ai_telegram_status"),
+  localAITelegramConfigure: (config: TelegramConfig) => callOrThrow<unknown>("local_ai_telegram_configure", { config }),
+  localAITelegramStart: () => callOrThrow<unknown>("local_ai_telegram_start"),
+  localAITelegramStop: () => callOrThrow<unknown>("local_ai_telegram_stop"),
+  localAIComputerPlan: (plan: ComputerPlan) => callOrThrow<unknown>("local_ai_computer_plan", { plan }),
+  localAIComputerApprove: (id: string) => callOrThrow<unknown>("local_ai_computer_approve", { id }),
+  localAIComputerFinish: () => callOrThrow<unknown>("local_ai_computer_finish"),
+  localAIAccountStatus: () => callOrThrow<unknown>("local_ai_account_status"),
+  localAIAccountConfigure: (config: AccountConfig) => callOrThrow<unknown>("local_ai_account_configure", { config }),
+  localAIAccountConnect: (phone?: string) => callOrThrow<unknown>("local_ai_account_connect", { phone }),
+  localAIAccountVerify: (input: AccountVerify) => callOrThrow<unknown>("local_ai_account_verify", { input }),
+  localAIAccountDisconnect: () => callOrThrow<unknown>("local_ai_account_disconnect"),
+  localAIAccountChats: (options?: AccountChatQuery) => callOrThrow<unknown>("local_ai_account_chats", { options }),
+  localAIAccountMessages: (chatId: string, options?: AccountMessageQuery) => callOrThrow<unknown>("local_ai_account_messages", { chatId, options }),
+  localAIAccountDraft: (chatId: string, instruction: string, replyToId?: number) => callOrThrow<unknown>("local_ai_account_draft", { chatId, instruction, replyToId }),
+  localAIAccountCompose: (chatId: string, text: string, replyToId?: number) => callOrThrow<unknown>("local_ai_account_compose", { chatId, text, replyToId }),
+  localAIAccountResolve: (recipient: string) => callOrThrow<unknown>("local_ai_account_resolve", { recipient }),
+  localAIAccountCommand: (query: string, chatId?: string, messageText?: string) => callOrThrow<unknown>("local_ai_account_command", { query, chatId, messageText }),
+  localAIAccountCancelDraft: (id: string) => callOrThrow<unknown>("local_ai_account_cancel_draft", { id }),
+  localAIAccountSend: (id: string) => callOrThrow<unknown>("local_ai_account_send", { id }),
   boot: () => call<BootInfo>("boot"),
   /** The system's languages as the webview sees them, for Rust's own texts (i18n.rs). */
   setSystemLanguages: (languages: string[]) => call<void>("set_system_languages", { languages }),
 
   saveSettings: (settings: Settings) => call<void>("save_settings", { settings }),
+  /** Settings edits that show success must propagate write failures. */
+  saveSettingsOrThrow: (settings: Settings) => callOrThrow<void>("save_settings", { settings }),
 
   /** Shrink the window down to the invisible wake strip (hidden) or back to full. */
   setCollapsed: (collapsed: boolean) => call<void>("set_collapsed", { collapsed }),
@@ -45,18 +87,30 @@ export const Bridge = {
    * Pushes the island shape in window coordinates. Rust flips click-through from
    * its own cursor poll, so the flag is never a frame behind a click.
    */
-  setIslandRect: (x: number, y: number, width: number, height: number) =>
-    call<void>("set_island_rect", { x, y, width, height }),
+  setIslandRect: (x: number, y: number, width: number, height: number, compact?: boolean) =>
+    call<void>("set_island_rect", { x, y, width, height, compact }),
 
   /** Give the window keyboard focus (chat field) and take it away again. */
   focusWindow: (focused: boolean) => call<void>("focus_window", { focused }),
 
   reposition: () => call<void>("reposition"),
 
+  beginIslandDrag: (pointerType: "mouse" | "touch" | "pen", clientX?: number, clientY?: number) =>
+    call<boolean>("begin_island_drag", { pointerType, clientX, clientY }),
+  updateIslandDrag: (deltaX: number, deltaY: number) =>
+    call<void>("update_island_drag", { deltaX, deltaY }),
+  endIslandDrag: (cancelled = false) => call<void>("end_island_drag", { cancelled }),
+  resetIslandPosition: () => call<void>("reset_island_position"),
+  setIslandDock: (dock: string) => call<void>("set_island_dock", { dock }),
+
   /** Displays the island can be pinned to: `key` is what `settings.screen` stores. */
   listMonitors: () => call<{ key: string; label: string }[]>("list_monitors"),
 
   openUrl: (url: string) => call<void>("open_url", { url }),
+  customSounds: (names: readonly string[]) => call<string[]>("custom_sounds", { names }),
+  customSound: (name: string) => call<ArrayBuffer>("custom_sound", { name }),
+  revealSoundsFolder: () => call<void>("reveal_sounds_folder"),
+  reloadSounds: () => call<void>("reload_sounds"),
 
   /** "Open terminal" → opens the folder in VS Code when `code` is on PATH. */
   openInVSCode: (path: string | null) => call<boolean>("open_in_vscode", { path }),
@@ -132,13 +186,15 @@ export const Bridge = {
   // ── Chat, files, secrets ──────────────────────────────────────────────────
   /** One chat turn. The API key and any file bytes never leave Rust. */
   chatSend: (query: string, context: ChatContext | null) =>
-    callOrThrow<{ text: string }>("chat_send", { query, context }),
+    callOrThrow<ChatReply>("chat_send", { query, context }),
   chatReset: () => call<void>("chat_reset"),
   /**
    * The models a provider offers, for the picker in the chat view. Rust asks
    * the provider only when it has a key (or a server address).
    */
   chatModels: (provider: string) => callOrThrow<ModelInfo[]>("chat_models", { provider }),
+  /** Explicit connection check; model discovery only, never a generated message. */
+  chatProviderStatus: (provider: string) => callOrThrow<ChatProviderStatus>("chat_provider_status", { provider }),
   /** Settings → Local models → Connect: does the server answer, and with which models? */
   /** The custom server's key, bound to the address it is entered for. */
   localSetKey: (url: string, key: string) => call<void>("local_set_key", { url, key }),
@@ -195,7 +251,7 @@ export const Bridge = {
   desktopDragMove: (x: number, y: number) => call<void>("desktop_mochi_drag_move", { x, y }),
   desktopDragEnd: (x: number, y: number) => call<void>("desktop_mochi_drag_end", { x, y }),
   /** From the island to his spot. False: no spot on any connected display. */
-  desktopFlyOut: () => call<boolean>("desktop_mochi_fly_out"),
+  desktopFlyOut: (anywhere = false) => call<boolean>("desktop_mochi_fly_out", { anywhere }),
   /** To the island, then hidden. `forget`: he lives in the island again. */
   desktopFlyHome: (forget: boolean) => call<boolean>("desktop_mochi_fly_home", { forget }),
   /** Asleep, the cursor poll stops. */
@@ -247,6 +303,21 @@ export type ChatContext =
 export interface ModelInfo {
   id: string;
   label: string;
+}
+
+export interface ChatReply {
+  text: string;
+  /** Provider and model that actually answered, including Automatic fallback. */
+  provider?: string;
+  model?: string;
+}
+
+export interface ChatProviderStatus {
+  provider: string;
+  available: boolean;
+  model: string;
+  effectiveProvider?: string;
+  error?: string;
 }
 
 export interface LocalServer {

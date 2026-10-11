@@ -1,322 +1,186 @@
-<div align="center">
+# Coucou Uzbek Edition — Windows 0.6.2
 
-<img src="NotchBuddy/Assets.xcassets/AppIcon.appiconset/icon_256x256.png" width="96" alt="Coucou icon">
+O‘zbekcha interfeysli Windows yordamchisi: ko‘chiriladigan Coucou paneli, alohida **LocalAI Studio**, Telegram, terminal, GitHub, tanlangan oynani boshqarish va mahalliy ovozli buyruqlar.
 
-# Coucou
+Bu [Louis-CFM/coucou](https://github.com/Louis-CFM/coucou) loyihasining Windows uchun moslashtirilgan **forki**. Ushbu ombor va uning 0.6.2 installerlaridagi qo‘shimchalar upstream macOS/iPhone reliziga kiritilgan deb hisoblanmaydi.
 
-**A tiny friend that lives in your Mac's notch — or at the top of your screen on Windows and Linux — and keeps an eye on your AI coding agent sessions. And now on your iPhone too.**
+## Yuklab olish
 
-Approve permissions, watch your agents work, drop a file, chat with Claude — all without leaving what you're doing. Walk away from your Mac and Mochi follows you to your iPhone: Lock Screen, Dynamic Island, widgets, Siri.
+| Windows x64 paketi | Nima uchun |
+|---|---|
+| **[0.6.2 Setup EXE — taxminan 405 MiB](https://github.com/Ahmadjon0worker/CouCou-Uzbek-edition-/releases/download/v0.6.2/Coucou-Windows-0.6.2-setup.exe)** | Tavsiya etiladi; joriy Windows foydalanuvchisi uchun o‘rnatadi. |
+| [0.6.2 MSI — taxminan 436 MiB](https://github.com/Ahmadjon0worker/CouCou-Uzbek-edition-/releases/download/v0.6.2/Coucou-Windows-0.6.2.msi) | MSI formatini talab qiladigan o‘rnatish jarayonlari uchun. |
+| [v0.6.2 relizi va tekshiruv fayllari](https://github.com/Ahmadjon0worker/CouCou-Uzbek-edition-/releases/tag/v0.6.2) | Nazorat summalari, runtime paketi va reliz dalillari. |
 
-[![Version](https://img.shields.io/github/v/release/Louis-CFM/coucou?filter=v*&label=version&color=0A84FF)](https://github.com/Louis-CFM/coucou/releases)
-![macOS 15+](https://img.shields.io/badge/macOS-15%2B-black?logo=apple)
-![iOS 18+](https://img.shields.io/badge/iOS-18%2B-black?logo=apple)
-![Windows 10/11](https://img.shields.io/badge/Windows-10%2F11-0078D4?logo=windows&logoColor=white)
-![Linux](https://img.shields.io/badge/Linux-AppImage%20%7C%20deb%20%7C%20rpm-FCC624?logo=linux&logoColor=black)
-![Swift 6](https://img.shields.io/badge/Swift-6-F05138?logo=swift&logoColor=white)
-![SwiftUI](https://img.shields.io/badge/SwiftUI-native-0A84FF)
-![Tauri 2](https://img.shields.io/badge/Tauri-2-FFC131?logo=tauri&logoColor=black)
-![Code: MIT](https://img.shields.io/badge/code-MIT-green)
-![GitHub stars](https://img.shields.io/github/stars/Louis-CFM/coucou?style=social)
+**Talablar:** Windows 10/11 **x64**, Microsoft Edge WebView2 va paketni o‘rnatish uchun yetarli disk joyi. WebView2 bo‘lmasa, installer uni internet orqali o‘rnatadi. Tayyor installer uchun Python, Node.js yoki Rust’ni alohida o‘rnatish kerak emas. ARM64 uchun alohida installer bu relizda yo‘q.
 
-<img src="docs/media/demo.gif" width="760" alt="Coucou in action">
+Paket ichida Python xizmati, Telegram/Windows vositalari, GitHub CLI, Whisper nutq modellari, Silero VAD va eSpeak NG mavjud. **Ollama dasturi va katta chat modellari paketga kiritilmagan.** Ularni mahalliy AI suhbat kerak bo‘lsa alohida tayyorlang.
 
-</div>
+## Birinchi ishga tushirish
 
----
+1. Setup EXE’ni ishga tushiring va o‘rnatishni tugating. Yangi o‘rnatishda LocalAI Studio ochiladi.
+2. Keyinchalik Start menyusidan **Coucou LocalAI Studio**, Coucou tray menyusi yoki panelning **LocalAI Studio** tugmasini tanlang. O‘rnatilgan `coucou.exe --studio` ham shu oynani ochadi.
+3. Studio → **Tizim holati** orqali mahalliy xizmatni tekshiring. Ulanmasa, **Mahalliy xizmatlarni ishga tushirish** tugmasidan foydalaning.
+4. AI suhbat uchun Ollama yoki cloud provider’ni sozlang. Oddiy Telegram, terminal va desktop amallari uchun chat modeli shart emas.
+5. Tilni almashtirish: Sozlamalar → Umumiy → Til → **O‘zbekcha**.
 
-## Why
+Studio oynasini yopish uni yashiradi. Tray menyusidagi **Chiqish** Coucou va unga tegishli mahalliy xizmatni to‘xtatadi. Windows bilan avtomatik ochish umumiy sozlamalarda boshqariladi.
 
-Some studios showed off gorgeous notch companions… and never let anyone use them.
-**Coucou is the open version.** Every line of code is open source under the MIT License: read it, fork it, learn from it. The Coucou name, Mochi and the sounds stay © Louis Raillé (see [License](#license)).
+Xizmat faqat shu kompyuterdagi `127.0.0.1:11435` yoki `127.0.0.1:11437` da ishlaydi. 11435 portida eski yoki mos kelmaydigan xizmat bo‘lsa, unga tegilmaydi va yangi xizmat 11437 ni ishlatadi. Ikkala port ham band bo‘lsa, ilova sababini ko‘rsatadi. Mavjud `D:\LocalAI` o‘rnatmasi yangi installer uchun majburiy emas.
 
-Meet **Mochi**: a soft little squircle with big eyes that pops out of your notch, waves hello, follows your cursor with its eyes, gets annoyed when you poke it (and dizzy if you insist), and tells you the moment Claude Code needs you.
+Batafsil: [o‘rnatish va sozlash](windows/INSTALL-UZ.md), [Windows imkoniyatlari](windows/README-UZ.md).
 
-## Features
+## Panel va agentlar holati
 
-- 🤖 **Claude Code, Cursor, Codex, Gemini CLI, Antigravity, Copilot CLI, Muse Code, OpenCode, Amp, Hermes and other agents, live** — see every session in your notch: what it reads, edits and runs, step by step. Tag a hook payload with `coucou_agent` to give any agent its own pill (see [`docs/AGENTS.md`](docs/AGENTS.md)). Finished? Mochi does a happy little jump.
-- See what Claude is editing, live in the notch: each file modification shows the file name and +N −M counts in the ticker, tap to read the full diff
-- ✅ **Approve and answer from the notch** — Claude Code permission requests show up with **Allow / Deny / Always**; `AskUserQuestion` prompts show the choices right in the notch (single or multi-select, up to 4 questions). One click, or "Reply in terminal" to fall back to the CLI. Codex also gets Allow / Deny.
-- 🧑‍💻 **Jump to the right terminal** — open the exact terminal window of a session *(macOS)*.
-- 💬 **Chat with Claude, Gemini, OpenAI, or a local model (Ollama / LM Studio)** — click the model name above the chat box to switch provider and pick a model. Cloud providers use your own API key; local providers connect to a server running on your Mac. *(Gemini, OpenAI and local models: macOS)*
-- 📊 **Claude plan usage** *(macOS, GitHub build)* — a small pill in the notch header shows your 5-hour and weekly Claude plan limits. Enable it from Settings → Agents → Plan usage. Pro and Max plans only.
-- 📊 **Codex plan usage** *(macOS, GitHub build)* — a Codex pill next to it shows your Codex limits and how many free resets you have left, read from the Codex CLI. Turn it on in Settings → Agents → Plan usage.
-- 📋 **Declare the tools you use** — open Settings → Active pills and pick your main workspace tool (VS Code, Cursor, Codex or Antigravity), then toggle up to 4 more: Gemini CLI, Anthropic, Google AI, OpenAI, Ollama, LM Studio and service integrations *(macOS)*.
-- 📎 **Drop a file on the notch** — Mochi turns into a box and swallows it, then ask a question about it or send it by email *(email: macOS, Mail.app)*.
-- 🖥️ **Mochi on the desktop** — drag Mochi out of the island to set him loose on your desktop: he floats as a 120 pt companion, follows your cursor, wears his outfit, reacts to alerts by flying home and flying back, and comes back where you left him on next launch.
-- 🪟 **Drag Mochi onto any window** — attach that window as context for Claude *(macOS)*.
-- 🔌 **Integrations** — Stripe payments, n8n workflows, GitHub (open PRs, reviews requested, CI status), Vercel deployments, Resend emails, Notion, Cal.com. Each one gets its own little colored Mochi.
-- 🎵 **Apple Music pill** *(macOS, GitHub build)* — add the Apple Music pill in Settings → Active pills to see what's playing and control playback from the notch; Mochi dances while it plays.
-- 👗 **Dress Mochi up** — right-click him for the wardrobe. He also dresses up for the seasons on his own.
-- ⌨️ **Keyboard shortcuts** — open the chat, jump to an alert or a terminal, switch pills, mute, send Mochi to the desktop or open the wardrobe from anywhere; all customizable in Settings → Shortcuts.
-- 🎭 **A real character** — idle breathing, blinks, eyes on a sphere that follow your mouse, emotes, 28 handcrafted sounds, a greeting on launch.
-- 🫥 **Invisible when idle** — hides away when nothing is running, peeks out when you hover the notch (the top edge of the screen on Windows and Linux).
-- 🖥️ **Any Mac, notch or not** — on an iMac, a Mac mini, or a MacBook with its lid closed on an external display, Mochi sits in a small bar at the top of the screen. With several displays, pick his screen in Settings → General, or let him follow your mouse *(macOS)*.
-- 📱 **Coucou on iPhone** — your sessions, approvals and services in your pocket, with Live Activities, widgets and Siri. See [Coucou on iPhone](#coucou-on-iphone).
-- 📅 **Weekly recap** *(macOS)* — every Monday morning Coucou shows a summary of the past week: time coding, sessions, files, lines changed, commands, permissions, top agent and project, busiest day and longest session. Share it as a 1080 × 1920 image with Mochi — project names optional. All local, no sync.
-- 🌍 **10 languages** — English, 中文, हिन्दी, Español, العربية, Français, বাংলা, Português, Русский, Bahasa Indonesia. Pick one in Settings → General → Language; community translations welcome.
-- 🔒 **Private by design** — no telemetry, no account. Keys live in your macOS Keychain, Windows Credential Manager or Linux Secret Service (GNOME Keyring, KWallet). The app only talks to the services you plug in.
+- **⠿** tutqichini ushlab panelni sudrang; mouse va touch qo‘llab-quvvatlanadi. Chetga qo‘yib yuborganda yuqori/pastda gorizontal, yonlarda vertikal, burchaklarda kvadrat shaklga moslashadi. Joylashuv qayta ochishda saqlanadi; Windows vazifalar paneli uchun ish maydoni hisobga olinadi.
+- Sozlamalar → Umumiy → **Panelning joyi** orqali to‘qqiz joylashuvni tanlang. Tutqichni ikki marta bosish yoki **Yuqori markazga qaytarish** boshlang‘ich joyga qaytaradi.
+- Kengaygan paneldagi **−** tugmasi uni ixchamlaydi. Kutayotgan ruxsat yoki savol bekor qilinmaydi.
+- Kursor bilan ochish, avtomatik yopilish vaqti, pill ranglari, klaviatura yorliqlari va notification ovozlari sozlanadi. Maxsus ovozlar uchun Sounds papkasini oching, fayl qo‘ying va **Reload** bosing.
+- Codex holati o‘ylash, ishlash, qidirish, ruxsat/javob kutish, tugash, xato va limitni ko‘rsatadi. Yakuniy javob mavjud bo‘lsa, tugash holati keyingi vazifagacha saqlanadi.
 
-## Coucou on iPhone
+Codex hooklari `%USERPROFILE%\.codex\hooks.json` orqali ulanadi. Yangi hooklarni Codex’da `/hooks` yoki Hooks sozlamalari orqali bir marta tekshirib tasdiqlang. Relay ulanish sinovi haqiqiy agent sessiyasining barcha holatlari tekshirilganini anglatmaydi. Agent konfiguratsiyasini olib tashlash kerak bo‘lsa, Coucou’ni o‘chirishdan oldin uning sozlamalaridan hooklarni olib tashlang.
 
-The Mac app does the work; the iPhone app keeps you in the loop when you step away. It goes as far into the Apple ecosystem as a dev tool can:
+## Ollama, Gemini va Groq
 
-<table>
-<tr>
-<td colspan="3" align="center"><img src="docs/media/iphone-live-activity.jpg" width="520" alt="Mochi on the Lock Screen, waiting for your OK with Deny and Allow"></td>
-</tr>
-<tr>
-<td width="33%"><img src="docs/media/iphone-approval.jpg" alt="A permission request on the iPhone, Allow with Face ID"></td>
-<td width="33%"><img src="docs/media/iphone-session.jpg" alt="A Claude Code session on the iPhone: the prompt, what it did, Claude's answer and the next instruction"></td>
-<td width="33%"><img src="docs/media/iphone-widgets.jpg" alt="Home Screen widgets with each agent's and service's Mochi"></td>
-</tr>
-</table>
+**Avtomatik** rejim Ollama → sozlangan Gemini → sozlangan Groq tartibida provider tanlaydi. Javob ostida haqiqiy provider va model ko‘rsatiladi. Oqim boshlanganidan keyin boshqa provider matni shu javobga qo‘shilmaydi. Muayyan provider’ni tanlasangiz, faqat o‘sha provider ishlatiladi.
 
-- 🏝️ **Live Activity and Dynamic Island** — lock your Mac while an agent works and Mochi moves to your iPhone's Lock Screen and Dynamic Island with the agent's state, then comes back to the notch when you unlock. **Allow** or **Deny** a permission right from the Lock Screen, without opening the app.
-- 🔔 **Notifications you can act on** — Allow, Review or Deny a permission, pick an answer to Claude's question, or reply to a finished agent, straight from the notification.
-- 🔐 **Face ID on every Allow** — nothing runs on your Mac without your explicit tap; your Mac only applies a decision meant for the exact request it is waiting on.
-- 💬 **Talk to your agents** — follow each session live (steps, diffs, the last turn), answer questions, and send the next instruction to your Mac by text or voice.
-- 🧩 **Widgets, Control Center, Siri and Shortcuts** — home and Lock Screen widgets, a Control Center control, ask Siri how your agents are doing or send Claude an instruction, in Siri and Shortcuts.
-- 🔎 **Spotlight and Focus** — find past turns in Spotlight; a Focus filter shows only the agents waiting for you.
-- 📊 **Your services up close** — GitHub, Vercel, Stripe, Cal.com, n8n, Notion, Resend: your Mac reads their APIs with the keys in its Keychain and the iPhone shows the figures and lists. Safe actions (re-run CI, redeploy, merge a PR, pause a workflow) behind Face ID; nothing that moves money or sends an email.
-- 🫧 **Liquid Glass, native to the bone** — SwiftUI, tabs, zoom transitions, context menus, swipe actions, alternate icons, Mochi at 120 Hz.
-- 🔒 **Through your own iCloud** — sessions sync through your private CloudKit database; project names, commands and questions are encrypted with your iCloud keys. No Coucou server sees your projects, commands or keys. Turn it on in the Mac app: Settings → General → iPhone.
+| Provider | Sozlash | Internet |
+|---|---|---|
+| [Ollama](https://ollama.com/) | Ollama’ni o‘rnating, chat modelini yuklang, xizmatni ishga tushiring; Studio’da modelni tanlang. Mahalliy loopback portlari 11434 va 11436 qo‘llab-quvvatlanadi. | Dastur/modelni olishda kerak; keyingi mahalliy javoblarda shart emas. |
+| [Gemini](https://aistudio.google.com/apikey) | Google AI Studio’dan API kalitini oling va Studio’da saqlang. | Kerak. |
+| [Groq](https://console.groq.com/keys) | Groq Console’dan API kalitini oling va Studio’da saqlang. | Kerak. |
 
-**Get it on your iPhone in 3 steps:** install Coucou on your iPhone ([Join the TestFlight beta](https://testflight.apple.com/join/3GpeHv2b) — free, App Store coming soon), turn on **Settings → General → iPhone** in the Mac app (0.1.9 or later), and use the same Apple Account in iCloud on both. Full guide, troubleshooting and build-it-yourself: [docs/IPHONE.md](docs/IPHONE.md).
+Studio → **API kalitlari va sozlamalar** → **Chat provayderlari** → provider → **Saqlash va tekshirish**. Keyin **AI provayderi** va modelni tanlang. Model ro‘yxatini yangilash yoki model ID’ni qo‘lda kiritish mumkin. Ulanishni tekshirish model ro‘yxatini tekshiradi; haqiqiy javobni sinash uchun qisqa savol yuboring.
 
-<table>
-<tr>
-<td><img src="docs/media/claude-code.png" alt="Claude Code session"></td>
-<td><img src="docs/media/stripe.png" alt="Stripe payments"></td>
-</tr>
-<tr>
-<td><img src="docs/media/chat.png" alt="Chat with Claude"></td>
-<td><img src="docs/media/dizzy.png" alt="Too many hits"></td>
-</tr>
-</table>
+Kalitni chatga yozmang. Gemini/Groq kalitlari Windows Credential Manager’da saqlanadi. Cloud provider tanlansa, so‘rov matni o‘sha providerga yuboriladi; kvota va to‘lov uning hisobingizga bog‘liq. Mahalliy ovozni tanish uchun bu kalitlar kerak emas.
 
-## Versions
+## Telegram: shaxsiy akkaunt va bot
 
-macOS releases are published as `v*` tags. See [CHANGELOG.md](CHANGELOG.md) for the full notes of each version.
+Studio → **Telegram va Windows vositalari** → **Shaxsiy Telegram**. [Telegram App API](https://my.telegram.org/apps) orqali olingan API ID/hash’ni shu oynaga kiriting. Telefon raqami → kirish kodi → zarur bo‘lsa 2FA paroli bosqichlarini bajaring. Kod va parolni chatga yubormang. Bot ulash uchun alohida **Bot va Windows** bo‘limi bor.
 
-| Version | Date | Highlights |
-|---------|------|------------|
-| [0.2.1](https://github.com/Louis-CFM/coucou/releases/tag/v0.2.1) | Oct 7, 2026 | Hermes Agent support |
-| [0.2.0](https://github.com/Louis-CFM/coucou/releases/tag/v0.2.0) | Oct 6, 2026 | Copilot CLI, Muse Code, OpenCode and Amp, weekly recap, 10 languages |
-| [0.1.9](https://github.com/Louis-CFM/coucou/releases/tag/v0.1.9) | Oct 6, 2026 | iPhone services with live details and actions, smarter Live Activity |
-| [0.1.8](https://github.com/Louis-CFM/coucou/releases/tag/v0.1.8) | Oct 5, 2026 | Coucou on iPhone: sessions, widgets, approvals with Face ID, Mochi in the Dynamic Island |
-| [0.1.7](https://github.com/Louis-CFM/coucou/releases/tag/v0.1.7) | Oct 4, 2026 | Keyboard shortcuts |
-| [0.1.6](https://github.com/Louis-CFM/coucou/releases/tag/v0.1.6) | Oct 4, 2026 | Mochi on the desktop |
-| [0.1.5](https://github.com/Louis-CFM/coucou/releases/tag/v0.1.5) | Oct 4, 2026 | Wardrobe and seasonal outfits, new launch greeting |
-| [0.1.4](https://github.com/Louis-CFM/coucou/releases/tag/v0.1.4) | Oct 3, 2026 | Live diffs, GitHub pull requests, CI, reviews and contribution grid |
-| [0.1.3](https://github.com/Louis-CFM/coucou/releases/tag/v0.1.3) | Oct 3, 2026 | Answer Claude's questions from the notch, plan usage, local models, Apple Music |
-| [0.1.2](https://github.com/Louis-CFM/coucou/releases/tag/v0.1.2) | Oct 2, 2026 | Codex and Cursor support, the permission card stays until you answer |
-| [0.1.1](https://github.com/Louis-CFM/coucou/releases/tag/v0.1.1) | Oct 2, 2026 | Gemini and OpenAI chat, Linux build, more agents and pills, security hardening |
-| [0.1.0](https://github.com/Louis-CFM/coucou/releases/tag/v0.1.0) | Sep 27, 2026 | First release: Mochi, Claude Code sessions, chat, file drop, integrations |
+Akkaunt ulanganidan keyin:
 
-Windows and Linux builds are in Releases under the `windows-v*` and `linux-v*` tags; the newest Windows installer is always at [`windows-latest`](https://github.com/Louis-CFM/coucou/releases/tag/windows-latest).
+- Chatlarni qidiring, o‘qilmaganlar/shaxsiy chatlar/guruhlar/kanallar bo‘yicha filtrlang va keyingi sahifani yuklang.
+- **Saved Messages** yoki `@username` orqali chatni oching. Tarixni yuklang, eski xabarlar va matn ichidan qidiring.
+- Oddiy xabar yoki reply yozing. **Yuborish** va **Ctrl+Enter** darhol yuboradi; Enter yangi qator ochadi.
+- AI qoralama, tarjima, qisqa javob yoki xulosa tayyorlaydi. Matnni tahrirlash mumkin. **AI va yuborish** yoki `@username ga salom yubor` kabi aniq yuborish buyrug‘i bir xabarni yuborishga ruxsat beradi.
 
-## Demo mode
+**Qoralama/xulosa so‘rovi o‘zicha yubormaydi.** Aniq yuborish buyrug‘i esa darhol yuborishi mumkin. Ovozda avval ko‘rishni istasangiz, **darhol yuborish** belgisini o‘chiring. Oluvchi noaniq bo‘lsa, chatni tanlash so‘raladi; tanlovni almashtirish oldin tayyorlangan xabarning adresatini o‘zgartirmaydi.
 
-No API key, no Claude Code, no setup — open **Settings → General → Demo**, click **Try demo mode**, and Coucou walks through a scripted session: a Claude Code session with live steps and a diff you can read, a permission request, an AskUserQuestion, a parallel Codex session, the GitHub, Stripe, Vercel and other integration pills loaded with sample data, the chat with a streamed response, the weekly recap with a share image you can actually save.
+Yuborish javobi kelmay qolsa, natija **noma’lum** deb ko‘rsatiladi va avtomatik takrorlanmaydi. Telegramni tekshirib, **Telegramni tekshirdim** tugmasini bosing; u hech narsa yubormaydi. Keyingi yuborish alohida buyruq yoki tugmani talab qiladi.
 
-Nothing is written to disk during the demo — no Keychain entries, no hook files, no recap history. Your real sessions and keys are saved and restored exactly as they were when you stop.
+API ma’lumotlari va sessiya per-user Windows DPAPI bilan himoyalanadi. Eski `D:\LocalAI` sessiyasi yangi xizmatga avtomatik ko‘chirilmaydi. AI uchun faqat siz ochgan chatning cheklangan tarixi va ko‘rsatmangiz ishlatiladi; barcha chatlarni fonda o‘qib, avtomatik javob berish yoqilmagan. Rasm/fayl/ovozli xabar turi ko‘rsatiladi, ammo bu versiyada ular Telegram’dan yuklab olinmaydi.
 
-## Install
+## Windows vositalari va AI rejalar
 
-### App Store
+**Terminal / GitHub** bo‘limida CMD yoki PowerShell skriptini yozib, **Bajarish**ni bosing. Exit code, stdout/stderr va timeout ko‘rsatiladi. Skript joriy foydalanuvchi huquqida ishlaydi; ish papkasining workspace ichida bo‘lishi OS sandbox yaratmaydi. AI skript taklif qiladi, bajarishdan oldin uni ko‘rib chiqing.
 
-Coucou is coming to the **Mac App Store** and the **iPhone App Store**: one click to install, automatic updates, and the iPhone app pairs with your Mac through your iCloud account, with nothing to configure. The links will be here as soon as Apple publishes them.
+Portable rasmiy GitHub CLI installer ichida. Repository, issue va pull request bilan ishlash mavjud; issue/draft PR yaratish aniq amal orqali bajariladi. GitHub login foydalanuvchi tomonidan bajariladi.
 
-The App Store build of the Mac app runs in Apple's sandbox, so a few features stay in the GitHub build: Claude plan usage, the Apple Music pill and attaching the front window to the chat.
+**Desktop** bo‘limida oynani tanlang va **Kuzatish**ni bosing. Click, literal matn, navigatsiya yoki scroll joriy kuzatuv va oyna identifikatoriga bog‘lanadi. Sessiya 5 daqiqa yoki 100 amal bilan cheklanadi. Login/parol/to‘lov/UAC/shell oynalari ushbu paneldan boshqarilmaydi. Avvalgi, har bir amali tasdiqlanadigan Notepad hujjat yordamchisi ham saqlangan.
 
-### iPhone
+AI taklifi bajarilgan ish degani emas; natijani tekshiring. **Stop Local AI** faol desktop sessiyasi, terminal va ovoz ishlarini to‘xtatadi. Davom etish uchun profilni tanlab, yangi sessiya oching. OpenCode bu installerga kiritilmagan.
 
-1. **Install Coucou on your iPhone** (iOS 18 or later): install [TestFlight](https://apps.apple.com/app/testflight/id899247664) from the App Store, then [Join the TestFlight beta](https://testflight.apple.com/join/3GpeHv2b). The beta is free; Apple limits it to 10,000 testers. The App Store version is coming soon.
-   *Apple is reviewing the beta: it opens within a day or two — if the link isn't accepting testers yet, check back soon.*
-2. **On your Mac**, with Coucou 0.1.9 or later: **Settings… → General → iPhone**, turn on **Show my agent sessions on my iPhone**, and **Move Mochi to my iPhone's Dynamic Island when my Mac is locked** for the Lock Screen.
-3. **Same Apple Account** in iCloud on the Mac and the iPhone. That's the whole link: no account, no pairing code.
-4. Open Coucou on the iPhone, allow notifications, and start a Claude Code session on the Mac.
+CLI va MCP ulash misollari: [vositalar qo‘llanmasi](windows/localai-service/TOOLS-UZ.md).
 
-Everything else, troubleshooting included, is in [docs/IPHONE.md](docs/IPHONE.md).
+## O‘zbekcha ovoz — mahalliy ishlaydi
 
-### Download for macOS
+Studio → **🎙 Ovozli boshqaruv** yoki Telegram va Windows vositalari → **Ovoz** → **Gapirish**. Mikrofon ilova ochilganda avtomatik yoqilmaydi. Bo‘limdan chiqish, oynani yashirish, ovozni to‘xtatish yoki Stop mikrofon treklarini yopadi. Windows/WebView2 mikrofon ruxsatini berish kerak bo‘lishi mumkin.
 
-1. Grab the latest `Coucou.zip` from [Releases](https://github.com/Louis-CFM/coucou/releases).
-2. Unzip and move **Coucou.app** to `/Applications`.
-3. Launch it, and click **Open** when macOS asks you to confirm. Updating from 0.1.0? macOS may ask you, once for each key you saved, to let Coucou use it: enter your Mac password and click **Always Allow**.
+- O‘zbekcha: **NavAI Whisper small Q5_1 + Silero VAD 6.2.0**.
+- Ruscha/inglizcha: multilingual **small-q5_1**.
+- Mahalliy javob ovozi: **eSpeak NG**; uning ovozi robotga o‘xshaydi.
+- Modellar installer ichida. Nutqni tanish va eSpeak uchun internet, Ollama yoki cloud API kaliti shart emas.
+- Yozuv eng ko‘pi 15 soniya; bir vaqtda bitta transkripsiya. Vaqtinchalik WAV va decoder natijalari ish tugagach o‘chiriladi.
 
-### Windows
+Misollar: «Panelni och», «Sozlamalarni och», «Studioni och», «GitHub holatini ko‘rsat», «Shu chatga salom yubor». Telegram uchun avval oluvchini tanlang. Murakkab AI reja sozlangan chat provider’ni ishlatadi; terminal buyrug‘i muharrirda ko‘rib chiqiladi. Ixtiyoriy davomli tinglashni o‘zingiz yoqasiz; unda «OK Coucou / Kuku» bilan boshlangan buyruqlar qabul qilinadi.
 
-Download **[Coucou-Windows.msi](https://github.com/Louis-CFM/coucou/releases/download/windows-latest/Coucou-Windows.msi)** or **[Coucou-Windows-setup.exe](https://github.com/Louis-CFM/coucou/releases/download/windows-latest/Coucou-Windows-setup.exe)** (Windows 10/11, always the newest version) and run it. You can also [build it from source](#build-from-source).
+**Tekshirilgan natija va cheklov:** bir xil **8 ta Google FLEURS o‘zbekcha audio** (jami 66,12 soniya) uchun WER **115,70% → 20,66%**, CER **43,70% → 7,99%** bo‘ldi. WER qo‘shimcha so‘zlar sabab 100% dan oshishi mumkin. Bu kichik, tasodifiy bo‘lmagan sinov to‘plami; barcha odamlar yoki mikrofonlar uchun aniqlik bahosi emas. Shovqinli nutq, ismlar va username xato tanilishi mumkin. **Haqiqiy mikrofon/xona sinovi hali bajarilmagan**; o‘rnatilgan xizmat ommaviy audio va sun’iy nazoratlar bilan tekshirilgan. Eshitilgan matnni yuborishdan avval tekshiring.
 
-**Windows will show a warning the first time — that's expected.** The installer isn't code-signed yet, so SmartScreen doesn't know the publisher:
+[Ovoz qo‘llanmasi](windows/localai-service/VOICE-UZ.md) · [O‘lchash usuli va har bir namuna](windows/localai-service/VOICE-UZ-BENCHMARK.md) · [JSON natijalar](windows/localai-service/VOICE-UZ-BENCHMARK.json)
 
-1. A **"Windows protected your PC"** screen appears, with *Publisher: Unknown publisher*.
-2. Click **More info** (*Informations complémentaires* in French). This reveals a **Run anyway** button.
-3. Click **Run anyway** (*Exécuter quand même*). The installer starts normally.
+## Saqlash, yangilash va maxfiylik
 
-This is only because the app isn't signed with a paid certificate yet. Coucou is open source, and Microsoft Defender scans the installer as clean.
+| Joy | Nima saqlanadi |
+|---|---|
+| `%LOCALAPPDATA%\Coucou` | Standart per-user EXE o‘rnatish joyi; ilova va portable runtime. |
+| `%APPDATA%\Coucou\settings.json` | Til, provider/model tanlovi, panel va boshqa sozlamalar. |
+| `%APPDATA%\Coucou\sounds` | Foydalanuvchi notification ovozlari. |
+| `%LOCALAPPDATA%\Coucou\LocalAI` | Workspace, ishchi fayllar, DPAPI bilan himoyalangan Telegram ma’lumotlari/sessiyasi. |
+| Windows Credential Manager | AI provider kalitlari. |
 
-**Windows and Linux 0.2.0** catch up with the Mac: Codex, Copilot CLI, Muse Code and six more agents with approvals from the island, answers to Claude's questions, live diffs, GitHub pull requests and CI, plan usage, local models, the wardrobe, Mochi on the desktop, keyboard shortcuts, the weekly recap and 10 languages. See the [changelog](CHANGELOG.md).
+Yangi installer mavjud o‘rnatishni yangilaydi. Foydalanuvchi sozlamalari va LocalAI ishchi fayllari yangilash/o‘chirishda saqlanadi; mavjud `D:\LocalAI` ga tegilmaydi. Akkaunt va sozlamalar per-user: boshqa Windows foydalanuvchisiga nusxa ko‘chirish avtomatik login bermaydi.
 
-There is no notch on a PC, so the island slides out of the top edge of the screen
-instead of hiding inside one. See [`windows/README.md`](windows/README.md) for the
-rest of the differences.
+Chat, screenshot va terminal chiqishi AI uchun ma’lumotdir; ularning ichidagi buyruqlar avtomatik ijro etilmaydi. Cloud AI ishlatilsa, tegishli vazifa/chat matni providerga boradi; Telegram yuborishda matn Telegram API’ga boradi. Ovoz yozuvi va transkript alohida jurnalga saqlanmaydi. Kalitlar, Telegram sessiyalari va shaxsiy konfiguratsiya ommaviy installerga kiritilmaydi.
 
-### Linux
-
-Download the newest Linux build from [Releases](https://github.com/Louis-CFM/coucou/releases) (`linux-v*` tags), x86_64 only for now.
-
-- **AppImage** (any distribution): `chmod +x Coucou-Linux-*.AppImage`, then run it.
-- **Debian / Ubuntu**: `sudo apt install ./Coucou-Linux-*.deb`
-- **Fedora / openSUSE**: `sudo dnf install ./Coucou-Linux-*.rpm`
-
-Check a download with `sha256sum -c SHA256SUMS --ignore-missing`. On Arch Linux, build it with the [PKGBUILD](linux/arch/PKGBUILD).
-
-The island sits on the top edge on compositors with layer-shell — COSMIC, KDE
-Plasma, Hyprland, Sway and other wlroots compositors. GNOME has no layer-shell,
-so there it runs through XWayland as a dock window at the top of the screen. See [`windows/README.md`](windows/README.md#linux).
-
-### Build from source
-
-**macOS** — requirements: macOS 15+, Xcode 16+, [XcodeGen](https://github.com/yonaskolb/XcodeGen).
-
-```bash
-brew install xcodegen
-git clone https://github.com/Louis-CFM/coucou.git
-cd coucou/NotchBuddy
-xcodegen
-open NotchBuddy.xcodeproj   # then ⌘R
-```
-
-**Windows** — requirements: [Rust](https://rustup.rs), Node 20+, MSVC build tools.
+Yuklangan installer’ni relizdagi `SHA256SUMS.txt` bilan solishtirish mumkin:
 
 ```powershell
-git clone https://github.com/Louis-CFM/coucou.git
-cd coucou/windows
-npm install
-npm run pack                # installer lands in windows/release/
+Get-FileHash .\Coucou-Windows-0.6.2-setup.exe -Algorithm SHA256
 ```
 
-**Linux** — requirements: [Rust](https://rustup.rs), Node 20+, and the WebKitGTK,
-gtk-layer-shell and appindicator development packages (Debian/Ubuntu names below).
+## Tekshiruv doirasi
 
-```bash
-sudo apt install build-essential pkg-config \
-  libwebkit2gtk-4.1-dev libgtk-layer-shell-dev libayatana-appindicator3-dev \
-  librsvg2-dev libssl-dev libdbus-1-dev patchelf \
-  gstreamer1.0-plugins-base gstreamer1.0-plugins-good
-git clone https://github.com/Louis-CFM/coucou.git
-cd coucou/windows
-npm install
-npm run pack                # AppImage, .deb and .rpm land in windows/release/
+0.6.2 uchun frontend **633/633** test, ovoz/HTTP router **50** test, TypeScript va production Vite/Rust build o‘tgan. NSIS va MSI ichidan ilova, hook, qo‘llanma va **2068 runtime fayli** chiqarilib, SHA-256/versiya/platforma tekshirilgan. EXE shu Windows kompyuterga o‘rnatilib, eski sozlamalar va shifrlangan Telegram fayli saqlangani tekshirilgan; o‘rnatilgan ASR haqiqiy decoder bilan ishlagan.
+
+**MSI o‘rnatish va toza VM sinovi bajarilmagan.** Ovoz unit suite’dagi bitta ixtiyoriy native smoke o‘tkazib yuborilgan; native ASR alohida audio sinovida tekshirilgan. Bu dalillar real mikrofon, barcha Windows qurilmalari yoki AI’ning har bir erkin vazifasi uchun kafolat emas. Tekshiruv hisobotlari [v0.6.2 relizida](https://github.com/Ahmadjon0worker/CouCou-Uzbek-edition-/releases/tag/v0.6.2) beriladi.
+
+## Manba kodi va yig‘ish
+
+```text
+windows/
+  src/                   TypeScript panel, Studio, Telegram/vositalar, tarjimalar
+  src-tauri/             Rust/Tauri, Windows bridge, installer sozlamalari
+  hook/                  coucou-hook relay
+  localai-service/src/   Python service, Telegram, desktop, terminal, ovoz
+  localai-service/tests/ Python testlar
+  scripts/               Runtime tayyorlash, build va installer tekshiruvi
+  tests/                 Frontend testlar
+NotchBuddy/              Asl macOS/iPhone kodi va umumiy ovoz resurslari
+docs/, relay/            Upstream hujjatlar va iPhone relay manbasi
 ```
 
-## Setup
+Windows x64 build kompyuterida **Node.js 24** (testlar uchun kamida 22.18), Rust MSVC toolchain, Microsoft C++ Build Tools (**Desktop development with C++**) va runtime paketini tayyorlash uchun **Python 3.12** kerak. Installer tekshiruvi uchun **7-Zip** va Tauri’ning WiX `dark.exe` keshi ishlatiladi. Bular tayyor ilovani o‘rnatadigan foydalanuvchiga kerak emas.
 
-Click the Coucou icon in the menu bar (macOS) or in the system tray (Windows, Linux) → **Settings…**
+Git klonining o‘zi katta portable Python/model binary’larini bermaydi: ular source asset sifatida emas, [v0.6.2 runtime ZIP](https://github.com/Ahmadjon0worker/CouCou-Uzbek-edition-/releases/download/v0.6.2/Coucou-Windows-0.6.2-runtime.zip) orqali tarqatiladi. Ikonalar, Canvas personaj kodi va umumiy notification ovozlari omborda bor; ular uchun alohida «yo‘qolgan asset» yuklash shart emas.
 
-| What | Why | Where the key goes |
-|---|---|---|
-| **Claude Code hooks** | live sessions and approvals | **Install hooks** — Coucou backs up `~/.claude/settings.json`, merges its hooks and shows you the diff before writing anything |
-| **Claude plan** *(macOS, GitHub build)* | Plan usage gauge in the notch header | **Install relay** in Settings → Agents → Plan usage, then enable "Show in the notch" |
-| **Gemini CLI hooks** *(macOS)* | Gemini CLI sessions in the island | **Install hooks** in Settings → Gemini CLI — backs up `~/.gemini/settings.json` |
-| **Antigravity (agy) hooks** *(macOS)* | agy sessions in the island | **Install hooks** in Settings → Antigravity — backs up `~/.gemini/config/hooks.json` |
-| **Anthropic API key** | chat and questions about files | Settings → Anthropic API · Keychain / Windows Credential Manager / Secret Service |
-| **Google AI API key** *(macOS)* | chat with Google AI (Gemini) | Settings → Chat — other providers · Keychain |
-| **OpenAI API key** *(macOS)* | chat with OpenAI | Settings → Chat — other providers · Keychain |
-| **Ollama server** *(macOS)* | chat with local models via Ollama | Settings → Chat → Local models → **Connect** |
-| **LM Studio server** *(macOS)* | chat with local models via LM Studio | Settings → Chat → Local models → **Connect** |
-| **iPhone** *(macOS)* | sessions, approvals, questions and Mochi on your iPhone | Settings → General → iPhone · your private iCloud, see [docs/IPHONE.md](docs/IPHONE.md) |
-| **Active pills** *(macOS)* | choose which tools and agents appear in the island | Settings → Active pills |
-| Stripe, n8n, GitHub, Vercel, Resend, Notion, Cal.com | the service pills | Keychain / Windows Credential Manager / Secret Service, all optional |
+PowerShell’da:
 
-If Coucou isn't running, the hook exits immediately: **Claude Code is never blocked.**
+```powershell
+git clone https://github.com/Ahmadjon0worker/CouCou-Uzbek-edition-.git
+cd CouCou-Uzbek-edition-\windows
+python scripts/prepare-release-runtime.py --download
+npm ci
+npm test
+node scripts/build-hook.mjs
+cargo test --workspace --locked
+npm run pack
+```
 
-### Supported agents
+`prepare-release-runtime.py` faqat build vaqtida aniq v0.6.2 public runtime ZIP’ni yuklaydi; hajm, SHA-256, manifest va har bir faylni tekshiradi. So‘ng portable runtime, ovoz modellari, GitHub CLI va private Microsoft DLL’larini build uchun joylaydi hamda `build_runtime.py --sync-source` orqali **joriy Python manbasiga** moslaydi. Ilova ishga tushishda runtime/model yuklamaydi; helper installer’ni ishga tushirmaydi yoki shaxsiy konfiguratsiyani nusxalamaydi.
 
-| Agent | How it connects | Mac-only? |
-|---|---|---|
-| Claude Code | Settings → Claude Code → **Install hooks** | No |
-| Gemini CLI | Settings → Gemini CLI → **Install hooks** | Mac only |
-| Antigravity | Settings → Antigravity → **Install hooks** | Mac only |
-| Cursor | Hooks installed automatically alongside Claude Code | No |
-| Codex | `--agent codex` flag; Settings → Codex → **Install hooks** | No |
-| Copilot CLI | `--agent copilot` flag + camelCase events | No |
-| Muse Code | `--agent muse` flag | No |
-| OpenCode | Plugin — **Settings → OpenCode Plugin → Install** | Mac only |
-| Amp | Plugin — **Settings → Amp Plugin → Install** | Mac only |
-| Hermes | Plugin — **Settings → Agents → Hermes → Install** | Mac only |
-| Any other | `--agent <name>` flag; see [`docs/AGENTS.md`](docs/AGENTS.md) | No |
+ZIP’ni oldindan olgan bo‘lsangiz, tarmoqsiz tayyorlash uchun yuklash buyrug‘i o‘rniga:
 
-OpenCode, Amp and Hermes use a plugin model rather than a hook command. Coucou installs the plugin file into `~/.config/opencode/plugins/`, `~/.config/amp/plugins/` and `~/.hermes/plugins/coucou/` respectively. On Windows and Linux the plugins start the `coucou-hook` relay directly — see [`windows/README.md`](windows/README.md#supported-agents).
+```powershell
+python scripts/prepare-release-runtime.py --archive C:\path\Coucou-Windows-0.6.2-runtime.zip
+```
 
-## Things to try
+Xizmatni ishga tushirmasdan runtime self-test:
 
-| Do this | Mochi does that |
-|---|---|
-| Hover the notch (top edge on Windows and Linux) | peeks out and says hi 👋 |
-| Click it | opens |
-| Hover Mochi | blinks, eyes grow |
-| Click Mochi | squish + annoyed |
-| Click 3 times fast | 😵‍💫 dizzy for a few seconds |
-| Drag a file onto the island | turns into a box and swallows it |
-| Drag Mochi onto a window *(macOS)* | attaches it as context |
-| Click the model name above the chat box *(macOS)* | switch AI provider or model |
+```powershell
+.\localai-service\bundle\runtime\python.exe -B .\localai-service\bundle\src\service_main.py --self-test
+```
 
-## How it works
+`npm run pack` TypeScript/Vite va Tauri production build’ni bajaradi, hook/runtime’ni tekshiradi va EXE/MSI’ni `windows/release` ichiga yozadi. `release-manifest.json` va `SHA256SUMS.txt` ham yaratiladi. Eski installer yoki manba kodiga mos kelmaydigan runtime xeshlari bilan paket chiqarilmaydi.
 
-**macOS**
+Development: tayyorlangan runtime bilan `npm run tauri dev`. Faqat UI’ni tekshirish uchun `npm run build` mavjud; native xizmat va vositalar Tauri bridge orqali ishlaydi. Runtime’ni noldan tayyorlash: [runtime qo‘llanmasi](windows/localai-service/README.md). O‘zbek modelini qayta konvertatsiya/kvantlash: [model tayyorlash](windows/localai-service/model-preparation/README.md).
 
-- **Island**: a borderless `NSPanel` hugging the notch, driven by a small state machine (`hidden → petit → home`).
-- **Character**: drawn in SwiftUI `Canvas` + `TimelineView` at 60 fps — squircle body, eyes projected on a sphere, spring animations. No Rive, no Lottie, no images.
-- **Claude Code**: a tiny `nb-hook` script receives hook events and forwards them over a Unix socket to the app. For approvals it waits for your click, then answers the hook.
-- **Integrations**: lightweight pollers, paused when nothing is watching.
-- **Declared pills**: `PillCatalog.swift` is the single source of truth — every pill (coding tools, agents, AI providers, services) is declared there with its ID, color and category.
-- **Sounds**: 28 short WAVs played through preloaded `AVAudioPlayer`s.
+## Litsenziya va asl loyiha
 
-The macOS app is native Swift 6 / SwiftUI / AppKit with **zero third-party dependencies**.
+Asl Coucou muallifi — **[Louis Raillé](https://louisraille.fr)**. Manba kodi [MIT litsenziyasi](LICENSE) ostida. Ushbu Windows forkiga upstream muallifi tomonidan homiylik yoki tasdiq berilgani da’vo qilinmaydi.
 
-**iPhone**
+**Nom va media alohida:** «Coucou», «Mochi», personaj, ikonalar, notification ovozlari va demo media MIT bilan litsenziyalanmagan. [LICENSE-ASSETS.md](LICENSE-ASSETS.md) ularni Louis Raillé mulki deb belgilaydi va shu nom/assetlar bilan ommaviy fork tarqatish uchun yozma ruxsat talab qiladi. Kodni qayta ishlatish ruxsati bu assetlarni ommaviy tarqatish ruxsatini bermaydi.
 
-- A native SwiftUI app sharing Mochi's engine, the pills and the diff engine with the Mac through `CoucouKit`.
-- The Mac publishes sessions, turns and services to a private CloudKit zone in your iCloud (sensitive fields encrypted with your iCloud keys); the iPhone reads them and writes back decisions, answers and instructions, which the Mac only applies when they match what it is waiting on.
-- Live Activities are started and updated by APNs pushes through [`relay/`](relay/), a stateless Cloudflare Worker that holds the APNs key and only sees the agent's name and state.
+Whisper/whisper.cpp va Silero MIT, NavAI o‘zbekcha model Apache-2.0, eSpeak NG GPLv3 litsenziyasida. Ularning license/provenance fayllari runtime paketida, eSpeak tegishli manba arxivi ham tarqatiladi. [Ovoz manbalari va litsenziyalari](windows/localai-service/VOICE-UZ.md#litsenziyalar-va-manbalar).
 
-**Windows**
-
-- A [Tauri 2](https://tauri.app) app (Rust + TypeScript): the island is a transparent, always-on-top window that never steals focus, Mochi is drawn in Canvas 2D with the same shapes, timings and sounds as on the Mac.
-- Claude Code hooks go through a tiny `coucou-hook.exe` and a named pipe; keys live in Windows Credential Manager.
-- Details and differences in [`windows/README.md`](windows/README.md).
-
-**Linux**
-
-- The same Tauri app as Windows. On Wayland the island is a gtk-layer-shell
-  overlay anchored to the top edge, and click-through is its input region.
-- Claude Code hooks go through the same `coucou-hook`, over a Unix socket in
-  `$XDG_RUNTIME_DIR`; keys live in the Secret Service.
-
-## Contributing
-
-Issues and PRs are very welcome — new integrations, new emotes, new sounds, bug fixes. See [CONTRIBUTING.md](CONTRIBUTING.md).
-
-Want to add or improve a translation? Open a PR with changes to `NotchBuddy/Resources/Localizable.xcstrings`.
-
-## Credits
-
-Built by [Louis Raillé](https://louisraille.fr) with Claude Code.
-Inspired by the notch-companion concepts shared by design studios — this project is independent and not affiliated with any of them.
-
-## License
-
-- **Code:** [MIT](LICENSE) — use it, fork it, learn from it, just keep the copyright notice.
-- **Name, Mochi character, icon, sounds and media:** © Louis Raillé, all rights reserved — see [LICENSE-ASSETS.md](LICENSE-ASSETS.md). Shipping your own fork? Give it your own name and character.
-
-<div align="center">
-
-**If Mochi made you smile, a ⭐ helps a lot.**
-
-[Website](https://louis-cfm.github.io/coucou/) · [Privacy](https://louis-cfm.github.io/coucou/privacy.html) · [Terms](https://louis-cfm.github.io/coucou/terms.html) · [Support](https://louis-cfm.github.io/coucou/support.html)
-
-</div>
+Asl loyiha: [GitHub](https://github.com/Louis-CFM/coucou) · [sayt](https://louis-cfm.github.io/coucou/) · [upstream maxfiylik](https://louis-cfm.github.io/coucou/privacy.html) · [upstream shartlar](https://louis-cfm.github.io/coucou/terms.html) · [upstream yordam](https://louis-cfm.github.io/coucou/support.html). Bu havolalar original loyihaga tegishli; Windows forkiga oid savol va xatolarni [ushbu ombor issues](https://github.com/Ahmadjon0worker/CouCou-Uzbek-edition-/issues) orqali yuboring, shaxsiy kalit/kod/xabarlarni qo‘shmang.

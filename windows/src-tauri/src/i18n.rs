@@ -12,10 +12,11 @@ use serde_json::{Map, Value};
 use std::collections::HashMap;
 use std::sync::{OnceLock, RwLock};
 
-pub const LANGUAGES: [&str; 10] = ["en", "zh-Hans", "hi", "es", "ar", "fr", "bn", "pt-BR", "ru", "id"];
+pub const LANGUAGES: [&str; 11] = ["en", "zh-Hans", "hi", "es", "ar", "fr", "bn", "pt-BR", "ru", "id", "uz"];
 
 static MAC: &str = include_str!("../../src/i18n/strings.json");
 static EXTRA: &str = include_str!("../../src/i18n/extra.json");
+static UZ: &str = include_str!("../../src/i18n/uz.json");
 
 type Table = HashMap<String, Map<String, Value>>;
 
@@ -24,12 +25,12 @@ fn table() -> &'static Table {
     TABLE.get_or_init(|| {
         let mut out = Table::new();
         // extra.json goes last: it wins where both have a string.
-        for source in [MAC, EXTRA] {
+        for source in [MAC, EXTRA, UZ] {
             let Ok(Value::Object(root)) = serde_json::from_str::<Value>(source) else { continue };
             let Some(Value::Object(strings)) = root.get("strings") else { continue };
             for (key, entry) in strings {
                 if let Value::Object(langs) = entry {
-                    out.insert(key.clone(), langs.clone());
+                    out.entry(key.clone()).or_default().extend(langs.clone());
                 }
             }
         }
@@ -246,6 +247,17 @@ mod tests {
         assert_eq!(resolve("", &sys(&["zh-TW", "de", "es-MX"])), "es");
         assert_eq!(resolve("", &sys(&["de-DE"])), "en");
         assert_eq!(resolve("xx", &[]), "en");
+        assert_eq!(resolve("", &sys(&["uz_Latn_UZ.UTF-8"])), "uz");
+    }
+
+    #[test]
+    fn uzbek_merges_without_replacing_existing_languages() {
+        set_for_test("uz");
+        assert_eq!(t("Settings"), "Sozlamalar");
+        assert_eq!(tf("Uploading {name}", &[("name", "test.txt")]), "test.txt yuklanmoqda");
+        set_for_test("fr");
+        assert_eq!(t("Allow"), "Autoriser");
+        set_for_test("en");
     }
 
     #[test]
@@ -281,9 +293,9 @@ mod tests {
     fn every_extra_string_has_every_language() {
         let Value::Object(root) = serde_json::from_str::<Value>(EXTRA).unwrap() else { panic!() };
         let Some(Value::Object(strings)) = root.get("strings") else { panic!("no strings") };
-        for (key, entry) in strings {
+        for (key, _) in strings {
             for lang in LANGUAGES.iter().filter(|l| **l != "en") {
-                assert!(entry.get(*lang).is_some(), "{key:?} has no {lang}");
+                assert!(table().get(key).unwrap().get(*lang).is_some(), "{key:?} has no {lang}");
             }
         }
     }

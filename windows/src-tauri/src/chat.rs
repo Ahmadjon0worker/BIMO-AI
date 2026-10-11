@@ -10,12 +10,13 @@ use std::sync::Mutex;
 
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
-use tauri::AppHandle;
+use tauri::{AppHandle, Emitter};
 
 use crate::settings::Settings;
 use crate::{claude, local_chat, openai_compat, secrets};
 
 pub const ANTHROPIC: &str = "anthropic";
+pub const AUTO: &str = "auto";
 
 #[derive(Debug, Clone, Deserialize)]
 #[serde(tag = "kind", rename_all = "camelCase")]
@@ -28,6 +29,28 @@ pub enum ChatContext {
 #[serde(rename_all = "camelCase")]
 pub struct ChatReply {
     pub text: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provider: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model: Option<String>,
+}
+
+impl ChatReply {
+    pub fn new(text: String, provider: &str, model: &str) -> Self {
+        Self { text, provider: Some(provider.into()), model: Some(model.into()) }
+    }
+}
+
+#[derive(Debug, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ProviderStatus {
+    pub provider: String,
+    pub available: bool,
+    pub model: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub effective_provider: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error: Option<String>,
 }
 
 /// A model a provider offers, for the picker in the chat view.
@@ -45,9 +68,15 @@ pub struct ModelInfo {
 /// understand), and as plain text turns. Switching provider mid-conversation
 /// rebuilds the history from the plain turns, so nothing in one provider's
 /// format is ever sent to another.
-#[derive(Default)]
 pub struct Chat {
     inner: Mutex<Conversation>,
+    window_label: &'static str,
+}
+
+impl Default for Chat {
+    fn default() -> Self {
+        Self::for_window(crate::island::WINDOW_LABEL)
+    }
 }
 
 #[derive(Default)]
@@ -72,6 +101,14 @@ pub struct Turn {
 }
 
 impl Chat {
+    pub fn for_window(window_label: &'static str) -> Self {
+        Self { inner: Mutex::new(Conversation::default()), window_label }
+    }
+
+    pub fn window_label(&self) -> &'static str {
+        self.window_label
+    }
+
     pub fn reset(&self) {
         let mut c = self.inner.lock().unwrap();
         let epoch = c.epoch + 1;
@@ -159,6 +196,9 @@ pub fn plain_question(first: bool, context: Option<&ChatContext>, query: &str) -
 
 /// The model chosen for `provider`, or its default.
 pub fn model_for(settings: &Settings, provider: &str) -> String {
+    if provider == AUTO {
+        return AUTO.into();
+    }
     if provider == ANTHROPIC {
         let m = settings.model.trim();
         return if m.is_empty() { claude::DEFAULT_MODEL.to_string() } else { m.to_string() };
@@ -170,6 +210,134 @@ pub fn model_for(settings: &Settings, provider: &str) -> String {
         .filter(|m| !m.is_empty())
         .or_else(|| openai_compat::provider(provider).map(|p| p.default_model.to_string()))
         .unwrap_or_default()
+}
+
+/// Model discovery is authoritative in auto mode: a removed model must not
+/// strand a fresh install or an upgraded account on an obsolete default.
+fn auto_model(settings: &Settings, provider: &str, available: &[ModelInfo]) -> Result<String, String> {
+    let preferred = model_for(settings, provider);
+    available.iter().find(|m| m.id == preferred)
+        .or_else(|| openai_compat::provider(provider).and_then(|p| available.iter().find(|m| m.id == p.default_model)))
+        .or_else(|| available.first())
+        .map(|m| m.id.clone())
+        .ok_or_else(|| crate::i18n::tf("{provider}: no chat models available.", &[("provider", provider)]))
+}
+
+enum AutoCandidate {
+    Ollama(local_chat::Server),
+    Cloud(&'static openai_compat::Provider),
+}
+
+impl AutoCandidate {
+    fn id(&self) -> &'static str {
+        match self {
+            Self::Ollama(_) => "ollama",
+            Self::Cloud(p) => p.id,
+        }
+    }
+
+    async fn models(&self) -> Result<Vec<ModelInfo>, String> {
+        match self {
+            Self::Ollama(server) => local_chat::models(server).await,
+            Self::Cloud(p) => {
+                let key = secrets::get(p.key).ok_or_else(|| crate::i18n::tf("{name} API key missing. Add it in Settings.", &[("name", p.name)]))?;
+                openai_compat::models(p, &key).await
+            }
+        }
+    }
+}
+
+fn auto_candidates(settings: &Settings) -> Vec<AutoCandidate> {
+    let mut candidates = vec![AutoCandidate::Ollama(local_chat::auto_ollama_server(settings))];
+    for id in ["google", "groq"] {
+        let p = openai_compat::provider(id).expect("known auto provider");
+        if secrets::present(p.key) {
+            candidates.push(AutoCandidate::Cloud(p));
+        }
+    }
+    candidates
+}
+
+struct AutoFailure {
+    message: String,
+    retryable: bool,
+}
+
+/// This router is only used for generation. Telegram, local commands and other
+/// actions never pass through it, so fallback cannot replay their side effects.
+async fn try_auto<T, F, Fut>(candidates: Vec<T>, mut attempt: F) -> Result<ChatReply, String>
+where
+    F: FnMut(T) -> Fut,
+    Fut: std::future::Future<Output = Result<ChatReply, AutoFailure>>,
+{
+    let mut errors = Vec::new();
+    for candidate in candidates {
+        match attempt(candidate).await {
+            Ok(reply) => return Ok(reply),
+            Err(error) if error.retryable => errors.push(error.message),
+            Err(error) => return Err(error.message),
+        }
+    }
+    Err(crate::i18n::tf("No AI provider is available. Start Ollama with a chat model, or add a Gemini/Groq API key in Settings. {errors}", &[("errors", &errors.join(" | "))]))
+}
+
+async fn send_auto(
+    app: &AppHandle,
+    chat: &Chat,
+    settings: &Settings,
+    query: String,
+    context: Option<ChatContext>,
+) -> Result<ChatReply, String> {
+    try_auto(auto_candidates(settings), |candidate| {
+        let query = query.clone();
+        let context = context.clone();
+        async move {
+            let id = candidate.id();
+            let failure = |message| AutoFailure { message: format!("{id}: {message}"), retryable: true };
+            let available = candidate.models().await.map_err(failure)?;
+            let model = auto_model(settings, id, &available).map_err(failure)?;
+            // A failed attempt may have emitted an empty stream update. Clear
+            // that view before a cloud reply; visible partial replies stop above.
+            let _ = app.emit_to(chat.window_label(), "chat-delta", "");
+            match candidate {
+                AutoCandidate::Ollama(server) => local_chat::send_auto(app, chat, &server, &model, query, context).await
+                    .map_err(|e| AutoFailure { message: format!("Ollama: {}", e.message), retryable: !e.visible_started }),
+                AutoCandidate::Cloud(p) => openai_compat::send(chat, p, &model, query, context).await.map_err(failure),
+            }
+        }
+    }).await
+}
+
+/// Readiness checks list models only; they never generate a reply, change the
+/// selected provider, install Ollama or disclose credentials to the frontend.
+pub async fn provider_status(settings: &Settings, provider: &str) -> ProviderStatus {
+    let mut errors = Vec::new();
+    if provider == AUTO {
+        for candidate in auto_candidates(settings) {
+            let id = candidate.id();
+            match candidate.models().await.and_then(|list| auto_model(settings, id, &list)) {
+                Ok(model) => return ProviderStatus { provider: AUTO.into(), available: true, model,
+                    effective_provider: Some(id.into()), error: None },
+                Err(error) => errors.push(format!("{id}: {error}")),
+            }
+        }
+        return ProviderStatus { provider: AUTO.into(), available: false, model: String::new(), effective_provider: None,
+            error: Some(crate::i18n::tf("Start Ollama with a chat model, or add a Gemini/Groq API key in Settings. {errors}", &[("errors", &errors.join(" | "))])) };
+    }
+    match models(settings, provider).await {
+        Ok(list) => {
+            let selected = model_for(settings, provider);
+            let model = if selected.is_empty() { auto_model(settings, provider, &list) } else {
+                list.iter().find(|m| m.id == selected).map(|m| m.id.clone())
+                    .ok_or_else(|| crate::i18n::tf("The selected model {model} is unavailable. Pick another model.", &[("model", &selected)]))
+            };
+            match model {
+                Ok(model) => ProviderStatus { provider: provider.into(), available: true, model, effective_provider: Some(provider.into()), error: None },
+                Err(error) => ProviderStatus { provider: provider.into(), available: false, model: selected, effective_provider: None, error: Some(error) },
+            }
+        }
+        Err(error) => ProviderStatus { provider: provider.into(), available: false, model: model_for(settings, provider), effective_provider: None, error: Some(error) },
+    }
 }
 
 /// A file rides along only if it is one of Coucou's own copies of a dropped
@@ -206,6 +374,9 @@ pub async fn send(
 ) -> Result<ChatReply, String> {
     let context = context.map(checked_context).transpose()?;
     let provider = settings.chat_provider.as_str();
+    if provider == AUTO {
+        return send_auto(app, chat, settings, query, context).await;
+    }
     let model = model_for(settings, provider);
     if provider == ANTHROPIC || provider.is_empty() {
         return claude::send(chat, &model, query, context).await;
@@ -223,6 +394,9 @@ pub async fn send(
 /// that provider, and only once it has a key (or, for a local server, an
 /// address): nothing is sent anywhere before that.
 pub async fn models(settings: &Settings, provider: &str) -> Result<Vec<ModelInfo>, String> {
+    if provider == AUTO {
+        return Ok(vec![ModelInfo { id: AUTO.into(), label: "Ollama → Gemini → Groq".into() }]);
+    }
     let no_key = || crate::i18n::t("No API key — add it in Settings.");
     if provider == ANTHROPIC {
         let key = secrets::get(claude::KEY).ok_or_else(no_key)?;
@@ -263,6 +437,25 @@ mod tests {
         assert!(!t.first);
         assert_eq!(t.history.len(), 2);
         assert!(t.history[0]["content"].is_array());
+    }
+
+    #[test]
+    fn separate_windows_never_share_history_reset_or_stream_targets() {
+        let island = Chat::default();
+        let studio = Chat::for_window("studio");
+        assert_eq!(island.window_label(), crate::island::WINDOW_LABEL);
+        assert_eq!(studio.window_label(), "studio");
+        let first = island.begin("ollama");
+        island.commit(&first, json!({"role":"user","content":"island question"}),
+            json!({"role":"assistant","content":"island answer"}), "island question", "island answer");
+        assert!(studio.begin("ollama").first);
+        let other = studio.begin("google");
+        studio.commit(&other, json!({"role":"user","content":"studio question"}),
+            json!({"role":"assistant","content":"studio answer"}), "studio question", "studio answer");
+        studio.reset();
+        assert!(!island.begin("ollama").first);
+        assert!(studio.begin("google").first);
+        assert_eq!(island.begin("ollama").history.len(), 2);
     }
 
     #[test]
@@ -332,6 +525,8 @@ mod tests {
     #[test]
     fn the_model_comes_from_the_settings_or_the_provider_default() {
         let mut s = Settings::default();
+        assert_eq!(s.chat_provider, AUTO);
+        assert_eq!(model_for(&s, AUTO), AUTO);
         assert_eq!(model_for(&s, "anthropic"), claude::DEFAULT_MODEL);
         assert_eq!(model_for(&s, "openai"), openai_compat::provider("openai").unwrap().default_model);
         assert_eq!(model_for(&s, "ollama"), "");
@@ -341,6 +536,64 @@ mod tests {
         assert_eq!(model_for(&s, "openai"), "gpt-x");
         assert_eq!(model_for(&s, "ollama"), "llama3.2");
         assert_eq!(model_for(&s, "anthropic"), "claude-haiku-4-5");
+    }
+
+    fn block_on<T>(f: impl std::future::Future<Output = T>) -> T {
+        tokio::runtime::Builder::new_current_thread().enable_all().build().unwrap().block_on(f)
+    }
+
+    #[test]
+    fn automatic_generation_falls_back_in_order_and_reports_the_provider_that_answered() {
+        let mut attempted = Vec::new();
+        let reply = block_on(try_auto(vec!["ollama", "google", "groq"], |id| {
+            attempted.push(id);
+            std::future::ready(if id == "google" {
+                Ok(ChatReply::new("answer".into(), id, "gemini-discovered"))
+            } else {
+                Err(AutoFailure { message: format!("{id}: offline"), retryable: true })
+            })
+        })).unwrap();
+        assert_eq!(attempted, ["ollama", "google"]);
+        let wire = serde_json::to_value(reply).unwrap();
+        assert_eq!(wire["provider"], "google");
+        assert_eq!(wire["model"], "gemini-discovered");
+    }
+
+    #[test]
+    fn automatic_generation_stops_after_partial_visible_output() {
+        let mut attempted = Vec::new();
+        let error = block_on(try_auto(vec!["ollama", "google", "groq"], |id| {
+            attempted.push(id);
+            std::future::ready(Err(AutoFailure { message: "stream failed after visible text".into(), retryable: false }))
+        })).err().unwrap();
+        assert_eq!(attempted, ["ollama"]);
+        assert_eq!(error, "stream failed after visible text");
+    }
+
+    #[test]
+    fn automatic_generation_explains_all_unavailable_candidates() {
+        let error = block_on(try_auto(vec!["ollama", "google", "groq"], |id| {
+            std::future::ready(Err(AutoFailure { message: format!("{id}: unavailable"), retryable: true }))
+        })).err().unwrap();
+        assert!(error.contains("add a Gemini/Groq API key"));
+        for id in ["ollama", "google", "groq"] {
+            assert!(error.contains(&format!("{id}: unavailable")));
+        }
+    }
+
+    #[test]
+    fn auto_model_selection_preserves_available_choices_and_recovers_retired_defaults() {
+        let mut settings = Settings::default();
+        let choices = vec![
+            ModelInfo { id: "some-chat-model".into(), label: "some-chat-model".into() },
+            ModelInfo { id: "gemini-3.8-flash".into(), label: "Gemini".into() },
+        ];
+        settings.chat_models.insert("google".into(), " removed-old-model ".into());
+        assert_eq!(auto_model(&settings, "google", &choices).unwrap(), "gemini-3.8-flash");
+        settings.chat_models.insert("google".into(), " some-chat-model ".into());
+        assert_eq!(auto_model(&settings, "google", &choices).unwrap(), "some-chat-model");
+        assert_eq!(auto_model(&settings, "ollama", &choices).unwrap(), "some-chat-model");
+        assert!(auto_model(&settings, "groq", &[]).unwrap_err().contains("no chat models"));
     }
 
     #[test]

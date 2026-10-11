@@ -1,6 +1,6 @@
 // Cloud providers that speak the OpenAI chat completions API: OpenAI, Google AI
 // (Gemini's OpenAI-compatible endpoint, as ClaudeService.swift uses it) and
-// OpenRouter. One table describes them; one client talks to all three.
+// OpenRouter and Groq. One table describes them; one client talks to them all.
 //
 // Same contract as claude.rs: the key never leaves the credential store and
 // file bytes never cross the IPC boundary. Chat only — no tools are sent, so
@@ -47,13 +47,23 @@ pub const PROVIDERS: &[Provider] = &[
     },
     Provider {
         id: "google",
-        name: "Google AI",
+        name: "Gemini",
         base_url: "https://generativelanguage.googleapis.com/v1beta/openai",
         key: "google-api-key",
         models_path: "models",
-        default_model: "gemini-2.0-flash",
-        not_chat: &["embed", "imagen", "veo", "aqa", "tts", "audio", "live"],
+        default_model: "gemini-3.8-flash",
+        not_chat: &["embed", "imagen", "veo", "aqa", "tts", "audio", "live", "image", "robotics"],
         max_tokens_field: "max_tokens",
+    },
+    Provider {
+        id: "groq",
+        name: "Groq",
+        base_url: "https://api.groq.com/openai/v1",
+        key: "groq-api-key",
+        models_path: "models",
+        default_model: "llama-3.3-70b-versatile",
+        not_chat: &["embed", "whisper", "tts", "orpheus", "guard", "compound"],
+        max_tokens_field: "max_completion_tokens",
     },
     Provider {
         id: "openrouter",
@@ -151,6 +161,10 @@ fn status_error(p: &Provider, status: u16, detail: &str) -> String {
     }
 }
 
+fn safe_error_detail(body: &[u8], key: &str) -> String {
+    net::error_detail(body).replace(key, "[redacted]").chars().take(1000).collect()
+}
+
 /// One chat turn with a cloud provider.
 pub async fn send(
     chat: &Chat,
@@ -178,15 +192,16 @@ pub async fn send(
     let status = response.status();
     if !status.is_success() {
         let body = net::read_capped(response, net::MAX_ERROR_BODY).await.unwrap_or_default();
-        return Err(status_error(p, status.as_u16(), &net::error_detail(&body)));
+        let detail = safe_error_detail(&body, &key);
+        return Err(status_error(p, status.as_u16(), &detail));
     }
     let bytes = net::read_capped(response, net::MAX_BODY).await?;
     let json: Value = serde_json::from_slice(&bytes).map_err(|e| tf("Bad API response: {error}", &[("error", &e.to_string())]))?;
-    let text = reply_text(p, &json)?;
+    let text = reply_text(p, &json).map_err(|e| e.replace(&key, "[redacted]"))?;
 
     let plain = chat::plain_question(turn.first, context.as_ref(), &query);
     chat.commit(&turn, user, json!({ "role": "assistant", "content": text }), &plain, &text);
-    Ok(ChatReply { text })
+    Ok(ChatReply::new(text, p.id, model))
 }
 
 /// The provider's chat models. Only ever asked with the user's key, once they
@@ -202,11 +217,19 @@ pub async fn models(p: &Provider, key: &str) -> Result<Vec<ModelInfo>, String> {
     let status = response.status();
     if !status.is_success() {
         let body = net::read_capped(response, net::MAX_ERROR_BODY).await.unwrap_or_default();
-        return Err(status_error(p, status.as_u16(), &net::error_detail(&body)));
+        let detail = safe_error_detail(&body, key);
+        return Err(status_error(p, status.as_u16(), &detail));
     }
     let bytes = net::read_capped(response, net::MAX_BODY).await?;
     let json: Value = serde_json::from_slice(&bytes).map_err(|_| t("Unexpected API response."))?;
-    Ok(parse_models(p, &json))
+    if json.get("error").is_some() {
+        return Err(format!("{}: {}", p.name, safe_error_detail(&bytes, key)));
+    }
+    let models = parse_models(p, &json);
+    if models.is_empty() {
+        return Err(tf("No chat models available from {name}. Check the account and API key in Settings.", &[("name", p.name)]));
+    }
+    Ok(models)
 }
 
 fn parse_models(p: &Provider, json: &Value) -> Vec<ModelInfo> {
@@ -214,6 +237,9 @@ fn parse_models(p: &Provider, json: &Value) -> Vec<ModelInfo> {
     let mut models: Vec<(ModelInfo, i64, bool)> = items
         .iter()
         .filter(|m| {
+            if m.get("active").and_then(Value::as_bool) == Some(false) {
+                return false;
+            }
             // OpenRouter lists image and audio generators too.
             m.pointer("/architecture/output_modalities")
                 .and_then(Value::as_array)
@@ -224,7 +250,8 @@ fn parse_models(p: &Provider, json: &Value) -> Vec<ModelInfo> {
             // Gemini sometimes answers "models/gemini-…".
             let id = raw.strip_prefix("models/").unwrap_or(raw).to_string();
             let lower = id.to_lowercase();
-            if id.is_empty() || p.not_chat.iter().any(|x| lower.contains(x)) {
+            if id.is_empty() || p.not_chat.iter().any(|x| lower.contains(x))
+                || (p.id == "google" && !lower.starts_with("gemini-")) {
                 return None;
             }
             let created = m.get("created").and_then(Value::as_i64).unwrap_or(0);
@@ -241,8 +268,14 @@ fn parse_models(p: &Provider, json: &Value) -> Vec<ModelInfo> {
         "openrouter" => models.sort_by(|a, b| {
             b.2.cmp(&a.2).then_with(|| a.0.label.to_lowercase().cmp(&b.0.label.to_lowercase()))
         }),
-        _ => {}
+        _ => models.sort_by(|a, b| {
+            let a_default = a.0.id == p.default_model;
+            let b_default = b.0.id == p.default_model;
+            b_default.cmp(&a_default).then_with(|| a.0.id.cmp(&b.0.id))
+        }),
     }
+    let mut seen = std::collections::HashSet::new();
+    models.retain(|m| seen.insert(m.0.id.clone()));
     models.into_iter().map(|(m, _, _)| m).collect()
 }
 
@@ -306,6 +339,7 @@ mod tests {
             "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions"
         );
         assert_eq!(url(p("openrouter"), "models").unwrap().as_str(), "https://openrouter.ai/api/v1/models");
+        assert_eq!(url(p("groq"), "models").unwrap().as_str(), "https://api.groq.com/openai/v1/models");
         for prov in PROVIDERS {
             assert!(crate::secrets::KNOWN_KEYS.contains(&prov.key), "{}", prov.key);
             assert!(prov.base_url.starts_with("https://"));
@@ -378,7 +412,16 @@ mod tests {
     fn status_errors_say_what_to_do() {
         assert!(status_error(p("openai"), 401, "x").contains("rejected the API key"));
         assert!(status_error(p("openrouter"), 402, "x").contains("credits"));
-        assert_eq!(status_error(p("google"), 500, "boom"), "Google AI 500: boom");
+        assert_eq!(status_error(p("google"), 500, "boom"), "Gemini 500: boom");
+    }
+
+    #[test]
+    fn provider_errors_never_echo_the_entered_key_and_stay_bounded() {
+        let body = br#"{"error":{"message":"Invalid API key secret-example. Check secret-example."}}"#;
+        assert_eq!(safe_error_detail(body, "secret-example"), "Invalid API key [redacted]. Check [redacted].");
+        assert_eq!(safe_error_detail(&vec![b'x'; 5000], "secret-example").len(), 200);
+        let body = json!({"error":{"message":"x".repeat(5000)}}).to_string();
+        assert_eq!(safe_error_detail(body.as_bytes(), "secret-example").len(), 1000);
     }
 
     #[test]
@@ -416,5 +459,20 @@ mod tests {
     #[test]
     fn an_unknown_answer_gives_an_empty_list() {
         assert!(parse_models(p("openai"), &json!({"nope":true})).is_empty());
+    }
+
+    #[test]
+    fn groq_discovery_omits_audio_guard_and_inactive_models_and_deduplicates() {
+        let body = json!({"data":[
+            {"id":"whisper-large-v3"}, {"id":"canopylabs/orpheus-v1-english"},
+            {"id":"openai/gpt-oss-safeguard-20b"}, {"id":"groq/compound"},
+            {"id":"old-chat", "active":false}, {"id":"llama-3.3-70b-versatile"},
+            {"id":"llama-3.3-70b-versatile"}, {"id":"llama-3.1-8b-instant"}
+        ]});
+        let ids: Vec<_> = parse_models(p("groq"), &body).into_iter().map(|m| m.id).collect();
+        assert_eq!(ids, ["llama-3.3-70b-versatile", "llama-3.1-8b-instant"]);
+        let request = request_body(p("groq"), &ids[0], "sys", &[], &user_message(false, None, "hi"));
+        assert_eq!(request["max_completion_tokens"], MAX_TOKENS);
+        assert!(request.get("tools").is_none());
     }
 }

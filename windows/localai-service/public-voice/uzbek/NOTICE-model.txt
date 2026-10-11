@@ -1,0 +1,57 @@
+NavAI Whisper — Uzbek Speech Recognition
+Copyright 2026 NavAI (https://huggingface.co/navai-uz)
+
+The model weights in this repository are released under the Apache License,
+Version 2.0. See the LICENSE file for the full license text.
+
+This model was fine-tuned from OpenAI Whisper and trained on publicly available
+Uzbek speech corpora. Their licenses and required attributions are reproduced
+below, as required by the Creative Commons Attribution licenses of some sources.
+
+================================================================================
+BASE MODEL
+================================================================================
+OpenAI Whisper (openai/whisper-small)
+  License: MIT — Copyright (c) 2022 OpenAI
+  https://github.com/openai/whisper
+
+================================================================================
+TRAINING DATA
+================================================================================
+
+1) Uzbek Speech Corpus (USC) — Creative Commons Attribution 4.0 International
+   Required attribution:
+     "Our product uses ISSAI and TUIT Uzbek Speech Corpus, which is available
+      under a Creative Commons Attribution 4.0 International License."
+   Citation:
+     Musaev, M., Mussakhojayeva, S., Khujayorov, I., Khassanov, Y., Ochilov, M.,
+     & Varol, H. A. (2021). USC: An Open-Source Uzbek Speech Corpus and Initial
+     Speech Recognition Experiments. arXiv:2107.14419.
+   Source:  https://issai.nu.edu.kz/uzbek-asr/
+   License: https://creativecommons.org/licenses/by/4.0/
+
+2) FLEURS (Uzbek), official TRAIN split only — CC BY 4.0
+   Citation:
+     Conneau, A., Ma, M., Khanuja, S., Zhang, Y., Axelrod, V., Dalmia, S.,
+     Riesa, J., Rivera, C., & Bapna, A. (2022). FLEURS: Few-shot Learning
+     Evaluation of Universal Representations of Speech.
+   Source:  https://huggingface.co/datasets/google/fleurs
+   License: https://creativecommons.org/licenses/by/4.0/
+   Note: only the official TRAIN split is used; the disjoint TEST split is held
+         out for evaluation and is NOT part of the training data.
+
+3) Common Voice (Uzbek) — CC0 1.0 Universal (Public Domain Dedication)
+   Mozilla Common Voice.  https://commonvoice.mozilla.org/
+   No attribution is required; acknowledged here with thanks.
+
+4) UzbekVoice — Apache License 2.0
+   Crowd-sourced Uzbek speech corpus by the UzbekVoice / Mohir AI initiative.
+   Source:  https://uzbekvoice.ai/
+
+================================================================================
+EXCLUSIONS
+================================================================================
+Machine pseudo-labels, scraped audio, and the "feruza" and "omni" evaluation
+sets are explicitly excluded from the training data. No evaluation benchmark
+test set is present in training.
+================================================================================

@@ -1,2 +1,8 @@
 docs/** linguist-documentation
 design/** linguist-documentation
+
+# The runtime bootstrap compares these public inputs byte for byte with the
+# pinned archive. Preserve their original line endings on every checkout.
+windows/localai-service/public-voice/** -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof
+windows/localai-service/public-tools/LICENSE-GitHub-CLI.txt -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof
+windows/localai-service/public-tools/github-cli-provenance.json -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof

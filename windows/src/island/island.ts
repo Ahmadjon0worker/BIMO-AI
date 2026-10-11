@@ -25,6 +25,10 @@ import { IslandStateMachine } from "./fsm";
 import { refreshHookPills } from "./integrations";
 import { DesktopLink } from "./desktop";
 import { DRAG_THRESHOLD } from "../mochi/desktop-logic";
+import { PanelDrag } from "./panel-drag";
+import type { ViewCommand } from "./shortcuts";
+import { tl } from "../i18n/i18n";
+import { panelDock, compactShape, compactSize, compactParts, panelRect, panelRadii } from "./panel-layout";
 
 const BOT_OVERHANG = 40;
 const CLAUDE_DESKTOP_ID = "agent_claude-desktop";
@@ -57,6 +61,15 @@ export class Island {
   private miniGrid!: HTMLElement;
   private countdown!: HTMLElement;
   private wakeStrip!: HTMLElement;
+  private panelHandle!: HTMLButtonElement;
+  private panelFold!: HTMLButtonElement;
+  private panelPointerId: number | null = null;
+  private readonly panelDrag = new PanelDrag({
+    begin: async (kind, clientX, clientY) => (await Bridge.beginIslandDrag(kind, clientX, clientY)) === true,
+    update: (dx, dy) => Bridge.updateIslandDrag(dx, dy),
+    end: (cancelled) => Bridge.endIslandDrag(cancelled),
+    active: (on) => this.panelDragActive(on),
+  });
 
   private header!: ViewHost;
   private views!: Map<IslandViewName, ViewHost>;
@@ -85,6 +98,7 @@ export class Island {
   private wasInIsland = false;
   /** Last shape handed to Rust for the click-through test. */
   private pushedRect = { x: -1, y: -1, w: -1, h: -1 };
+  private pushedCompact: boolean | null = null;
 
   // Bot hover → love (IslandWindowController.botHoverIn)
   private botHovering = false;
@@ -120,7 +134,7 @@ export class Island {
     this.wireInput();
     this.engine.onDizzy = () => this.handleDizzy();
     this.greeting.onComplete = () => {
-      this.fsm.greetComplete();
+      if (!this.panelDrag.active) this.fsm.greetComplete();
       this.onGreetingDone?.();
     };
     State.subscribe(() => {
@@ -253,6 +267,17 @@ export class Island {
     this.greetingCanvas = h("canvas", { id: "greeting-canvas" });
     this.miniGrid = h("div", { id: "mini-grid" });
     this.countdown = h("div", { id: "countdown" });
+    this.panelHandle = h("button", {
+      id: "panel-drag-handle", type: "button",
+      title: tl("Drag to move. Release near an edge to dock. Double-click to reset."),
+      "aria-label": tl("Move panel"), text: "⠿",
+    });
+    this.panelFold = h("button", {
+      id: "panel-fold", type: "button", title: tl("Collapse panel"),
+      "aria-label": tl("Collapse panel"), text: "−",
+      onmousedown: (e: Event) => { e.preventDefault(); e.stopPropagation(); },
+      onclick: (e: Event) => { e.stopPropagation(); this.collapse(); },
+    });
 
     this.header = buildHeader(actions);
     this.views = buildViews(actions, () => this.animateGeometry(false));
@@ -287,6 +312,8 @@ export class Island {
       this.botCanvas,
       this.miniGrid,
       this.countdown,
+      this.panelHandle,
+      this.panelFold,
     );
 
     const dpr = Math.min(2, window.devicePixelRatio || 1);
@@ -303,6 +330,7 @@ export class Island {
 
   private wireFsm() {
     this.fsm.homeToPetitDelay = State.settings.autoCloseInterval;
+    this.fsm.openOnHover = State.settings.openOnHover;
     this.fsm.onTransition = (from, to) => {
       // The greeting is over, however it ended: back to his desktop spot.
       if (from === "coucou" && to !== "coucou") this.desktop.launch();
@@ -329,6 +357,7 @@ export class Island {
           this.greeting.start();
           break;
       }
+      if (this.panelDrag.active) this.fsm.cancelTimers();
       State.notify();
       if (from === "hidden") this.onWake?.();
     };
@@ -414,6 +443,17 @@ export class Island {
     // island then did nothing — the island could never be reopened.
     this.fsm.forcePetit();
   }
+
+  canLeaveIsland(): boolean { return this.desktop.supported; }
+
+  flyOutOrHome() {
+    if (this.panelDrag.active) return;
+    const busy = State.mode === "expanded" && (State.view === "greeting" || this.uploadActive);
+    if (busy && !State.mochiOnDesktop) return;
+    this.desktop.flyOutOrHome();
+  }
+
+  viewCommand(command: ViewCommand) { this.views.get(State.view)?.command?.(command); }
 
   /** Alert from the hook server: open on this view. Pinned alerts never auto-close. */
   alert(view: IslandViewName) {
@@ -612,6 +652,7 @@ export class Island {
 
   private targetSize(): { w: number; h: number; r: number } {
     let { w, h } = islandSize(State.mode, State.view, State.chatHistory.length);
+    if (State.mode === "compact") ({ w, h } = compactSize(panelDock(State.settings.islandPosition)));
     if (State.mode === "expanded" && State.view === "question" && State.pendingApproval?.questions) {
       h = QUESTION_PICKER_H;
     }
@@ -637,22 +678,39 @@ export class Island {
     const w = this.width.value;
     const hh = this.height.value;
     const r = this.radius.value;
+    const dock = panelDock(State.settings.islandPosition);
+    const rect = panelRect(w, hh, dock);
+    const parts = compactParts(dock, w, hh);
     this.islandEl.style.width = `${w}px`;
     this.islandEl.style.height = `${hh}px`;
-    this.islandEl.style.borderRadius = `0 0 ${r}px ${r}px`;
-    this.islandEl.style.transform = `translateX(-50%)`;
+    this.islandEl.style.left = `${rect.x}px`;
+    this.islandEl.style.top = `${rect.y}px`;
+    this.islandEl.style.borderRadius = panelRadii(dock, r);
+    this.islandEl.style.transform = "none";
+    this.islandEl.dataset.dock = dock;
+    this.islandEl.dataset.shape = State.mode === "compact" ? compactShape(dock) : "expanded";
     // These follow the island as it resizes, so they belong here rather than in
     // the state-driven DOM sync.
-    this.miniGrid.style.left = `${w - 40 - 14.5}px`;
-    this.miniGrid.style.top = `${hh / 2 - 14.5}px`;
+    this.miniGrid.style.left = `${parts.grid.x}px`;
+    this.miniGrid.style.top = `${parts.grid.y}px`;
+    this.miniGrid.style.width = `${parts.grid.width}px`;
+    this.miniGrid.style.height = `${parts.grid.height}px`;
+    this.miniGrid.style.gridTemplateColumns = `repeat(${parts.grid.columns}, 13px)`;
     this.greetingCanvas.style.left = `${(w - EXPANDED_W) / 2}px`;
     this.uploadCanvas.el.style.left = `${(w - EXPANDED_W) / 2}px`;
+    this.panelHandle.hidden = State.mode === "hidden";
+    this.panelHandle.style.left = `${State.mode === "expanded" ? 160 : parts.handle.x}px`;
+    this.panelHandle.style.top = `${State.mode === "expanded" ? 13 : parts.handle.y}px`;
+    this.panelFold.hidden = State.mode !== "expanded";
+    this.panelFold.style.left = `${w - 30}px`;
+    this.wakeStrip.style.display = State.mode === "hidden" ? "block" : "none";
 
-    const rect = { x: (PANEL_W - w) / 2, y: 0, w, h: hh };
     const p = this.pushedRect;
-    if (Math.abs(p.x - rect.x) > 0.5 || Math.abs(p.w - rect.w) > 0.5 || Math.abs(p.h - rect.h) > 0.5) {
+    const compact = State.mode === "compact";
+    if (this.pushedCompact !== compact || Math.abs(p.x - rect.x) > 0.5 || Math.abs(p.y - rect.y) > 0.5 || Math.abs(p.w - rect.w) > 0.5 || Math.abs(p.h - rect.h) > 0.5) {
       this.pushedRect = rect;
-      void Bridge.setIslandRect(rect.x, rect.y, rect.w, rect.h);
+      this.pushedCompact = compact;
+      void Bridge.setIslandRect(rect.x, rect.y, rect.w, rect.h, compact);
     }
   }
 
@@ -660,7 +718,7 @@ export class Island {
   private islandRect(): { x: number; y: number; w: number; h: number } {
     const w = this.width.value;
     const hh = this.height.value;
-    return { x: (PANEL_W - w) / 2, y: 0, w, h: hh };
+    return panelRect(w, hh, panelDock(State.settings.islandPosition));
   }
 
   // ── Window collapse (hidden → tiny wake strip, zero polling) ────────────────
@@ -675,7 +733,7 @@ export class Island {
       // from there the OS delivers no cursor events, so nothing polls at all.
       this.collapseTimer = window.setTimeout(() => {
         this.collapseTimer = null;
-        if (State.mode !== "hidden") return;
+        if (State.mode !== "hidden" || this.panelDrag.active) return;
         this.collapsed = true;
         void Bridge.setCollapsed(true);
       }, 420);
@@ -689,6 +747,7 @@ export class Island {
   // ── Input ───────────────────────────────────────────────────────────────────
 
   private wireInput() {
+    this.wirePanelDrag();
     // The wake strip is the only thing the OS can hit while the island is hidden.
     this.wakeStrip.addEventListener("mouseenter", () => {
       Sound.resume();
@@ -696,8 +755,10 @@ export class Island {
     });
 
     this.islandEl.addEventListener("mousedown", (e) => {
+      if (this.panelDrag.active) return;
       Sound.resume();
       State.lastActivity = performance.now();
+      this.fsm.userInteracted();
       // A press on Mochi may become a drag out to the desktop.
       if (e.button === 0 && this.isBotHit(e.clientX, e.clientY)) {
         this.botPress = { x: e.clientX, y: e.clientY };
@@ -751,6 +812,11 @@ export class Island {
     // a terminal — so it may fold a waiting card away, as Escape in the notch
     // does on macOS.
     window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && this.panelDrag.active) {
+        e.preventDefault();
+        void this.panelDrag.end(true);
+        return;
+      }
       if (e.key === "Escape" && State.mode === "expanded") {
         if (State.pendingApproval) this.foldApproval();
         else if (!State.isPinned) this.collapse();
@@ -764,6 +830,68 @@ export class Island {
     // island can be inspected with `npm run dev`.
     if (!IS_TAURI) this.followPageCursor();
   }
+
+  private wirePanelDrag() {
+    const handle = this.panelHandle;
+    handle.addEventListener("pointerdown", (e) => {
+      e.stopPropagation();
+      if (!this.panelDrag.start(e)) return;
+      e.preventDefault();
+      this.panelPointerId = e.pointerId;
+      try { handle.setPointerCapture(e.pointerId); }
+      catch {
+        // Mouse release is also watched natively. Touch/pen need capture to
+        // guarantee that release reaches this WebView after it moves.
+        if (e.pointerType !== "mouse") { void this.panelDrag.end(true); return; }
+      }
+      Sound.resume();
+    });
+    handle.addEventListener("pointermove", (e) => this.panelDrag.move(e));
+    handle.addEventListener("pointerup", (e) => {
+      this.panelDrag.move(e);
+      void this.panelDrag.end(false, e.pointerId);
+    });
+    handle.addEventListener("pointercancel", (e) => void this.panelDrag.end(true, e.pointerId));
+    handle.addEventListener("lostpointercapture", (e) => void this.panelDrag.end(true, e.pointerId));
+    // Suppress compatibility mouse events: this handle must never open the
+    // compact panel, slap Mochi or drag him out to the desktop.
+    handle.addEventListener("mousedown", (e) => { e.preventDefault(); e.stopPropagation(); });
+    handle.addEventListener("click", (e) => e.stopPropagation());
+    handle.addEventListener("contextmenu", (e) => { e.preventDefault(); e.stopPropagation(); });
+    handle.addEventListener("dblclick", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      void this.panelDrag.end(true).then(() => Bridge.resetIslandPosition());
+    });
+    window.addEventListener("blur", () => void this.panelDrag.end(true));
+    window.addEventListener("pagehide", () => void this.panelDrag.end(true));
+  }
+
+  private panelDragActive(on: boolean) {
+    this.panelHandle.classList.toggle("dragging", on);
+    if (on) {
+      this.fsm.cancelTimers();
+      this.cancelBotHover();
+      this.botHovering = false;
+      this.botPress = null;
+      if (this.collapseTimer != null) window.clearTimeout(this.collapseTimer);
+      this.collapseTimer = null;
+    } else {
+      const id = this.panelPointerId;
+      this.panelPointerId = null;
+      if (id != null && this.panelHandle.hasPointerCapture(id)) {
+        try { this.panelHandle.releasePointerCapture(id); } catch { /* Pointer already released. */ }
+      }
+      // Resume hover and auto-close without changing approval/user pinning.
+      this.wasInIsland = false;
+      this.onCursor(State.mouse.x, State.mouse.y);
+      if (!this.wasInIsland) this.fsm.mouseLeft();
+      this.updateWindowCollapsed();
+    }
+    this.ensureRunning();
+  }
+
+  panelDragEnded() { this.panelDrag.nativeEnd(); }
 
   /**
    * Takes the cursor from the page's own mouse events instead of Rust's poll.
@@ -799,6 +927,7 @@ export class Island {
     State.mouse = { x, y };
     const rect = this.islandRect();
     State.mouseInIsland = { x: x - rect.x, y: y - rect.y };
+    if (this.panelDrag.active) return;
 
     // Windows sends no cursor position with an OLE drag, so the drop sequence is
     // fed from the Win32 cursor poll instead — it runs throughout the drag.
@@ -810,14 +939,15 @@ export class Island {
       x >= rect.x - HIT_MARGIN && x <= rect.x + rect.w + HIT_MARGIN &&
       y >= rect.y - HIT_MARGIN && y <= rect.y + rect.h + HIT_MARGIN;
 
-    if (inIsland && !this.wasInIsland) {
+    const wasIn = this.wasInIsland;
+    this.wasInIsland = inIsland;
+    if (inIsland && !wasIn) {
       if (this.fsm.state === "coucou") this.greeting.hover();
       this.fsm.mouseEntered();
     }
-    if (!inIsland && this.wasInIsland) {
+    if (!inIsland && wasIn) {
       this.fsm.mouseLeft();
     }
-    this.wasInIsland = inIsland;
 
     // Bot hover → love
     const overBot = State.mode === "expanded" && State.stateOverride == null && this.isBotHit(x, y);
@@ -975,6 +1105,9 @@ export class Island {
 
   private updateBotTargets() {
     const p = botPosition(State.mode, State.view, this.height.value, State.uploadProgress);
+    if (State.mode === "compact") {
+      Object.assign(p, compactParts(panelDock(State.settings.islandPosition), this.width.value, this.height.value).bot);
+    }
     this.botCx.target = p.cx;
     this.botCy.target = p.cy;
     this.botSize.target = p.diameter / 0.6;
@@ -1063,7 +1196,7 @@ export class Island {
   }
 
   private lookY(): number {
-    return -Math.tanh((State.mouse.y - this.botCy.value) / 200);
+    return -Math.tanh((State.mouse.y - this.islandRect().y - this.botCy.value) / 200);
   }
 
   private updateCountdown(nowMs: number) {
@@ -1105,6 +1238,7 @@ export class Island {
     for (const [name, view] of this.views) {
       const on = name === State.view;
       view.el.classList.toggle("on", on);
+      view.setVisible?.(on && live && !this.uploadActive && !State.paused);
       if (on) view.sync();
     }
 
@@ -1146,6 +1280,8 @@ export class Island {
     Sound.setEnabled(State.settings.soundEnabled);
     Sound.setVolume(State.settings.soundVolume);
     this.fsm.homeToPetitDelay = State.settings.autoCloseInterval;
+    this.fsm.openOnHover = State.settings.openOnHover;
+    this.animateGeometry(false);
     State.notify();
   }
 

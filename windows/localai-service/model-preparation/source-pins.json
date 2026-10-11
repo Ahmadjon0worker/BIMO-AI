@@ -1,0 +1,138 @@
+{
+  "repository": "navai-uz/whisper-small-uzbek",
+  "revision": "4b432caf21c2752bca3384b5df1d41cf0da2801d",
+  "files": [
+    {
+      "path": "model.safetensors",
+      "size": 966995080,
+      "sha256": "3662e1baf3a9bc9a3b3df9bb75060c99708f8c461df19e0e3acd80ae6814411e",
+      "source": "https://huggingface.co/navai-uz/whisper-small-uzbek/resolve/4b432caf21c2752bca3384b5df1d41cf0da2801d/model.safetensors?download=true",
+      "declared_lfs_sha256": "3662e1baf3a9bc9a3b3df9bb75060c99708f8c461df19e0e3acd80ae6814411e",
+      "declared_git_blob": "a7bb2b802e580c5bb875474a7d04f4df58939a11"
+    },
+    {
+      "path": "config.json",
+      "size": 1230,
+      "sha256": "d92d447b0e06f5371ee05172cf381315f915b5b43d0251eea67a6dadc7231311",
+      "source": "https://huggingface.co/navai-uz/whisper-small-uzbek/resolve/4b432caf21c2752bca3384b5df1d41cf0da2801d/config.json?download=true",
+      "declared_lfs_sha256": null,
+      "declared_git_blob": "b1534455c57ce683681571693109be9c59c138d6"
+    },
+    {
+      "path": "vocab.json",
+      "size": 1036584,
+      "sha256": "50d6a919f0a0601d56a04eb583c780d18553aa388254ba3158eb6a00f13e2c1a",
+      "source": "https://huggingface.co/navai-uz/whisper-small-uzbek/resolve/4b432caf21c2752bca3384b5df1d41cf0da2801d/vocab.json?download=true",
+      "declared_lfs_sha256": null,
+      "declared_git_blob": "90e797dd4fd05d9dea443d702ca06be2463c5f2f"
+    },
+    {
+      "path": "added_tokens.json",
+      "size": 34604,
+      "sha256": "9715fd2243b6f06a5858b5e32950d2853f73dd5bc201aafcf76f5082a2d8acd1",
+      "source": "https://huggingface.co/navai-uz/whisper-small-uzbek/resolve/4b432caf21c2752bca3384b5df1d41cf0da2801d/added_tokens.json?download=true",
+      "declared_lfs_sha256": null,
+      "declared_git_blob": "e3d256c988462aa153dcabe2aa38b8e9b436c06f"
+    },
+    {
+      "path": "generation_config.json",
+      "size": 3047,
+      "sha256": "6da11c78f29763cda0d1abb6306d733629a873d5c069232e3dc0b67f4ee02c14",
+      "source": "https://huggingface.co/navai-uz/whisper-small-uzbek/resolve/4b432caf21c2752bca3384b5df1d41cf0da2801d/generation_config.json?download=true",
+      "declared_lfs_sha256": null,
+      "declared_git_blob": "f31dcb22c58258f4dc781b57f9187350e7580dfd"
+    },
+    {
+      "path": "LICENSE",
+      "size": 582,
+      "sha256": "e4141598cf0d80d69d0d8ee3db927b7fefbf95a3605e17d4cfcb2052100de3ee",
+      "source": "https://huggingface.co/navai-uz/whisper-small-uzbek/resolve/4b432caf21c2752bca3384b5df1d41cf0da2801d/LICENSE?download=true",
+      "declared_lfs_sha256": null,
+      "declared_git_blob": "4256d9731fa6db5a58a549e9fa6e4ee30a2f0404"
+    },
+    {
+      "path": "NOTICE",
+      "size": 2861,
+      "sha256": "76f3c46de52adb775cafe9d0dfffd686cc715ed3fbea6de4824a0bcd50899268",
+      "source": "https://huggingface.co/navai-uz/whisper-small-uzbek/resolve/4b432caf21c2752bca3384b5df1d41cf0da2801d/NOTICE?download=true",
+      "declared_lfs_sha256": null,
+      "declared_git_blob": "e556d828498f3fa9173835d89ae5e5f4af391a3d"
+    },
+    {
+      "path": "README.md",
+      "size": 12247,
+      "sha256": "fc6f9926d3952d4162e22d3aa9fd8820ac698fbd849fbbffa060d5567acd6ef9",
+      "source": "https://huggingface.co/navai-uz/whisper-small-uzbek/resolve/4b432caf21c2752bca3384b5df1d41cf0da2801d/README.md?download=true",
+      "declared_lfs_sha256": null,
+      "declared_git_blob": "2aecac5e15ec0f207827dfb0928f1ac9eb98109d"
+    },
+    {
+      "path": "preprocessor_config.json",
+      "size": 356,
+      "sha256": "994838f1fa6462c8b9b3c90edada831f11f3dd8b4664634e18f4694d005c9dbf",
+      "source": "https://huggingface.co/navai-uz/whisper-small-uzbek/resolve/4b432caf21c2752bca3384b5df1d41cf0da2801d/preprocessor_config.json?download=true",
+      "declared_lfs_sha256": null,
+      "declared_git_blob": "d7c5b1dfd466c815664b16139e8f605620d22e4e"
+    },
+    {
+      "path": "tokenizer_config.json",
+      "size": 282713,
+      "sha256": "21a4fc0483c14b87f4e0bbc177a9a357479bfa7c95aaf21ad53d71e9c5afafb9",
+      "source": "https://huggingface.co/navai-uz/whisper-small-uzbek/resolve/4b432caf21c2752bca3384b5df1d41cf0da2801d/tokenizer_config.json?download=true",
+      "declared_lfs_sha256": null,
+      "declared_git_blob": "3ae24e088bb83a2aaa76a3bf6e3f1cef13e78b53"
+    }
+  ],
+  "build_assets": [
+    {
+      "path": "mel_filters.npz",
+      "source": "https://raw.githubusercontent.com/openai/whisper/v20250625/whisper/assets/mel_filters.npz",
+      "size": 4271,
+      "sha256": "7450ae70723a5ef9d341e3cee628c7cb0177f36ce42c44b7ed2bf3325f0f6d4c"
+    },
+    {
+      "path": "official-convert-h5-to-ggml.py",
+      "source": "https://raw.githubusercontent.com/ggml-org/whisper.cpp/v1.9.4/models/convert-h5-to-ggml.py",
+      "size": 7891,
+      "sha256": "9cc282dfcd9a24da03ffa1b4123b5508ee935e19e369c33520b1a73f89440094"
+    },
+    {
+      "path": "APACHE-2.0.txt",
+      "source": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+      "size": 11358,
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+    },
+    {
+      "path": "whisper-bin-x64.zip",
+      "source": "https://github.com/ggml-org/whisper.cpp/releases/download/b5130/whisper-bin-x64.zip",
+      "size": 8573270,
+      "sha256": "f9ec6c52a2e949b62ab51fa21d0d497958f9e41c3010c157c4e42932d5316f3c"
+    },
+    {
+      "path": "ggml-silero-v6.2.0.bin",
+      "source": "https://huggingface.co/ggml-org/whisper-vad/resolve/c5c26827b67dfd053856f92e824e14fdcc123daf/ggml-silero-v6.2.0.bin",
+      "size": 885098,
+      "sha256": "2aa269b785eeb53a82983a20501ddf7c1d9c48e33ab63a41391ac6c9f7fb6987"
+    },
+    {
+      "path": "LICENSE-vad.txt",
+      "source": "https://raw.githubusercontent.com/snakers4/silero-vad/be95df9152c0d7618fa1edfeb296fc3dae32376f/LICENSE",
+      "size": 1075,
+      "sha256": "2e63e9a38b6e8fc0c7bc37ce174caca1862870856c6daf5697cfb785e925520b"
+    }
+  ],
+  "vad": {
+    "model": "silero-v6.2.0",
+    "repository": "ggml-org/whisper-vad",
+    "revision": "c5c26827b67dfd053856f92e824e14fdcc123daf",
+    "source": "https://huggingface.co/ggml-org/whisper-vad/resolve/c5c26827b67dfd053856f92e824e14fdcc123daf/ggml-silero-v6.2.0.bin",
+    "model_file": "ggml-silero-v6.2.0.bin",
+    "bytes": 885098,
+    "sha256": "2aa269b785eeb53a82983a20501ddf7c1d9c48e33ab63a41391ac6c9f7fb6987",
+    "license": "MIT",
+    "license_source": "https://raw.githubusercontent.com/snakers4/silero-vad/be95df9152c0d7618fa1edfeb296fc3dae32376f/LICENSE",
+    "license_revision": "be95df9152c0d7618fa1edfeb296fc3dae32376f",
+    "license_sha256": "2e63e9a38b6e8fc0c7bc37ce174caca1862870856c6daf5697cfb785e925520b",
+    "purpose": "Offline native speech activity detection before Uzbek decoding; no automatic downloading."
+  }
+}

@@ -16,6 +16,8 @@ pub struct Settings {
     pub sound_enabled: bool,
     pub sound_volume: f64,
     pub auto_close_interval: f64,
+    /// Open the collapsed island when hovered. Off preserves click-to-open.
+    pub open_on_hover: bool,
     pub absence_interval: f64,
     pub active_integrations: Vec<String>,
     /// The always-on workspace pill (src/core/pills.ts checks it is one).
@@ -35,8 +37,8 @@ pub struct Settings {
     /// Show the Codex plan pill (5 h / weekly limits from `codex app-server`).
     /// Off by default; nothing is installed for it.
     pub show_codex_plan_in_notch: bool,
-    /// Who the chat talks to: "anthropic", a cloud provider of
-    /// openai_compat.rs ("openai", "google", "openrouter"), or a model server
+    /// Who the chat talks to: "auto", "anthropic", a cloud provider of
+    /// openai_compat.rs ("openai", "google", "groq", "openrouter"), or a model server
     /// of local_chat.rs ("ollama", "lmstudio", "custom"). Picked in the chat view.
     pub chat_provider: String,
     /// The model picked for each provider other than Anthropic (whose model is
@@ -54,6 +56,8 @@ pub struct Settings {
     /// season), "none" or an outfit id — the Mac's raw values. The island reads
     /// anything it doesn't know as "auto", so the value is stored as it comes.
     pub mochi_outfit: String,
+    /// Per-pill Mochi colours. The page accepts #RRGGBB and ignores other values.
+    pub pill_colors: BTreeMap<String, String>,
     /// Interface language: "" follows the system, else one of i18n::LANGUAGES
     /// ("fr", "pt-BR", "zh-Hans"…). Kept as it comes, like `mochi_outfit`: a
     /// code this build doesn't know reads as "".
@@ -61,6 +65,91 @@ pub struct Settings {
     /// Mochi on the desktop: whether he lives there, and his spot. Owned by
     /// the Rust side (desktop.rs) — what a webview sends back is ignored.
     pub desktop_mochi: DesktopMochiPref,
+    /// Native-owned panel placement, normalized against the monitor work area.
+    #[serde(default, deserialize_with = "read_island_position")]
+    pub island_position: Option<IslandPosition>,
+}
+
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "kebab-case")]
+pub enum Dock {
+    #[default]
+    Free,
+    Top,
+    Bottom,
+    Left,
+    Right,
+    TopLeft,
+    TopRight,
+    BottomLeft,
+    BottomRight,
+}
+
+impl Dock {
+    fn legacy(x: f64, y: f64) -> Self {
+        match (x == 0.0, x == 1.0, y == 0.0, y == 1.0) {
+            (true, _, true, _) => Self::TopLeft,
+            (_, true, true, _) => Self::TopRight,
+            (true, _, _, true) => Self::BottomLeft,
+            (_, true, _, true) => Self::BottomRight,
+            (_, _, true, _) => Self::Top,
+            (_, _, _, true) => Self::Bottom,
+            (true, _, _, _) => Self::Left,
+            (_, true, _, _) => Self::Right,
+            _ => Self::Free,
+        }
+    }
+
+    pub fn left(self) -> bool { matches!(self, Self::Left | Self::TopLeft | Self::BottomLeft) }
+    pub fn right(self) -> bool { matches!(self, Self::Right | Self::TopRight | Self::BottomRight) }
+    pub fn top(self) -> bool { matches!(self, Self::Top | Self::TopLeft | Self::TopRight) }
+    pub fn bottom(self) -> bool { matches!(self, Self::Bottom | Self::BottomLeft | Self::BottomRight) }
+    pub fn corner(self) -> bool { (self.left() || self.right()) && (self.top() || self.bottom()) }
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize)]
+pub struct IslandPosition {
+    pub monitor: String,
+    /// Fractions of the space left after fitting the full 720 × 320 panel.
+    pub x: f64,
+    pub y: f64,
+    pub dock: Dock,
+}
+
+impl<'de> Deserialize<'de> for IslandPosition {
+    fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        #[derive(Deserialize)]
+        struct StoredPosition {
+            monitor: String,
+            x: f64,
+            y: f64,
+            #[serde(default)]
+            dock: Option<Dock>,
+        }
+        let raw = StoredPosition::deserialize(deserializer)?;
+        Ok(Self { monitor: raw.monitor, x: raw.x, y: raw.y,
+            dock: raw.dock.unwrap_or_else(|| Dock::legacy(raw.x, raw.y)) })
+    }
+}
+
+fn read_island_position<'de, D: serde::Deserializer<'de>>(deserializer: D) -> Result<Option<IslandPosition>, D::Error> {
+    let position = Option::<IslandPosition>::deserialize(deserializer)?;
+    if position.as_ref().is_some_and(|p| p.monitor.is_empty() || !p.x.is_finite() || !p.y.is_finite()
+        || !(0.0..=1.0).contains(&p.x) || !(0.0..=1.0).contains(&p.y)) {
+        return Err(serde::de::Error::custom("invalid island position"));
+    }
+    Ok(position)
+}
+
+/// The frontend may have an older settings snapshot while native dragging saves
+/// a new position. Only an explicit display selection resets that placement.
+pub fn preserve_native_preferences(incoming: &mut Settings, current: &Settings) {
+    incoming.desktop_mochi = current.desktop_mochi.clone();
+    incoming.island_position = if incoming.screen == current.screen {
+        current.island_position.clone()
+    } else {
+        None
+    };
 }
 
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
@@ -90,6 +179,7 @@ impl Default for Settings {
             sound_enabled: true,
             sound_volume: 0.12,
             auto_close_interval: 15.0,
+            open_on_hover: false,
             absence_interval: 180.0,
             active_integrations: vec![
                 "integration_resend".into(),
@@ -105,15 +195,17 @@ impl Default for Settings {
             show_plan_in_notch: false,
             plan_relay_installed: false,
             show_codex_plan_in_notch: false,
-            chat_provider: crate::chat::ANTHROPIC.into(),
+            chat_provider: crate::chat::AUTO.into(),
             chat_models: BTreeMap::new(),
             ollama_url: String::new(),
             lmstudio_url: String::new(),
             custom_url: String::new(),
             shortcuts: Default::default(),
             mochi_outfit: "auto".into(),
-            language: String::new(),
+            pill_colors: BTreeMap::new(),
+            language: "uz".into(),
             desktop_mochi: DesktopMochiPref::default(),
+            island_position: None,
         }
     }
 }
@@ -365,10 +457,11 @@ mod tests {
     use serde_json::{json, Value};
 
     /// A settings.json in which no value is the default one.
-    const CUSTOM: &str = r#"{
+    const CUSTOM: &str = r##"{
   "soundEnabled": false,
   "soundVolume": 0.5,
   "autoCloseInterval": 30.0,
+  "openOnHover": true,
   "absenceInterval": 60.0,
   "activeIntegrations": ["integration_notion"],
   "mainPill": "agent_cursor",
@@ -386,9 +479,11 @@ mod tests {
   "customUrl": "https://llm.example.com",
   "shortcuts": { "openChat": { "keys": "Ctrl+Shift+K", "enabled": false } },
   "mochiOutfit": "witchHat",
+  "pillColors": { "integration_notion": "#123ABC", "future_pill": "#654321" },
   "language": "pt-BR",
-  "desktopMochi": { "onDesktop": true, "spot": { "x": 1500.5, "y": -300.0, "space": "screen" } }
-}"#;
+  "desktopMochi": { "onDesktop": true, "spot": { "x": 1500.5, "y": -300.0, "space": "screen" } },
+  "islandPosition": { "monitor": "at:-1920,0|DELL|1920x1080", "x": 0.25, "y": 0.75, "dock": "free" }
+}"##;
 
     fn custom() -> Value {
         serde_json::from_str(CUSTOM).unwrap()
@@ -478,6 +573,21 @@ mod tests {
     }
 
     #[test]
+    fn new_installs_use_auto_without_replacing_existing_provider_choices() {
+        assert_eq!(Settings::default().chat_provider, crate::chat::AUTO);
+        assert_eq!(Settings::default().language, "uz");
+        for provider in ["anthropic", "google", "groq", "ollama", "openai", "auto"] {
+            let bytes = custom_with("chatProvider", Some(json!(provider)));
+            let loaded = parse(&bytes).unwrap();
+            assert_eq!(loaded.chat_provider, provider);
+            assert_eq!(loaded.chat_models.get("ollama").map(String::as_str), Some("llama3.2"));
+            assert_eq!(loaded.ollama_url, "http://127.0.0.1:11434");
+            assert_eq!(loaded.language, "pt-BR");
+            assert!(loaded.island_position.is_some());
+        }
+    }
+
+    #[test]
     fn a_file_from_before_the_wardrobe_dresses_mochi_for_the_seasons() {
         let loaded = parse(&custom_with("mochiOutfit", None)).unwrap();
         assert_eq!(loaded.mochi_outfit, "auto");
@@ -486,11 +596,90 @@ mod tests {
     }
 
     #[test]
+    fn legacy_hover_and_colour_defaults_preserve_language_provider_and_native_geometry() {
+        let mut old = custom();
+        old.as_object_mut().unwrap().remove("openOnHover");
+        old.as_object_mut().unwrap().remove("pillColors");
+        let loaded = parse(&serde_json::to_vec(&old).unwrap()).unwrap();
+        assert!(!loaded.open_on_hover);
+        assert!(loaded.pill_colors.is_empty());
+        assert_eq!(loaded.language, "pt-BR");
+        assert_eq!(loaded.chat_provider, "ollama");
+        assert_eq!(loaded.island_position.as_ref().unwrap().x, 0.25);
+        assert_eq!(loaded.desktop_mochi.spot.as_ref().unwrap().x, 1500.5);
+        let fresh = Settings::default();
+        assert!(!fresh.open_on_hover);
+        assert!(fresh.pill_colors.is_empty());
+        assert_eq!(fresh.language, "uz");
+        assert_eq!(fresh.chat_provider, crate::chat::AUTO);
+    }
+
+    #[test]
     fn a_file_from_before_the_desktop_mochi_keeps_him_in_the_island() {
         let loaded = parse(&custom_with("desktopMochi", None)).unwrap();
         assert_eq!(loaded.desktop_mochi, DesktopMochiPref::default());
         assert!(!loaded.desktop_mochi.on_desktop);
         assert_eq!(loaded.mochi_outfit, "witchHat");
+    }
+
+    #[test]
+    fn a_file_from_before_panel_drag_keeps_other_preferences() {
+        let loaded = parse(&custom_with("islandPosition", None)).unwrap();
+        assert_eq!(loaded.island_position, None);
+        assert_eq!(loaded.model, "some-model");
+        assert_eq!(loaded.chat_models.get("ollama").map(String::as_str), Some("llama3.2"));
+    }
+
+    #[test]
+    fn invalid_panel_position_costs_only_that_preference() {
+        for position in [json!({"monitor":"display","x":-0.1,"y":0.5}),
+            json!({"monitor":"display","x":0.1,"y":2}),
+            json!({"monitor":"","x":0.1,"y":0.5}),
+            json!({"monitor":"display","x":"left","y":0.5})] {
+            let loaded = parse(&custom_with("islandPosition", Some(position))).unwrap();
+            assert_eq!(loaded.island_position, None);
+            assert_eq!(loaded.model, "some-model");
+            assert_eq!(loaded.desktop_mochi.spot.as_ref().unwrap().x, 1500.5);
+        }
+    }
+
+    #[test]
+    fn stale_frontend_save_preserves_native_panel_and_mochi_positions() {
+        let current: Settings = serde_json::from_str(CUSTOM).unwrap();
+        let mut incoming = current.clone();
+        incoming.island_position = None;
+        incoming.desktop_mochi = DesktopMochiPref::default();
+        incoming.sound_volume = 0.7;
+        preserve_native_preferences(&mut incoming, &current);
+        assert_eq!(incoming.island_position, current.island_position);
+        assert_eq!(incoming.desktop_mochi, current.desktop_mochi);
+        assert_eq!(incoming.sound_volume, 0.7);
+        incoming.screen = "primary".into();
+        preserve_native_preferences(&mut incoming, &current);
+        assert_eq!(incoming.island_position, None);
+        assert_eq!(incoming.desktop_mochi, current.desktop_mochi);
+    }
+
+    #[test]
+    fn legacy_panel_positions_migrate_boundaries_but_explicit_free_is_preserved() {
+        for (x,y,dock) in [(0.5,0.0,Dock::Top),(0.5,1.0,Dock::Bottom),(0.0,0.5,Dock::Left),(1.0,0.5,Dock::Right),
+            (0.0,0.0,Dock::TopLeft),(1.0,0.0,Dock::TopRight),(0.0,1.0,Dock::BottomLeft),(1.0,1.0,Dock::BottomRight),(0.3,0.4,Dock::Free)] {
+            let loaded = parse(&custom_with("islandPosition",Some(json!({"monitor":"display","x":x,"y":y})))).unwrap();
+            assert_eq!(loaded.island_position.unwrap().dock,dock);
+        }
+        let loaded = parse(&custom_with("islandPosition",Some(json!({"monitor":"display","x":0.0,"y":0.0,"dock":"free"})))).unwrap();
+        assert_eq!(loaded.island_position.unwrap().dock,Dock::Free);
+    }
+
+    #[test]
+    fn every_dock_serializes_with_the_frontend_contract_and_bad_dock_keeps_other_prefs() {
+        for (dock,name) in [(Dock::Free,"free"),(Dock::Top,"top"),(Dock::Bottom,"bottom"),(Dock::Left,"left"),(Dock::Right,"right"),
+            (Dock::TopLeft,"top-left"),(Dock::TopRight,"top-right"),(Dock::BottomLeft,"bottom-left"),(Dock::BottomRight,"bottom-right")] {
+            assert_eq!(serde_json::to_value(dock).unwrap(),json!(name));
+        }
+        let loaded = parse(&custom_with("islandPosition",Some(json!({"monitor":"display","x":0.5,"y":0.5,"dock":"unknown"})))).unwrap();
+        assert_eq!(loaded.island_position,None);
+        assert_eq!(loaded.model,"some-model");
     }
 
     #[test]
@@ -515,8 +704,9 @@ mod tests {
         // the choice must survive a save made by this one.
         let loaded = parse(&custom_with("mochiOutfit", Some(json!("topHat")))).unwrap();
         assert_eq!(loaded.mochi_outfit, "topHat");
-        // The language too: "" (follow the system) when absent, as it comes otherwise.
-        assert_eq!(parse(&custom_with("language", None)).unwrap().language, "");
+        // Fresh installs use Uzbek; explicit System and other languages survive updates.
+        assert_eq!(parse(&custom_with("language", None)).unwrap().language, "uz");
+        assert_eq!(parse(&custom_with("language", Some(json!("")))).unwrap().language, "");
         assert_eq!(parse(&custom_with("language", Some(json!("xx")))).unwrap().language, "xx");
     }
 
@@ -536,6 +726,8 @@ mod tests {
         for (key, wrong) in [
             ("soundVolume", json!("loud")),
             ("soundEnabled", json!(1)),
+            ("openOnHover", json!("yes")),
+            ("pillColors", json!({"integration_notion": 123})),
             ("activeIntegrations", json!("integration_n8n")),
             ("mainPill", json!(["agent_cursor"])),
             ("screen", Value::Null),
@@ -752,6 +944,7 @@ mod tests {
                 "soundEnabled",
                 "soundVolume",
                 "autoCloseInterval",
+                "openOnHover",
                 "absenceInterval",
                 "activeIntegrations",
                 "mainPill",
@@ -769,8 +962,10 @@ mod tests {
                 "customUrl",
                 "shortcuts",
                 "mochiOutfit",
+                "pillColors",
                 "language",
                 "desktopMochi",
+                "islandPosition",
             ]
         );
         let _ = std::fs::remove_dir_all(&dir);
